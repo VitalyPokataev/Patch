@@ -1,4 +1,4 @@
-/* Дуалспек при старте */
+/* Р”СѓР°Р»СЃРїРµРє РїСЂРё СЃС‚Р°СЂС‚Рµ! */
 DELETE FROM conditions WHERE SourceTypeOrReferenceId=15;
 DELETE FROM conditions WHERE SourceTypeOrReferenceId=14;
 REPLACE INTO `conditions` VALUES ('14', '10043', '14014', '0', '0', '6', '0', '67', '0', '0', '0', '0', '', null);
