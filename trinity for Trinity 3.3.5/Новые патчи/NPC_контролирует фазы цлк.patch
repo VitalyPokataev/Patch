@@ -1,0 +1,76 @@
+ .../IcecrownCitadel/icecrown_citadel_teleport.cpp  |  60 ++++++++++++++++++++
+1 file changed, 60 insertions(+)
+ 
+diff --git a/src/server/scripts/Northrend/IcecrownCitadel/icecrown_citadel_teleport.cpp b/src/server/scripts/Northrend/IcecrownCitadel/icecrown_citadel_teleport.cpp
+index af8aba5..c18aead 100755
+--- a/src/server/scripts/Northrend/IcecrownCitadel/icecrown_citadel_teleport.cpp
++++ b/src/server/scripts/Northrend/IcecrownCitadel/icecrown_citadel_teleport.cpp
+@@ -96,8 +96,68 @@ class at_frozen_throne_teleport : public AreaTriggerScript
+        }
+};
+ 
++class npc_icecrown_citadel_controller : public CreatureScript
++{
++    public:
++        npc_icecrown_citadel_controller() : CreatureScript("npc_icecrown_citadel_controller") { }
++
++        bool OnGossipHello(Player* pPlayer, Creature* pCreature)
++        {
++            InstanceScript* pInstance = pCreature->GetInstanceScript();
++            if (!pInstance || pInstance->instance->GetId() != 631) // ICC
++            {
++                pCreature->MonsterSay("You must be in ICC!", LANG_UNIVERSAL, pPlayer->GetGUID());
++                pPlayer->CLOSE_GOSSIP_MENU();
++                return false;
++            }
++
++            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Marrowgar", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+0);
++            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Lady DeathWhisper", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
++            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Gunship Battle", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
++            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Saurfang", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
++            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Valithria", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+4);
++            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Sindragossa", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+5);
++            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Blood Council", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+6);
++            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Queen Lana Thel", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+7);
++            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Festergut", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+8);
++            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Rotface", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+9);
++            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Professor Putricide", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+10);
++            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Lich King", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+11);
++            pPlayer->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE,pCreature->GetGUID());
++            return true;
++        }
++
++        bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
++        {
++            InstanceScript* pInstance = pPlayer->GetInstanceScript();
++            if(!pInstance)
++                return false;
++
++            for(uint8 i = 0; i < 12; ++i) // encounters count
++            {
++                if(uiAction == GOSSIP_ACTION_INFO_DEF + i)
++                {
++                    if(pInstance->GetData(i) != DONE)
++                    {
++                        pInstance->SetBossState(i, DONE);
++                        pCreature->MonsterSay("Is done!", LANG_UNIVERSAL, pPlayer->GetGUID());
++                    }
++                    else
++                    {
++                        pInstance->SetBossState(i, NOT_STARTED);
++                        pCreature->MonsterSay("Is activated!", LANG_UNIVERSAL, pPlayer->GetGUID());
++                    }
++                }
++            }
++
++            pPlayer->CLOSE_GOSSIP_MENU();
++            return true;
++    }
++};
++
+void AddSC_icecrown_citadel_teleport()
+{
+    new icecrown_citadel_teleport();
+    new at_frozen_throne_teleport();
++    new npc_icecrown_citadel_controller();
+}

@@ -1,0 +1,314 @@
+diff --git a/THANKS b/THANKS
+index ece583c..568a630 100644
+--- a/THANKS
++++ b/THANKS
+@@ -73,4 +73,4 @@ terrorbringer, antihrists, Havenard, scarymovie87, D3VIL, FaTe753, PrinceCreed,
+ spgm, Dakeyras, sombre88, 19Maxx83, moriquendu, Ille, breakerfly,
+ zthoreen, clement.roussel, p.alexej, Ceris, Nayre, Kiper, announce, thmarth,
+ Ner'zhul, DarkXuan, leak, linencloth, SnakeIce, Supabad, Tome, Nay, Kaelima,
+-Svannon, Walkline, ChaosUA, Aios.
++Svannon, Walkline, ChaosUA, Aios, Dimitro.
+diff --git a/src/server/game/Scripting/ScriptLoader.cpp b/src/server/game/Scripting/ScriptLoader.cpp
+index f765b0b..b212926 100755
+--- a/src/server/game/Scripting/ScriptLoader.cpp
++++ b/src/server/game/Scripting/ScriptLoader.cpp
+@@ -1236,6 +1236,8 @@ void AddBattlegroundScripts()
+ void AddSC_arena_spectator_script();
+   // Transmogrify
+ void AddSC_transmogrify_script();
++  // Duel Reset
++void AddSC_DuelReset(); 
+ 
+ #endif
+ 
+@@ -1247,6 +1249,8 @@ void AddCustomScripts()
+ 	AddSC_arena_spectator_script();
+ 	// Transmogrify
+ 	AddSC_transmogrify_script();
++	// Duel Reset
++    AddSC_DuelReset();
+ 
+ #endif
+ }
+diff --git a/src/server/game/World/World.cpp b/src/server/game/World/World.cpp
+index 06e3638..74ac9f9 100755
+--- a/src/server/game/World/World.cpp
++++ b/src/server/game/World/World.cpp
+@@ -1242,6 +1242,13 @@ void World::LoadConfigSettings(bool reload)
+      
+      // Disable Chat
+      m_int_configs[CONFIG_INT_CHAT_DISABLE_TIME]  = ConfigMgr::GetIntDefault("Chat.DisableWhenPlayerCreate", 60);
++     
++     //Reset Duel Cooldown
++     m_bool_configs[CONFIG_DUEL_RESET_COOLDOWN_ON_START] = ConfigMgr::GetBoolDefault("DuelReset.Cooldown.OnStart", false);
++     m_bool_configs[CONFIG_DUEL_RESET_COOLDOWN_ON_FINISH] = ConfigMgr::GetBoolDefault("DuelReset.Cooldown.OnFinish", false);
++     m_bool_configs[CONFIG_DUEL_RESET_COOLDOWN_ONLY_IN_ELWYNN_AND_DUROTAR] = ConfigMgr::GetBoolDefault("DuelReset.Cooldown.Only.in.Elwynn.and.Durotar", false);
++     m_bool_configs[CONFIG_DUEL_RESET_COOLDOWN_MAX_ENERGY_ON_START] = ConfigMgr::GetBoolDefault("DuelReset.Cooldown.Max.Energy.OnStart", false);
++     m_bool_configs[CONFIG_DUEL_RESET_COOLDOWN_RESET_ENERGY_ON_START] = ConfigMgr::GetBoolDefault("DuelReset.Cooldown.Reset.Energy.OnStart", false);
+ 
+     // call ScriptMgr if we're reloading the configuration
+     if (reload)
+diff --git a/src/server/game/World/World.h b/src/server/game/World/World.h
+index abfcdd4..10b37ce 100755
+--- a/src/server/game/World/World.h
++++ b/src/server/game/World/World.h
+@@ -177,6 +177,11 @@ enum WorldBoolConfigs
+     CONFIG_OUTDOORPVP_WINTERGRASP_CUSTOM_HONOR,
+     CONFIG_OUTDOORPVP_WINTERGRASP_ANTIFARM_ENABLE,
+     CONFIG_EXTERNAL_MAIL,
++    CONFIG_DUEL_RESET_COOLDOWN_ON_START,
++    CONFIG_DUEL_RESET_COOLDOWN_ON_FINISH,
++    CONFIG_DUEL_RESET_COOLDOWN_ONLY_IN_ELWYNN_AND_DUROTAR,
++    CONFIG_DUEL_RESET_COOLDOWN_RESET_ENERGY_ON_START,
++    CONFIG_DUEL_RESET_COOLDOWN_MAX_ENERGY_ON_START,
+     BOOL_CONFIG_VALUE_COUNT
+ };
+ 
+diff --git a/src/server/scripts/Custom/CMakeLists.txt b/src/server/scripts/Custom/CMakeLists.txt
+index b39e9f6..e3d5a16 100644
+--- a/src/server/scripts/Custom/CMakeLists.txt
++++ b/src/server/scripts/Custom/CMakeLists.txt
+@@ -12,6 +12,7 @@ set(scripts_STAT_SRCS
+   ${scripts_STAT_SRCS}
+   Custom/arena_spectator.cpp
+   Custom/npc_transmogrify.cpp
++  Custom/duel_reset.cpp
+ )
+ 
+ message("  -> Prepared: Custom")
+diff --git a/src/server/scripts/Custom/duel_reset.cpp b/src/server/scripts/Custom/duel_reset.cpp
+new file mode 100644
+index 0000000..c103137
+--- /dev/null
++++ b/src/server/scripts/Custom/duel_reset.cpp
+@@ -0,0 +1,175 @@
++#include "ScriptPCH.h" 
++#include "ScriptMgr.h" 
++#include "Config.h" 
++ 
++class duel_reset : public PlayerScript 
++{ 
++public: 
++    duel_reset() : PlayerScript("duel_reset") {} 
++ 
++    void OnDuelEnd(Player *winner, Player *looser, DuelCompleteType type) 
++    { 
++        if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_ON_FINISH)) 
++        { 
++            if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_ONLY_IN_ELWYNN_AND_DUROTAR)) 
++            { 
++                if(winner->GetZoneId() == 14 || winner->GetZoneId() == 12) 
++                { 
++                    if (type == DUEL_WON) 
++                    { 
++                        winner->RemoveArenaSpellCooldowns(); 
++                        looser->RemoveArenaSpellCooldowns(); 
++                        winner->SetHealth(winner->GetMaxHealth()); 
++                        looser->SetHealth(looser->GetMaxHealth()); 
++ 
++                        if (winner->getPowerType() == POWER_MANA)    
++                            winner->SetPower(POWER_MANA, winner->GetMaxPower(POWER_MANA)); 
++ 
++                        if (looser->getPowerType() == POWER_MANA)    
++                            looser->SetPower(POWER_MANA, looser->GetMaxPower(POWER_MANA)); 
++                    } 
++                    winner->HandleEmoteCommand(EMOTE_ONESHOT_CHEER); 
++                } 
++            } 
++ 
++            else 
++                if (type == DUEL_WON) 
++                { 
++                    winner->RemoveArenaSpellCooldowns(); 
++                    looser->RemoveArenaSpellCooldowns(); 
++                    winner->SetHealth(winner->GetMaxHealth()); 
++                    looser->SetHealth(looser->GetMaxHealth()); 
++ 
++                    if (winner->getPowerType() == POWER_MANA)    
++                        winner->SetPower(POWER_MANA, winner->GetMaxPower(POWER_MANA)); 
++ 
++                    if (looser->getPowerType() == POWER_MANA)    
++                        looser->SetPower(POWER_MANA, looser->GetMaxPower(POWER_MANA)); 
++                } 
++                winner->HandleEmoteCommand(EMOTE_ONESHOT_CHEER); 
++        } 
++    } 
++ 
++    void OnDuelStart(Player *player1, Player *player2) 
++    { 
++        if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_ON_START)) 
++        { 
++            if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_ONLY_IN_ELWYNN_AND_DUROTAR)) 
++            { 
++                if(player1->GetZoneId() == 14 || player1->GetZoneId() == 12) 
++                { 
++                    player1->RemoveArenaSpellCooldowns(); 
++                    player2->RemoveArenaSpellCooldowns(); 
++                    player1->SetHealth(player1->GetMaxHealth()); 
++                    player2->SetHealth(player2->GetMaxHealth()); 
++ 
++                    if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_RESET_ENERGY_ON_START)) 
++                    { 
++                        switch (player1->getPowerType()) 
++                        { 
++                        case POWER_RAGE: 
++                            player1->SetPower(POWER_RAGE, 0); 
++                            break; 
++                        case POWER_RUNIC_POWER: 
++                            player1->SetPower(POWER_RUNIC_POWER, 0); 
++                            break; 
++                        default: 
++                            break; 
++                        } 
++ 
++                        switch (player2->getPowerType()) 
++                        { 
++                        case POWER_RAGE: 
++                            player2->SetPower(POWER_RAGE, 0); 
++                            break; 
++                        case POWER_RUNIC_POWER: 
++                            player2->SetPower(POWER_RUNIC_POWER, 0); 
++                            break; 
++                        default: 
++                            break; 
++                        } 
++                    } 
++ 
++                    if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_MAX_ENERGY_ON_START)) 
++                    { 
++                        switch (player1->getPowerType()) 
++                        { 
++                        case POWER_MANA: 
++                            player1->SetPower(POWER_MANA, player1->GetMaxPower(POWER_MANA)); 
++                            break; 
++                        case POWER_RAGE: 
++                            player1->SetPower(POWER_RAGE, player1->GetMaxPower(POWER_RAGE)); 
++                            break; 
++                        case POWER_RUNIC_POWER: 
++                            player1->SetPower(POWER_RUNIC_POWER, player1->GetMaxPower(POWER_RUNIC_POWER)); 
++                            break; 
++                        default: 
++                            break; 
++                        } 
++ 
++                        switch (player2->getPowerType()) 
++                        { 
++                        case POWER_MANA: 
++                            player2->SetPower(POWER_MANA, player2->GetMaxPower(POWER_MANA)); 
++                           break; 
++                       case POWER_RAGE: 
++                           player2->SetPower(POWER_RAGE, player2->GetMaxPower(POWER_RAGE)); 
++                            break; 
++                        case POWER_RUNIC_POWER: 
++                            player2->SetPower(POWER_RUNIC_POWER, player2->GetMaxPower(POWER_RUNIC_POWER)); 
++                            break; 
++                        default: 
++                            break; 
++                        } 
++                    } 
++                } 
++            } 
++ 
++            else 
++            { 
++                player1->RemoveArenaSpellCooldowns(); 
++                player2->RemoveArenaSpellCooldowns(); 
++                player1->SetHealth(player1->GetMaxHealth()); 
++                player2->SetHealth(player2->GetMaxHealth()); 
++ 
++                if (sWorld->getBoolConfig(CONFIG_DUEL_RESET_COOLDOWN_MAX_ENERGY_ON_START)) 
++                { 
++                    switch (player1->getPowerType()) 
++                    { 
++                    case POWER_MANA: 
++                        player1->SetPower(POWER_MANA, player1->GetMaxPower(POWER_MANA)); 
++                        break; 
++                    case POWER_RAGE: 
++                        player1->SetPower(POWER_RAGE, player1->GetMaxPower(POWER_RAGE)); 
++                        break; 
++                    case POWER_RUNIC_POWER: 
++                        player1->SetPower(POWER_RUNIC_POWER, player1->GetMaxPower(POWER_RUNIC_POWER)); 
++                        break; 
++                    default: 
++                        break; 
++                    } 
++ 
++                    switch (player2->getPowerType()) 
++                    { 
++                    case POWER_MANA: 
++                        player2->SetPower(POWER_MANA, player2->GetMaxPower(POWER_MANA)); 
++                        break; 
++                    case POWER_RAGE: 
++                        player2->SetPower(POWER_RAGE, player2->GetMaxPower(POWER_RAGE)); 
++                        break; 
++                    case POWER_RUNIC_POWER: 
++                        player2->SetPower(POWER_RUNIC_POWER, player2->GetMaxPower(POWER_RUNIC_POWER)); 
++                        break; 
++                    default: 
++                        break; 
++                    } 
++                } 
++            } 
++        } 
++    } 
++}; 
++ 
++void AddSC_DuelReset() 
++{ 
++    new duel_reset(); 
++}  
+\ No newline at end of file
+diff --git a/src/server/worldserver/worldserver.conf.dist b/src/server/worldserver/worldserver.conf.dist
+index ec37f35..83f53bd 100644
+--- a/src/server/worldserver/worldserver.conf.dist
++++ b/src/server/worldserver/worldserver.conf.dist
+@@ -3035,6 +3035,49 @@ OutdoorPvP.Wintergrasp.Antifarm.Def = 5
+ #        Default:     900 seconds   (equal to 15 minutes)
+  
+ Chat.DisableWhenPlayerCreate = 900
++
++# Duel Reset Cooldown
++#
++#     DuelReset.Cooldown.OnStart
++#     Reseting cooldown and restore health to start of duel.
++#     Default: 0 - Disable
++#              1 - Enable
++#
++
++DuelReset.Cooldown.OnStart = 1
++
++#     DuelReset.Cooldown.OnFinish 
++#     Reseting cooldown and restore health to finish of duel.
++#     Default: 0 - Disable
++#              1 - Enable
++# 
++
++DuelReset.Cooldown.OnFinish = 1
++
++#     DuelReset.Cooldown.Only.in.Elwynn.and.Durotar
++#     Reseting cooldown only in Elwynn forest and Durotar locations.
++#     Default: 0 - Disable
++#              1 - Enable
++#
++
++DuelReset.Cooldown.Only.in.Elwynn.and.Durotar = 0
++
++#     DuelReset.Cooldown.Max.Energy.OnStart
++#     Sets rage, mana and runic power to max on duel start.
++#     Default: 0 - Disable
++#              1 - Enable
++#
++
++DuelReset.Cooldown.Max.Energy.OnStart = 0
++
++#     DuelReset.Cooldown.Reset.Energy.OnStart
++#     Resets rage and runic power on duel start.
++#     Default: 0 - Disable
++#              1 - Enable
++#
++
++DuelReset.Cooldown.Reset.Energy.OnStart = 1
++
+ #
+ ###################################################################################################
+ 

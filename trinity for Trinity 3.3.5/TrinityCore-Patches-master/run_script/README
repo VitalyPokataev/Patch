@@ -1,0 +1,19 @@
+PURPOSE
+  Bash script for start/stop/restart/status check of TrinityCore servers.
+
+STATUS
+  Working as of: https://github.com/TrinityCore/TrinityCore/commit/5365bd25fae59a6ae225534b779bd6c14779599a
+
+DETAILS
+  This script allows an administrator to start, stop, restart, or check
+  the running status of multiple TrinityCore servers. By default it is
+  configured to support two server binaries named "authserver" and
+  "worldserver".
+
+INSTALL
+  01 : Open trinitycore-server.sh in a text editor and modify all
+       config values at the top of the file.
+  02 : Optionally modify the output messages below the config values.
+  03 : Use and enjoy.
+
+

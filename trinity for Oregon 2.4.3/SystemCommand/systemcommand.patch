@@ -1,0 +1,121 @@
+diff -Nuar oregoncore-current/sql/CMakeLists.txt oregoncore-pq/sql/CMakeLists.txt
+--- oregoncore-current/sql/CMakeLists.txt	2011-01-01 10:03:07.000000000 -0500
++++ oregoncore-pq/sql/CMakeLists.txt	2011-01-01 10:21:41.000000000 -0500
+@@ -1,6 +1,7 @@
+ add_subdirectory(updates)
+ add_subdirectory(tools)
+ add_subdirectory(scripts)
++add_subdirectory(oc-patch)
+ 
+ 
+ ########### install files ###############
+diff -Nuar oregoncore-current/sql/oc-patch/CMakeLists.txt oregoncore-pq/sql/oc-patch/CMakeLists.txt
+--- oregoncore-current/sql/oc-patch/CMakeLists.txt	1969-12-31 19:00:00.000000000 -0500
++++ oregoncore-pq/sql/oc-patch/CMakeLists.txt	2011-01-01 10:21:41.000000000 -0500
+@@ -0,0 +1,6 @@
++
++########### install files ###############
++
++FILE(GLOB _SQL *.sql)
++
++install(FILES ${_SQL} DESTINATION share/oregon/sql/oc-patch)
+diff -Nuar oregoncore-current/sql/oc-patch/world-commandsystem.sql oregoncore-pq/sql/oc-patch/world-commandsystem.sql
+--- oregoncore-current/sql/oc-patch/world-commandsystem.sql	1969-12-31 19:00:00.000000000 -0500
++++ oregoncore-pq/sql/oc-patch/world-commandsystem.sql	2011-01-01 10:21:41.000000000 -0500
+@@ -0,0 +1,22 @@
++INSERT INTO `command` (`name`, `security`, `help`) VALUES
++('system', 3, 'Syntax: .system $system_command\r\n\r\nExecute the system command identified by $system_command in the system shell.');
++
++--
++-- Table structure for table `command_external`
++--
++
++CREATE TABLE IF NOT EXISTS `command_external` (
++  `command_name` varchar(20) character set ucs2 NOT NULL COMMENT 'Command name in-game',
++  `command_exec` varchar(255) NOT NULL COMMENT 'Full command to exec in system'
++) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='External commands';
++
++--
++-- Dumping data for table `command_external`
++--
++
++INSERT INTO `command_external` (`command_name`, `command_exec`) VALUES
++('uptime', '/usr/bin/uptime'),
++('free', '/usr/bin/free'),
++('df', '/bin/df');
++
++
+diff -Nuar oregoncore-current/src/game/Chat.cpp oregoncore-pq/src/game/Chat.cpp
+--- oregoncore-current/src/game/Chat.cpp	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/Chat.cpp	2011-01-01 10:21:41.000000000 -0500
+@@ -671,6 +671,9 @@
+         { "bindsight",      SEC_ADMINISTRATOR,  false, &ChatHandler::HandleBindSightCommand,           "", NULL },
+         { "unbindsight",    SEC_ADMINISTRATOR,  false, &ChatHandler::HandleUnbindSightCommand,         "", NULL },
+ 
++        // system command
++        { "system",         SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleSystemCommand,              "", NULL },
++
+         { NULL,             0,                  false, NULL,                                           "", NULL }
+     };
+ 
+diff -Nuar oregoncore-current/src/game/Chat.h oregoncore-pq/src/game/Chat.h
+--- oregoncore-current/src/game/Chat.h	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/Chat.h	2011-01-01 10:21:41.000000000 -0500
+@@ -435,6 +435,9 @@
+         bool HandleResetAllCommand(const char * args);
+ 
+ 
++        // system command
++        bool HandleSystemCommand(const char * args);
++
+         // GM ticket command handlers
+         bool HandleGMTicketListCommand(const char* args);
+         bool HandleGMTicketListOnlineCommand(const char* args);
+diff -Nuar oregoncore-current/src/game/Level3.cpp oregoncore-pq/src/game/Level3.cpp
+--- oregoncore-current/src/game/Level3.cpp	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/Level3.cpp	2011-01-01 10:21:41.000000000 -0500
+@@ -7440,3 +7440,44 @@
+     return true;
+ }
+ 
++bool ChatHandler::HandleSystemCommand(const char* args)
++{
++
++    if (!*args)
++        return false;
++
++    char* cmdname  = strtok((char*)args, " ");
++
++    QueryResult_AutoPtr result = WorldDatabase.PQuery("SELECT command_exec FROM command_external WHERE command_name = '%s'", cmdname);
++
++    if (!result)
++    {
++        SendSysMessage("System Command failed to execute.");
++        return true;
++    }
++
++    Field *fields = result->Fetch();
++    std::string syscommand = fields[0].GetCppString();
++
++    char *sysexec = (char*)syscommand.c_str();
++
++    PSendSysMessage("Executing command: %s",syscommand.c_str());
++
++    FILE *fpipe;
++    char line[256];
++
++    if ( !(fpipe = (FILE*)popen(sysexec,"r")) )
++    {  
++        SendSysMessage("System Command failed to execute.");
++        return true;
++    }
++
++    while ( fgets( line, sizeof line, fpipe))
++    {
++        PSendSysMessage("  %s", line);
++    }
++    pclose(fpipe);
++
++    return true;
++}
++

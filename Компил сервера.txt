@@ -1,0 +1,150 @@
+Компилим ядро!!
+(1) И так, для начала установка требуемых пакетов: 
+sudo apt-get install build-essential gcc g++ cpp automake git-core autoconf make patch libmysql++-dev libtool libcurl4-openssl-dev libssl-dev grep binutils subversion zlibc libc6 nano mysql-server unrar-free openssl
+
+ Debian Based systems:
+sudo apt-get install build-essential autoconf libtool gcc g++ make cmake subversion mercurial patch wget links zip unzip unrar 
+sudo apt-get install openssl libssl-dev mysql-server mysql-client libmysqlclient15-dev libmysql++-dev libreadline5-dev zlib1g-dev libbz2-dev
+
+(2) Устанавливаем ACE:
+
+wget http://download.dre.vanderbilt.edu/previous_versions/ACE-6.0.3.tar.gz
+tar xvzf ACE-6.0.3.tar.gz && cd ACE_wrappers && mkdir build && cd build && ../configure --prefix=/home/server/.sys/ --disable-ssl
+sudo make install -j 15
+
+wget http://download.dre.vanderbilt.edu/previous_versions/ACE-6.0.0.tar.gz
+tar xvzf ACE-6.0.0.tar.gz && cd ACE_wrappers && mkdir build && cd build && ../configure --prefix=/home/server/.sys_new/ --disable-ssl
+sudo make install -j 15
+
+1. Качаем и разархивируем: 
+wget http://download.dre.vanderbilt.edu/previous_versions/ACE-5.8.1.tar.gz 
+tar xvzf ACE-5.8.1.tar.gz 
+cd ACE_wrappers //Переходим в корневую папку исходников 
+mkdir build //делаем в ней папку build и 
+cd build //переходим в нее 
+../configure --prefix=/home/server/.sys/ //делаем конфигурацию( вместо пути который указан тут,ты можешь указать любой свой) 
+make //начать компилировать 
+make install // вводим после make, для установки уже скомпилированных библиотек в то место которое вы указали в префиксе при конфигурации 
+
+ ну и потом при выполнении cmake,указываем место куда вы установили библиотеки: 
+ #Данную строку добавляем в комманду cmake, для подключения библиотек в конфигурацию: 
+-DACE_LIBRARY=/home/server/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/server/.sys/include/
+
+(3) Установка openssl: http://packages.debian.org/squeeze/openssl
+
+wget ftp://ftp.debian.org/debian/pool/main/o/openssl/libssl-dev_0.9.8o-4squeeze13_amd64.deb
+wget ftp://ftp.debian.org/debian/pool/main/o/openssl/libssl0.9.8_0.9.8o-4squeeze13_amd64.deb 
+wget ftp://ftp.debian.org/debian/pool/main/o/openssl/openssl_0.9.8o-4squeeze13_amd64.deb 
+sudo dpkg -i libssl0.9.8_0.9.8o-4squeeze13_amd64.deb 
+sudo dpkg -i openssl_0.9.8o-4squeeze13_amd64.deb 
+sudo dpkg -i libssl-dev_0.9.8o-4squeeze13_amd64.deb
+
+wget ftp://ftp.debian.org/debian/pool/main/o/openssl/libssl-dev_1.0.1c-4_amd64.deb
+wget ftp://ftp.debian.org/debian/pool/main/o/openssl/libssl1.0.0_1.0.1c-4_amd64.deb
+wget ftp://ftp.debian.org/debian/pool/main/o/openssl/openssl_1.0.1c-4_amd64.deb
+sudo dpkg -i libssl1.0.0_1.0.1c-4_amd64.deb
+sudo dpkg -i openssl_1.0.1c-4_amd64.deb
+sudo dpkg -i libssl-dev_1.0.1c-4_amd64.deb
+
+
+wget http://www.openssl.org/source/openssl-1.0.1c.tar.gz 
+tar -xvzf openssl-1.0.1c.tar.gz && cd openssl-1.0.1c && ./config --prefix=/home/server/.sys_new shared 
+sudo make install -j 15
+
+wget http://www.openssl.org/source/openssl-fips-1.2.4.tar.gz
+tar -xvzf openssl-fips-1.2.4.tar.gz && cd openssl-fips-1.2.4 && ./config --prefix=/home/server/.sys shared 
+sudo make install -j 15
+
+
+ Дальше к команде при компиляции trinity, к cmake добавляем: 
+-DSSLLIB=/home/trinity/.sys/lib/libssl.so 
+
+
+(4) Качаем исходники: 
+hg clone https://trinitycore.googlecode.com/hg/ 
+mkdir build && cd build
+
+(5) Виды конфигураций: 
+
+Стандартный вид конфигурации: 
+cmake ../ -DCMAKE_C_FLAGS="-O3 -pipe" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DDO_RA=1 -DLARGE_CELL=1 -DPREFIX=/home/server/reliase/335 
+
+ Конфигурация для процессоров Athlon 64, линукс 64.  -DCONF_DIR=/home/server/wow/sh -DUSE_SFMT=0 
+
+cmake ../ -DPREFIX=/home/server/reliase/arcanum -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DDO_DEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=k8-m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/server/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/server/.sys/include/ -DSSLLIB=/home/server/.sys/lib/libssl.so
+
+cmake ../ -DPREFIX=/home/server/reliase/fun -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DWITH_COREDEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=k8-m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/server/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/server/.sys/include/ -DOPENSSL_LIBRARIES=/home/server/.sys/lib/libssl.so  -DOPENSSL_INCLUDE_DIR=/home/server/.sys/include/
+cmake ../ -DPREFIX=/home/server/reliase/x25 -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DWITH_COREDEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=k8-m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/server/.sys_new/lib/libACE.so -DACE_INCLUDE_DIR=/home/server/.sys_new/include/ -DOPENSSL_LIBRARIES=/home/server/.sys_new/lib/libssl.so  -DOPENSSL_INCLUDE_DIR=/home/server/.sys_new/include/
+
+cmake ../ -DPREFIX=/home/server/reliase/243 -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DDO_DEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=k8-m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/server/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/server/.sys/include/ -DSSLLIB=/home/server/.sys/lib/libssl.so
+cmake ../ -DPREFIX=/home/server/reliase/335 -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DDO_DEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=k8-m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/server/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/server/.sys/include/ -DSSLLIB=/home/server/.sys/lib/libssl.so
+cmake ../ -DPREFIX=/home/server/reliase/434 -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DDO_DEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=k8-m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/server/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/server/.sys/include/ -DSSLLIB=/home/server/.sys/lib/libssl.so
+
+ Конфигурация для онлайна ~1000, оптимизация под процессоры семейства Intel Quad/Core 2 duo и 32 битную систему: 
+cmake ../ -DPREFIX=/home/trinity/release -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DDO_DEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=prescott -m32 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=32 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/trinity/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/trinity/.sys/include/ -DSSLLIB=/home/trinity/.sys/lib/libssl.so
+
+ Конфигурация для онлайна ~1000, оптимизация под процессоры семейства Intel Xeon и 32 битную систему: 
+cmake ../ -DPREFIX=/home/trinity/release -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DDO_DEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=nocona-m32 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=32 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/trinity/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/trinity/.sys/include/ -DSSLLIB=/home/trinity/.sys/lib/libssl.so
+
+ Конфигурация для онлайна ~1000, оптимизация под процессоры семейства Intel Quad/Core 2 duo и 64 битную систему: 
+cmake ../ -DPREFIX=/home/trinity/release -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DDO_DEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=prescott -m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/trinity/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/trinity/.sys/include/ -DSSLLIB=/home/trinity/.sys/lib/libssl.so
+
+ Конфигурация для онлайна ~1000, оптимизация под процессоры семейства Intel Xeon и 64 битную систему: 
+cmake ../ -DPREFIX=/home/trinity/release -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DDO_DEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=nocona-m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/trinity/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/trinity/.sys/include/ -DSSLLIB=/home/trinity/.sys/lib/libssl.so
+
+Флаги компиляции и их описание: 
+Code
+
+ DO_MYSQL -- поддержка MYSQL (для включения поддержки 1 для отключения 0, по умолчанию включено) 
+ DO_POSTGRESQL -- поддержка POSTGRESQL (для включения поддержки 1 для отключения 0) 
+ DO_SCRIPTS -- активация поддержки trinity script (для включения поддержки 1 для отключения 0, по умолчанию включено) 
+ DO_RA -- Включение Ремоут Консоли RA (для включения поддержки 1 для отключения 0 
+ DO_DEBUG -- Сборка в дебаг режиме (для включения поддержки 1 для отключения 0) 
+ DO_CLI -- Включение CLI (для включения поддержки 1 для отключения 0, по умолчанию включено) 
+ LARGE_CELL -- Включение большого размера ячейки (для включения поддержки 1 для отключения 0) 
+ SHORT_SLEEP -- Изменение мин задержки, используйте 1 
+ PREFIX -- дирректория установки 
+ CONF_DIR -- директория файлов конфигурации тринити 
+ CMAKE_C_FLAGS -- Для продвинутых юзеров                         
+ CMAKE_CXX_FLAGS -- Для продвинутых юзеров
+
+(6) После конфигурации - выполняем сборку: 
+make -j n (где n - число ядер процессора + 1, для 4 ядерного цп используйте -j 5) 
+make install -j n (где n - число ядер процессора + 1, для 4 ядерного цп используйте -j 5)
+
+(7) Рестартер: 
+ устанавливаем screen: 
+sudo aptitude install screen 
+
+ Создаем файл core.sh со следующим содержимым: 
+
+ #!/bin/sh 
+ while true ; do 
+ servlog='путь к логу сервера, указанный в конфиге, включая имя файла лога'; 
+ outpath='путь к папке, в которую будем сохранять крашлог'; 
+ date=`date "+%Y-%m-%d_%H:%M:%S"`; 
+ echo "Server CRASHED !!! Start Bugreport System." >> $outpatch$date.txt; 
+ echo "Server.log Log FILE Last 30 Lines:" >> $outpatch$date.txt; 
+ cat $servlog | tail -n 30 >> $outpath$date.txt; 
+ echo "" >> $outpatch$date.txt; 
+ echo "END bugtracker system." >> $outpatch$date.txt; 
+ /путь к бинарникам/bin/trinity-core -c ../etc/trinitycore.conf #указывает расположение файла конфигурации 
+ done
+
+ realm.sh: 
+
+ #!/bin/sh 
+ while true ; do 
+ echo `date` ", Realm daemon crashed and restarted." >> /путь куда сохранять краш лог/realmcrash.log 
+ /путь к бинарникам/bin/trinity-realm -c ../etc/trinityrealm.conf 
+ done
+
+ ВАЖНО: делаем файлы исполняемыми: 
+ chmod +x /путь_к_файлу/ 
+ пример: chmod +x /root/realm.sh 
+ Нужно сделать ОБА файла исполняемыми. 
+
+ Для запуска я использую команды: 
+ screen -AmdS realm /путь_к_realm/realm.sh 
+ screen -AmdS world /путь_к_world/world.sh
+

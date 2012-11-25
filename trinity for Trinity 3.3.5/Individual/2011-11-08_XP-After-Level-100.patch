@@ -1,0 +1,32 @@
+From 140d2fbf8dcc2f80e6e1f7d5496194d62f99c12a Mon Sep 17 00:00:00 2001
+From: LordPsyan <uppp@juno.com>
+Date: Tue, 8 Nov 2011 22:52:45 -0600
+Subject: [PATCH] XP-After-Level-100
+
+---
+ src/server/game/World/World.cpp |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/server/game/World/World.cpp b/src/server/game/World/World.cpp
+index 408db18..ac777a0 100755
+--- a/src/server/game/World/World.cpp
++++ b/src/server/game/World/World.cpp
+@@ -732,13 +732,13 @@ void World::LoadConfigSettings(bool reload)
+     }
+     else
+         m_int_configs[CONFIG_MAX_PLAYER_LEVEL] = ConfigMgr::GetIntDefault("MaxPlayerLevel", DEFAULT_MAX_LEVEL);
+-
++/* Removed to allow XP gain after level 100. By LordPsyan
+     if (m_int_configs[CONFIG_MAX_PLAYER_LEVEL] > MAX_LEVEL)
+     {
+         sLog->outError("MaxPlayerLevel (%i) must be in range 1..%u. Set to %u.", m_int_configs[CONFIG_MAX_PLAYER_LEVEL], MAX_LEVEL, MAX_LEVEL);
+         m_int_configs[CONFIG_MAX_PLAYER_LEVEL] = MAX_LEVEL;
+     }
+-
++*/
+     m_int_configs[CONFIG_MIN_DUALSPEC_LEVEL] = ConfigMgr::GetIntDefault("MinDualSpecLevel", 40);
+ 
+     m_int_configs[CONFIG_START_PLAYER_LEVEL] = ConfigMgr::GetIntDefault("StartPlayerLevel", 1);
+-- 
+1.7.2.3
+

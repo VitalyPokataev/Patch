@@ -1,0 +1,123 @@
+commit 640283b67c46ef164a899e73461de007dcd6c1a3 
+Author: kleuser75 <kleuser1@gmail.com> 
+Date:   Sat Aug 4 22:04:17 2012 +0700 
+
+diff --git a/src/server/game/Scripting/ScriptLoader.cpp b/src/server/game/Scripting/ScriptLoader.cpp 
+index d3253be..e71d688 100755 
+--- a/src/server/game/Scripting/ScriptLoader.cpp 
++++ b/src/server/game/Scripting/ScriptLoader.cpp 
+@@ -39,6 +39,7 @@ void AddSC_arena_spectator_script(); 
+  void AddSC_dalaran_squirrel(); 
+  void AddSC_npc_transmogrifier(); 
+  void AddSC_transmogriefer(); 
++void AddSC_cs_world_chat(); 
+   
+  // spells 
+  void AddSC_deathknight_spell_scripts(); 
+@@ -1299,6 +1300,7 @@ AddSC_professionnpc(); 
+  AddSC_dalaran_squirrel(); 
+  AddSC_npc_transmogrifier(); 
+  AddSC_transmogriefer(); 
++AddSC_cs_world_chat(); 
+    
+  #endif 
+  } 
+diff --git a/src/server/scripts/Custom/CMakeLists.txt b/src/server/scripts/Custom/CMakeLists.txt 
+index 1893714..fc9c434 100644 
+--- a/src/server/scripts/Custom/CMakeLists.txt 
++++ b/src/server/scripts/Custom/CMakeLists.txt 
+@@ -23,6 +23,7 @@ set(scripts_STAT_SRCS 
+    Custom/dalaran_squirrel.cpp 
+    Custom/transmogrification.cpp 
+    Custom/transmogrification2.cpp 
++  Custom/world_chat.cpp 
+   
+  ) 
+  message("  -> Prepared: Custom") 
+diff --git a/src/server/scripts/Custom/world_chat.cpp b/src/server/scripts/Custom/world_chat.cpp 
+new file mode 100644 
+index 0000000..42e7bf1 
+--- /dev/null 
++++ b/src/server/scripts/Custom/world_chat.cpp 
+@@ -0,0 +1,87 @@ 
++#include "ScriptPCH.h" 
++#include "Chat.h" 
++ 
++class cs_world_chat : public CommandScript 
++{ 
++    public: 
++  cs_world_chat() : CommandScript("cs_world_chat"){} 
++ 
++    ChatCommand * GetCommands() const 
++    { 
++  static ChatCommand WorldChatCommandTable[] =  
++  { 
++   {"chat",    SEC_PLAYER,  true,  &HandleWorldChatCommand,    "", NULL}, 
++   {NULL,  0,    false,  NULL,      "", NULL} 
++  }; 
++ 
++  return WorldChatCommandTable; 
++    } 
++ 
++    static bool HandleWorldChatCommand(ChatHandler * handler, const char * args) 
++    { 
++  if (!handler->GetSession()->GetPlayer()->CanSpeak()) 
++   return false; 
++  std::string temp = args; 
++ 
++  if (!args || temp.find_first_not_of(' ') == std::string::npos) 
++   return false; 
++ 
++  std::string msg = ""; 
++  Player * player = handler->GetSession()->GetPlayer(); 
++ 
++  switch(player->GetSession()->GetSecurity()) 
++  { 
++   // Player 
++   case SEC_PLAYER: 
++    if (player->GetTeam() == ALLIANCE) 
++    { 
++     msg += "|cff0000ff[Альянс] |cffffffff["; 
++     msg += player->GetName(); 
++     msg += "] |cfffaeb00"; 
++    } 
++ 
++    if (player->GetTeam() == HORDE) 
++    { 
++     msg += "|cffff0000[Орда] |cffffffff["; 
++     msg += player->GetName(); 
++     msg += "] |cfffaeb00"; 
++    } 
++    break; 
++   // Moderator/trial  
++   case SEC_MODERATOR: 
++    msg += "|cffff8a00[Модератор] |cffffffff["; 
++    msg += player->GetName(); 
++    msg += "] |cfffaeb00"; 
++    break; 
++   // GM 
++   case SEC_GAMEMASTER: 
++    msg += "|cff00ffff[ГМ] |cffffffff["; 
++    msg += player->GetName(); 
++    msg += "] |cfffaeb00"; 
++    break; 
++   // Admin 
++   case SEC_ADMINISTRATOR: 
++    msg += "|cfffa9900[Админ] |cffffffff["; 
++    msg += player->GetName(); 
++    msg += "] |cfffaeb00"; 
++    break; 
++ 
++  } 
++    
++  msg += args; 
++  sWorld->SendServerMessage(SERVER_MSG_STRING, msg.c_str(), 0);  
++ 
++  return true; 
++    } 
++}; 
++ 
++void AddSC_cs_world_chat() 
++{ 
++    new cs_world_chat(); 
++}

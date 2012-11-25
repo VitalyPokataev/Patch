@@ -1,0 +1,157 @@
+From 06ec9ff363f2c61bcb43726d479481470183709a Mon Sep 17 00:00:00 2001
+From: LordPsyan <realmsofwarcraft@gmail.com>
+Date: Sat, 1 Sep 2012 09:51:53 -0500
+Subject: [PATCH] 2012_09_01-FakePlayers
+
+---
+ src/server/game/Entities/Player/Player.cpp   |    4 +++
+ src/server/game/Handlers/ChatHandler.cpp     |    9 ++++++
+ src/server/game/Handlers/MiscHandler.cpp     |   36 ++++++++++++++++++++++++-
+ src/server/game/Miscellaneous/Language.h     |    1 +
+ src/server/game/World/World.cpp              |    1 +
+ src/server/game/World/World.h                |    1 +
+ src/server/worldserver/worldserver.conf.dist |    8 ++++++
+ 7 files changed, 58 insertions(+), 2 deletions(-)
+
+diff --git a/src/server/game/Entities/Player/Player.cpp b/src/server/game/Entities/Player/Player.cpp
+index 65f6588..8d3d020 100755
+--- a/src/server/game/Entities/Player/Player.cpp
++++ b/src/server/game/Entities/Player/Player.cpp
+@@ -1736,6 +1736,10 @@ void Player::Update(uint32 p_time)
+             // m_nextSave reseted in SaveToDB call
+             SaveToDB();
+             sLog->outDebug(LOG_FILTER_PLAYER, "Player '%s' (GUID: %u) saved", GetName(), GetGUIDLow());
++            // If Fake WHO List system on then change player position with every SavePlayer Interval (usually 15min) 
++            if (sWorld->getBoolConfig(CONFIG_FAKE_WHO_LIST)) 
++                CharacterDatabase.PExecute("UPDATE characters SET zone = (FLOOR(50 * RAND()) + 1) WHERE online>1"); 
++                CharacterDatabase.PExecute("UPDATE characters SET level=level+1 WHERE online>1 AND level<5"); 
+         }
+         else
+             m_nextSave -= p_time;
+diff --git a/src/server/game/Handlers/ChatHandler.cpp b/src/server/game/Handlers/ChatHandler.cpp
+index 880f2df..9ed9e73 100755
+--- a/src/server/game/Handlers/ChatHandler.cpp
++++ b/src/server/game/Handlers/ChatHandler.cpp
+@@ -274,8 +274,17 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
+             bool receiverIsPlayer = AccountMgr::IsPlayerAccount(receiver ? receiver->GetSession()->GetSecurity() : SEC_PLAYER);
+             if (!receiver || (senderIsPlayer && !receiverIsPlayer && !receiver->isAcceptWhispers() && !receiver->IsInWhisperWhiteList(sender->GetGUID())))
+             {
++                // If Fake WHO List system on then show player DND 
++                if (sWorld->getBoolConfig(CONFIG_FAKE_WHO_LIST)) 
++                { 
++                    sWorld->SendWorldText(LANG_NOT_WHISPER); 
++                    return; 
++                } 
++                else 
++                { 
+                 SendPlayerNotFoundNotice(to);
+                 return;
++                }
+             }
+ 
+             if (!sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_CHAT) && senderIsPlayer && receiverIsPlayer)
+diff --git a/src/server/game/Handlers/MiscHandler.cpp b/src/server/game/Handlers/MiscHandler.cpp
+index 80caee7..e530321 100755
+--- a/src/server/game/Handlers/MiscHandler.cpp
++++ b/src/server/game/Handlers/MiscHandler.cpp
+@@ -359,8 +359,40 @@ void WorldSession::HandleWhoOpcode(WorldPacket & recv_data)
+ 
+         ++displaycount;
+     }
+-
+-    data.put(0, displaycount);                            // insert right count, count displayed
++	
++    if (sWorld->getBoolConfig(CONFIG_FAKE_WHO_LIST) && displaycount < 49) 
++    { 
++        // Fake players on WHO LIST                            0,   1,    2,   3,    4,   5     6 
++        QueryResult result = CharacterDatabase.Query("SELECT guid,name,race,class,level,zone,gender FROM characters WHERE online>1 AND level > 3"); 
++        if (result) 
++        { 
++            do 
++            { 
++                Field *fields = result->Fetch(); 
++ 
++                std::string pname = fields[1].GetString();    // player name 
++                std::string gname;                                // guild name 
++                uint32 lvl = fields[4].GetUInt32();                // player level 
++                uint32 class_ = fields[3].GetUInt32();            // player class 
++                uint32 race = fields[2].GetUInt32();            // player race 
++                uint32 pzoneid = fields[5].GetUInt32();            // player zone id 
++                uint8 gender = fields[6].GetUInt8();            // player gender 
++ 
++                data << pname;                              // player name 
++                data << gname;                              // guild name 
++                data << uint32(lvl);                        // player level 
++                data << uint32(class_);                     // player class 
++                data << uint32(race);                       // player race 
++                data << uint8(gender);                      // player gender 
++                data << uint32(pzoneid);                    // player zone id 
++ 
++                if ((++matchcount) == 49) 
++                    break; 
++            } while (result->NextRow()); 
++        } 
++    } 
++ 
++    data.put(0, matchcount);                            // insert right count, count displayed
+     data.put(4, matchcount);                              // insert right count, count of matches
+ 
+     SendPacket(&data);
+diff --git a/src/server/game/Miscellaneous/Language.h b/src/server/game/Miscellaneous/Language.h
+index a766108..be7100e 100755
+--- a/src/server/game/Miscellaneous/Language.h
++++ b/src/server/game/Miscellaneous/Language.h
+@@ -1072,6 +1072,7 @@ enum TrinityStrings
+     LANG_INVALID_REALMID                = 11001,
+ 
+     // NOT RESERVED IDS                   12000-1999999999
++    LANG_NOT_WHISPER                    = 12001, 
+     // `db_script_string` table index     2000000000-2000009999 (MIN_DB_SCRIPT_STRING_ID-MAX_DB_SCRIPT_STRING_ID)
+     // For other tables maybe             2000010000-2147483647 (max index)
+ };
+diff --git a/src/server/game/World/World.cpp b/src/server/game/World/World.cpp
+index ea74b6d..3d4cea9 100755
+--- a/src/server/game/World/World.cpp
++++ b/src/server/game/World/World.cpp
+@@ -664,6 +664,7 @@ void World::LoadConfigSettings(bool reload)
+     m_bool_configs[CONFIG_ALLOW_TWO_SIDE_WHO_LIST]            = ConfigMgr::GetBoolDefault("AllowTwoSide.WhoList", false);
+     m_bool_configs[CONFIG_ALLOW_TWO_SIDE_ADD_FRIEND]          = ConfigMgr::GetBoolDefault("AllowTwoSide.AddFriend", false);
+     m_bool_configs[CONFIG_ALLOW_TWO_SIDE_TRADE]               = ConfigMgr::GetBoolDefault("AllowTwoSide.trade", false);
++    m_bool_configs[CONFIG_FAKE_WHO_LIST]					  = ConfigMgr::GetBoolDefault("Fake.WHO.List", false);
+     m_int_configs[CONFIG_STRICT_PLAYER_NAMES]                 = ConfigMgr::GetIntDefault ("StrictPlayerNames",  0);
+     m_int_configs[CONFIG_STRICT_CHARTER_NAMES]                = ConfigMgr::GetIntDefault ("StrictCharterNames", 0);
+     m_int_configs[CONFIG_STRICT_PET_NAMES]                    = ConfigMgr::GetIntDefault ("StrictPetNames",     0);
+diff --git a/src/server/game/World/World.h b/src/server/game/World/World.h
+index a6cdd47..c542a8e 100755
+--- a/src/server/game/World/World.h
++++ b/src/server/game/World/World.h
+@@ -100,6 +100,7 @@ enum WorldBoolConfigs
+     CONFIG_ALLOW_TWO_SIDE_WHO_LIST,
+     CONFIG_ALLOW_TWO_SIDE_ADD_FRIEND,
+     CONFIG_ALLOW_TWO_SIDE_TRADE,
++	CONFIG_FAKE_WHO_LIST,
+     CONFIG_ALL_TAXI_PATHS,
+     CONFIG_INSTANT_TAXI,
+     CONFIG_INSTANCE_IGNORE_LEVEL,
+diff --git a/src/server/worldserver/worldserver.conf.dist b/src/server/worldserver/worldserver.conf.dist
+index 9eab3c4..195c5dd 100644
+--- a/src/server/worldserver/worldserver.conf.dist
++++ b/src/server/worldserver/worldserver.conf.dist
+@@ -1289,6 +1289,14 @@ AllowTwoSide.Trade = 0
+ 
+ TalentsInspecting = 1
+ 
++#    Fake.WHO.List 
++#        Add fake players to fill in WHO LIST (who is online list, "O" button) if there is less then 
++#        49 real players online (need to set online=2 in character database in order to work) 
++#        Default: 0 (disabled) 
++#                 1 (enabled) 
++
++Fake.Who.List = 0 
++
+ #
+ ###################################################################################################
+ 
+-- 
+1.7.2.5
+

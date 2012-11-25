@@ -1,0 +1,93 @@
+commit 682a3fea22068e1e21caf0a8ac9a54a624d0457c
+Author: Vitasic <vitasic_pokataev@yandex.ru>
+Date:   Tue Jun 26 16:42:52 2012 +0400
+
+    Chat Disable When Player Create
+
+diff --git a/sql/updates/BattleCore/fc_updates_world/2012_06_26_01_trinity_string.sql b/sql/updates/BattleCore/fc_updates_world/2012_06_26_01_trinity_string.sql
+new file mode 100644
+index 0000000..d03aea7
+--- /dev/null
++++ b/sql/updates/BattleCore/fc_updates_world/2012_06_26_01_trinity_string.sql
+@@ -0,0 +1,5 @@
++﻿/* Запрос к моду "Возможность писать в чат, исходя из проведенного онлайна" */
++
++DELETE FROM `trinity_string` WHERE `entry` = 11019;
++INSERT INTO `trinity_string` (`entry`, `content_default`, `content_loc8`) VALUES
++(11019, 'Your chat is disabled. So you can write to chat, draw in the game for another %s seconds', 'Ваш чат отключен. Чтобы вы смогли написать в чат, проведите в игре еще %s секунд');
+\ No newline at end of file
+diff --git a/src/server/game/Handlers/ChatHandler.cpp b/src/server/game/Handlers/ChatHandler.cpp
+index 3f4e3fb..4d36dfe 100755
+--- a/src/server/game/Handlers/ChatHandler.cpp
++++ b/src/server/game/Handlers/ChatHandler.cpp
+@@ -175,6 +175,14 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
+             return;
+         }
+ 
++        if ((sender->GetTotalPlayedTime() <= sWorld->getIntConfig(CONFIG_INT_CHAT_DISABLE_TIME)) && sender->GetSession()->GetSecurity() == SEC_PLAYER)
++        {
++            std::string adStr = secsToTimeString(sWorld->getIntConfig(CONFIG_INT_CHAT_DISABLE_TIME) - sender->GetTotalPlayedTime());
++            SendNotification(GetTrinityString(LANG_DISABLE_CHAT), adStr.c_str());
++            recv_data.rfinish();
++            return;
++        }
++
+         if (type != CHAT_MSG_AFK && type != CHAT_MSG_DND)
+             sender->UpdateSpeakTime();
+     }
+diff --git a/src/server/game/Miscellaneous/Language.h b/src/server/game/Miscellaneous/Language.h
+index 87cf159..7d1b6b1 100755
+--- a/src/server/game/Miscellaneous/Language.h
++++ b/src/server/game/Miscellaneous/Language.h
+@@ -1091,6 +1091,9 @@ enum TrinityStrings
+     LANG_AUTO_BROADCAST                 = 11000,
+     LANG_INVALID_REALMID                = 11001,
+ 
++    // Disable Chat
++	LANG_DISABLE_CHAT                   = 11019,
++
+     // NOT RESERVED IDS                   12000-1999999999
+     // `db_script_string` table index     2000000000-2000009999 (MIN_DB_SCRIPT_STRING_ID-MAX_DB_SCRIPT_STRING_ID)
+     // For other tables maybe             2000010000-2147483647 (max index)
+diff --git a/src/server/game/World/World.cpp b/src/server/game/World/World.cpp
+index 518effd..3a36109 100755
+--- a/src/server/game/World/World.cpp
++++ b/src/server/game/World/World.cpp
+@@ -1243,6 +1243,9 @@ void World::LoadConfigSettings(bool reload)
+     m_bool_configs[CONFIG_PDUMP_NO_PATHS] = ConfigMgr::GetBoolDefault("PlayerDump.DisallowPaths", true);
+     m_bool_configs[CONFIG_PDUMP_NO_OVERWRITE] = ConfigMgr::GetBoolDefault("PlayerDump.DisallowOverwrite", true);
+ 
++     // Disable Chat
++     m_int_configs[CONFIG_INT_CHAT_DISABLE_TIME]  = ConfigMgr::GetIntDefault("Chat.DisableWhenPlayerCreate", 60);
++
+     // call ScriptMgr if we're reloading the configuration
+     if (reload)
+         sScriptMgr->OnConfigLoad(reload);
+diff --git a/src/server/game/World/World.h b/src/server/game/World/World.h
+index 0d430bf..8131f56 100755
+--- a/src/server/game/World/World.h
++++ b/src/server/game/World/World.h
+@@ -340,6 +340,7 @@ enum WorldIntConfigs
+     CONFIG_OUTDOORPVP_WINTERGRASP_SAVESTATE_PERIOD,
+     CONFIG_OUTDOORPVP_WINTERGRASP_ANTIFARM_ATK,
+     CONFIG_OUTDOORPVP_WINTERGRASP_ANTIFARM_DEF,
++    CONFIG_INT_CHAT_DISABLE_TIME,
+     INT_CONFIG_VALUE_COUNT
+ };
+ 
+diff --git a/src/server/worldserver/worldserver.conf.dist b/src/server/worldserver/worldserver.conf.dist
+index 70816d4..893373e 100644
+--- a/src/server/worldserver/worldserver.conf.dist
++++ b/src/server/worldserver/worldserver.conf.dist
+@@ -1913,6 +1913,11 @@ PreserveCustomChannelDuration = 14
+ 
+ Channel.CityOnlyFlag = 1
+ 
++#     Chat.DisableWhenPlayerCreate
++#        Description: Disable chat for player who total played time not equal to X (in seconds)
++#        Default:     900 seconds   (equal to 15 minutes)
++ 
++Chat.DisableWhenPlayerCreate = 0
+ #
+ ###################################################################################################
+ 

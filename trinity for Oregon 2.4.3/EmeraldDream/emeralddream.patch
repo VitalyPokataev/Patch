@@ -1,0 +1,49 @@
+diff -Nuar oregoncore-current/sql/CMakeLists.txt oregoncore-pq/sql/CMakeLists.txt
+--- oregoncore-current/sql/CMakeLists.txt	2011-01-01 10:03:07.000000000 -0500
++++ oregoncore-pq/sql/CMakeLists.txt	2011-01-01 10:11:58.000000000 -0500
+@@ -1,6 +1,7 @@
+ add_subdirectory(updates)
+ add_subdirectory(tools)
+ add_subdirectory(scripts)
++add_subdirectory(oc-patch)
+ 
+ 
+ ########### install files ###############
+diff -Nuar oregoncore-current/sql/oc-patch/CMakeLists.txt oregoncore-pq/sql/oc-patch/CMakeLists.txt
+--- oregoncore-current/sql/oc-patch/CMakeLists.txt	1969-12-31 19:00:00.000000000 -0500
++++ oregoncore-pq/sql/oc-patch/CMakeLists.txt	2011-01-01 10:11:58.000000000 -0500
+@@ -0,0 +1,6 @@
++
++########### install files ###############
++
++FILE(GLOB _SQL *.sql)
++
++install(FILES ${_SQL} DESTINATION share/oregon/sql/oc-patch)
+diff -Nuar oregoncore-current/sql/oc-patch/world-emaralddream.sql oregoncore-pq/sql/oc-patch/world-emaralddream.sql
+--- oregoncore-current/sql/oc-patch/world-emaralddream.sql	1969-12-31 19:00:00.000000000 -0500
++++ oregoncore-pq/sql/oc-patch/world-emaralddream.sql	2011-01-01 10:11:58.000000000 -0500
+@@ -0,0 +1,11 @@
++-- Data for table `instance_template`
++
++INSERT INTO `instance_template` (`map`, `parent`, `maxPlayers`, `reset_delay`, `access_id`, `startLocX`, `startLocY`, `startLocZ`, `startLocO`, `script`) VALUES
++(169, 0, 40, 0, 0, NULL, NULL, NULL, NULL, '');
++
++
++-- Data for table `game_tele`
++
++INSERT INTO `game_tele` (`position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES
++( -2604.74, -2077.5, 126.758, 0.677952, 169, 'emeralddream');
++
+diff -Nuar oregoncore-current/src/game/MapManager.cpp oregoncore-pq/src/game/MapManager.cpp
+--- oregoncore-current/src/game/MapManager.cpp	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/MapManager.cpp	2011-01-01 10:11:58.000000000 -0500
+@@ -167,6 +167,9 @@
+     if (!entry)
+        return false;
+ 
++    if (entry->MapID == 169)
++       return true;
++
+     const char *mapName = entry->name[player->GetSession()->GetSessionDbcLocale()];
+ 
+     if (entry->map_type == MAP_INSTANCE || entry->map_type == MAP_RAID)

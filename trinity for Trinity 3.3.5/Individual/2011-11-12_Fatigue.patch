@@ -1,0 +1,76 @@
+From 3da0ab4bd11ccae9d86b86a0089ec7b9d49c73d3 Mon Sep 17 00:00:00 2001
+From: LordPsyan <uppp@juno.com>
+Date: Sat, 12 Nov 2011 13:41:43 -0600
+Subject: [PATCH] 2011-11-12_Fatigue
+
+---
+ src/server/game/Entities/Player/Player.cpp   |   11 +++++++++--
+ src/server/worldserver/worldserver.conf.dist |    7 +++++++
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/src/server/game/Entities/Player/Player.cpp b/src/server/game/Entities/Player/Player.cpp
+index 9b1b2c3..193ac0d 100755
+--- a/src/server/game/Entities/Player/Player.cpp
++++ b/src/server/game/Entities/Player/Player.cpp
+@@ -74,6 +74,7 @@
+ #include "InstanceScript.h"
+ #include <cmath>
+ #include "AccountMgr.h"
++#include "Config.h"
+ 
+ #define ZONE_UPDATE_INTERVAL (1*IN_MILLISECONDS)
+ 
+@@ -1304,9 +1305,12 @@ int32 Player::getMaxTimer(MirrorTimerType timer)
+ {
+     switch (timer)
+     {
++	if(ConfigMgr::GetBoolDefault("fatigue.enabled", true)) // If "fatigue.enabled" is enabled
++		{
+         case FATIGUE_TIMER:
+             return MINUTE * IN_MILLISECONDS;
+-        case BREATH_TIMER:
++		}
++		case BREATH_TIMER:
+         {
+             if (!isAlive() || HasAuraType(SPELL_AURA_WATER_BREATHING) || GetSession()->GetSecurity() >= AccountTypes(sWorld->getIntConfig(CONFIG_DISABLE_BREATHING)))
+                 return DISABLED_MIRROR_TIMER;
+@@ -1376,6 +1380,9 @@ void Player::HandleDrowning(uint32 time_diff)
+     }
+ 
+     // In dark water
++if(ConfigMgr::GetBoolDefault("fatigue.enabled", true)) // If "fatigue.enabled" is enabled
++{
++
+     if (m_MirrorTimerFlags & UNDERWARER_INDARKWATER)
+     {
+         // Fatigue timer not activated - activate it
+@@ -1412,7 +1419,7 @@ void Player::HandleDrowning(uint32 time_diff)
+         else if (m_MirrorTimerFlagsLast & UNDERWARER_INDARKWATER)
+             SendMirrorTimer(FATIGUE_TIMER, DarkWaterTime, m_MirrorTimer[FATIGUE_TIMER], 10);
+     }
+-
++}
+     if (m_MirrorTimerFlags & (UNDERWATER_INLAVA|UNDERWATER_INSLIME))
+     {
+         // Breath timer not activated - activate it
+diff --git a/src/server/worldserver/worldserver.conf.dist b/src/server/worldserver/worldserver.conf.dist
+index a8c0d91..b28f440 100644
+--- a/src/server/worldserver/worldserver.conf.dist
++++ b/src/server/worldserver/worldserver.conf.dist
+@@ -1144,6 +1144,13 @@ InstantLogout = 1
+ DisableWaterBreath = 4
+ 
+ #
++#    Enable or Disable "Fatigue" timer
++#           default = 1 (enabled)
++#                   = 0 (disabled)
++
++fatigue.enabled = 1
++
++#
+ #    AllFlightPaths
+ #        Description: Character knows all flight paths (of both factions) after creation.
+ #        Default:     0 - (Disabled)
+-- 
+1.7.2.3
+

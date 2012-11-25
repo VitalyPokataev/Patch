@@ -1,0 +1,132 @@
+From f1ecd76e97e95219c37d6e19ff4316f40da7de99 Mon Sep 17 00:00:00 2001
+From: LordPsyan <samccstudios@gmail.com>
+Date: Wed, 1 Feb 2012 09:26:53 -0600
+Subject: [PATCH] 2012-02-01_Dalaran_Sewers
+
+---
+ sql/DalaranSewers/DalaranSewers.sql                |    4 ++
+ .../game/Battlegrounds/Zones/BattlegroundDS.cpp    |   42 ++++++++++++++++++++
+ .../game/Battlegrounds/Zones/BattlegroundDS.h      |   10 +++--
+ 3 files changed, 52 insertions(+), 4 deletions(-)
+ create mode 100644 sql/DalaranSewers/DalaranSewers.sql
+
+diff --git a/sql/DalaranSewers/DalaranSewers.sql b/sql/DalaranSewers/DalaranSewers.sql
+new file mode 100644
+index 0000000..5d2676e
+--- /dev/null
++++ b/sql/DalaranSewers/DalaranSewers.sql
+@@ -0,0 +1,4 @@
++UPDATE `world`.`gameobject_template` SET `flags` = '36' WHERE `gameobject_template`.`entry` =192642 LIMIT 1 ;
++UPDATE `world`.`gameobject_template` SET `flags` = '36' WHERE `gameobject_template`.`entry` =192643 LIMIT 1 ;
++UPDATE `world`.`battleground_template` SET `MinPlayersPerTeam` = '0', `MaxPlayersPerTeam` = '2' WHERE `battleground_template`.`id` =10 LIMIT 1 ;
++DELETE FROM `disables` WHERE `entry` = 10 ;
+diff --git a/src/server/game/Battlegrounds/Zones/BattlegroundDS.cpp b/src/server/game/Battlegrounds/Zones/BattlegroundDS.cpp
+index 87f4ca4..f4c1bdd 100755
+--- a/src/server/game/Battlegrounds/Zones/BattlegroundDS.cpp
++++ b/src/server/game/Battlegrounds/Zones/BattlegroundDS.cpp
+@@ -37,6 +37,9 @@ BattlegroundDS::BattlegroundDS()
+     m_StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_ARENA_THIRTY_SECONDS;
+     m_StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_ARENA_FIFTEEN_SECONDS;
+     m_StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_ARENA_HAS_BEGUN;
++
++    m_knockback = 5000;
++    m_knockbackCheck = true;
+ }
+ 
+ BattlegroundDS::~BattlegroundDS()
+@@ -65,6 +68,23 @@ void BattlegroundDS::PostUpdateImpl(uint32 diff)
+     }
+     else
+         setWaterFallTimer(getWaterFallTimer() - diff);
++
++        if (GetStatus() == STATUS_IN_PROGRESS)
++        {
++                if(m_knockback < diff && m_knockbackCheck)
++                {
++                        for(BattlegroundPlayerMap::const_iterator itr = GetPlayers().begin(); itr != GetPlayers().end();itr++)
++                        {
++                                Player * plr = ObjectAccessor::FindPlayer(itr->first);
++                                if (plr->GetTeam() == ALLIANCE && plr->GetDistance2d(1214, 765) <= 50 && plr->GetPositionZ() > 10)
++                                        KnockBackPlayer(plr, 6.15f, 50.00f, 7.00f);
++                                if (plr->GetTeam() == HORDE && plr->GetDistance2d(1369, 817) <= 50 && plr->GetPositionZ() > 10)
++                                        KnockBackPlayer(plr, 3.10f, 50.00f, 7.00f);
++                                plr->RemoveAurasDueToSpell(48018);
++                        }
++                        m_knockbackCheck = false;
++                 } else m_knockback -= diff;
++        }
+ }
+ 
+ void BattlegroundDS::StartingEventCloseDoors()
+@@ -86,6 +106,9 @@ void BattlegroundDS::StartingEventOpenDoors()
+ 
+     for (uint32 i = BG_DS_OBJECT_WATER_1; i <= BG_DS_OBJECT_WATER_2; ++i)
+         SpawnBGObject(i, getWaterFallTimer());
++
++    m_knockback = 5000;
++    m_knockbackCheck = true;
+ }
+ 
+ void BattlegroundDS::AddPlayer(Player* player)
+@@ -158,6 +181,8 @@ void BattlegroundDS::Reset()
+ {
+     //call parent's class reset
+     Battleground::Reset();
++    m_knockback = 5000;
++    m_knockbackCheck = true;
+ }
+ 
+ bool BattlegroundDS::SetupBattleground()
+@@ -178,3 +203,20 @@ bool BattlegroundDS::SetupBattleground()
+ 
+     return true;
+ }
++
++void BattlegroundDS::KnockBackPlayer(Unit *pPlayer, float angle, float horizontalSpeed, float verticalSpeed)
++{
++    if(pPlayer->GetTypeId() == TYPEID_PLAYER)
++    {
++        WorldPacket data(SMSG_MOVE_KNOCK_BACK, 8+4+4+4+4+2);
++        data.append(pPlayer->GetPackGUID());
++        data << uint32(0);
++        data << float(cos(angle));
++        data << float(sin(angle));
++        data << float(horizontalSpeed);
++        data << float(-verticalSpeed);
++        ((Player*)pPlayer)->GetSession()->SendPacket(&data);
++    }
++    else
++        sLog->outError("The target of KnockBackPlayer must be a player !");
++}
+diff --git a/src/server/game/Battlegrounds/Zones/BattlegroundDS.h b/src/server/game/Battlegrounds/Zones/BattlegroundDS.h
+index f2ba2ce..5cf4209 100755
+--- a/src/server/game/Battlegrounds/Zones/BattlegroundDS.h
++++ b/src/server/game/Battlegrounds/Zones/BattlegroundDS.h
+@@ -43,10 +43,10 @@ enum BattlegroundDSObjects
+ };
+ 
+ enum BattlegroundDSData
+-{ // These values are NOT blizzlike... need the correct data!
+-    BG_DS_WATERFALL_TIMER_MIN                    = 30000,
++{
++    BG_DS_WATERFALL_TIMER_MIN                    = 35000,
+     BG_DS_WATERFALL_TIMER_MAX                    = 60000,
+-    BG_DS_WATERFALL_DURATION                     = 10000,
++    BG_DS_WATERFALL_DURATION                     = 30000,
+ };
+ 
+ class BattlegroundDSScore : public BattlegroundScore
+@@ -78,7 +78,9 @@ class BattlegroundDS : public Battleground
+     private:
+         uint32 m_waterTimer;
+         bool m_waterfallActive;
+-
++        bool m_knockbackCheck;
++        uint32 m_knockback;
++        void KnockBackPlayer(Unit *pPlayer, float angle, float horizontalSpeed, float verticalSpeed);
+         virtual void PostUpdateImpl(uint32 diff);
+     protected:
+         bool isWaterFallActive() { return m_waterfallActive; };
+-- 
+1.7.2.5
+

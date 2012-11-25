@@ -1,0 +1,83 @@
+// Thank Vlad
+diff --git a/src/server/game/Maps/Map.cpp b/src/server/game/Maps/Map.cpp
+index 3fac992..9fbb11f 100755
+--- a/src/server/game/Maps/Map.cpp
++++ b/src/server/game/Maps/Map.cpp
+@@ -384,6 +384,33 @@ void Map::LoadGrid(float x, float y)
+     EnsureGridLoaded(Cell(x, y));
+ }
+ 
++void Map::SendInitTransportsInInstance(Player* player)
++{
++    // Hack to send out transports
++    MapManager::TransportMap& tmap = sMapMgr->m_TransportsByInstanceIdMap;
++ 
++    // no transports at map
++    if (tmap.find(player->GetInstanceId()) == tmap.end())
++        return;
++ 
++    UpdateData transData;
++ 
++    MapManager::TransportSet& tset = tmap[player->GetInstanceId()];
++ 
++    for (MapManager::TransportSet::const_iterator i = tset.begin(); i != tset.end(); ++i)
++    {
++        // send data for current transport in other place
++        if ((*i) != player->GetTransport() && (*i)->GetInstanceId() == GetInstanceId())
++        {
++            (*i)->BuildCreateUpdateBlockForPlayer(&transData, player);
++        }
++    }
++ 
++    WorldPacket packet;
++    transData.BuildPacket(&packet);
++    player->GetSession()->SendPacket(&packet);
++}
++
+ bool Map::AddPlayerToMap(Player* player)
+ {
+     CellCoord cellCoord = Trinity::ComputeCellCoord(player->GetPositionX(), player->GetPositionY());
+@@ -392,22 +419,26 @@ bool Map::AddPlayerToMap(Player* player)
+         sLog->outError("Map::Add: Player (GUID: %u) has invalid coordinates X:%f Y:%f grid cell [%u:%u]", player->GetGUIDLow(), player->GetPositionX(), player->GetPositionY(), cellCoord.x_coord, cellCoord.y_coord);
+         return false;
+     }
+-
++ 
+     Cell cell(cellCoord);
+     EnsureGridLoadedForActiveObject(cell, player);
+     AddToGrid(player, cell);
+-
++ 
+     // Check if we are adding to correct map
+     ASSERT (player->GetMap() == this);
+     player->SetMap(this);
+     player->AddToWorld();
+-
++ 
+     SendInitSelf(player);
+     SendInitTransports(player);
+-
++    // And send init transport in instance
++    if (Instanceable())
++        SendInitTransportsInInstance(player);
++ 
++ 
+     player->m_clientGUIDs.clear();
+     player->UpdateObjectVisibility(false);
+-
++ 
+     sScriptMgr->OnPlayerEnterMap(this, player);
+     return true;
+ }
+diff --git a/src/server/game/Maps/Map.h b/src/server/game/Maps/Map.h
+index 3292edb..ae72d98 100755
+--- a/src/server/game/Maps/Map.h
++++ b/src/server/game/Maps/Map.h
+@@ -475,6 +476,7 @@ class Map : public GridRefManager<NGridType>
+ 
+         void SendInitTransports(Player* player);
+         void SendRemoveTransports(Player* player);
++		void SendInitTransportsInInstance(Player* player);
+ 
+         bool CreatureCellRelocation(Creature* creature, Cell new_cell);
+ 

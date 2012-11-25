@@ -1,0 +1,208 @@
+diff --git src/server/game/Chat/Chat.cpp src/server/game/Chat/Chat.cpp
+index 035fbaf..aa4c61f 100755
+--- src/server/game/Chat/Chat.cpp
++++ src/server/game/Chat/Chat.cpp
+@@ -414,6 +414,7 @@ ChatCommand* ChatHandler::getCommandTable()
+         { "bindsight",      SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleBindSightCommand>,           "", NULL },
+         { "unbindsight",    SEC_ADMINISTRATOR,  false, OldHandler<&ChatHandler::HandleUnbindSightCommand>,         "", NULL },
+         { "playall",        SEC_GAMEMASTER,  false, OldHandler<&ChatHandler::HandlePlayAllCommand>,             "", NULL },
++        { "xprate",         SEC_PLAYER,         false, OldHandler<&ChatHandler::HandleXpRateCommand>,              "", NULL },
+         { NULL,             0,                  false, NULL,                                           "", NULL }
+     };
+ 
+diff --git src/server/game/Chat/Chat.h src/server/game/Chat/Chat.h
+index 2311f4b..a612fa5 100755
+--- src/server/game/Chat/Chat.h
++++ src/server/game/Chat/Chat.h
+@@ -252,6 +252,7 @@ class ChatHandler
+         bool HandleStartCommand(const char* args);
+         bool HandleDismountCommand(const char* args);
+         bool HandleSaveCommand(const char* args);
++        bool HandleXpRateCommand(const char* args);
+ 
+         bool HandleSummonCommand(const char* args);
+         bool HandleAppearCommand(const char* args);
+diff --git src/server/game/Chat/Commands/Level0.cpp src/server/game/Chat/Commands/Level0.cpp
+index 6d33a57..5c0a292 100755
+--- src/server/game/Chat/Commands/Level0.cpp
++++ src/server/game/Chat/Commands/Level0.cpp
+@@ -157,3 +157,26 @@ bool ChatHandler::HandleServerMotdCommand(const char* /*args*/)
+     return true;
+ }
+ 
++// Allow the player to set their own exp modifier
++#define MAX_XP_RATE 5
++bool ChatHandler::HandleXpRateCommand(const char* args)
++{
++    Player* chr = m_session->GetPlayer();
++
++    if (!*args)
++        return false;
++
++    float xp_rate = atof((char*)args);
++
++    if (xp_rate < 0 || xp_rate > MAX_XP_RATE)
++    {
++        SendSysMessage(LANG_BAD_VALUE);
++        SetSentErrorMessage(true);
++        return false;
++    }
++
++    chr->SetXpRate(xp_rate);
++    PSendSysMessage("Your XP rate is now: %f", chr->GetXpRate());
++
++    return true;
++}
+diff --git src/server/game/Entities/Creature/GossipDef.cpp src/server/game/Entities/Creature/GossipDef.cpp
+index a39bd8e..8cf7dab 100755
+--- src/server/game/Entities/Creature/GossipDef.cpp
++++ src/server/game/Entities/Creature/GossipDef.cpp
+@@ -366,7 +366,7 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID,
+         }
+ 
+         data << uint32(quest->GetRewOrReqMoney());
+-        data << uint32(quest->XPValue(_session->GetPlayer()) * sWorld->getRate(RATE_XP_QUEST));
++        data << uint32(quest->XPValue(_session->GetPlayer()) * sWorld->getRate(RATE_XP_QUEST) * _session->GetPlayer()->GetXpRate());
+     }
+ 
+     // rewarded honor points. Multiply with 10 to satisfy client
+@@ -598,7 +598,7 @@ void PlayerMenu::SendQuestGiverOfferReward(Quest const* quest, uint64 npcGUID, b
+     }
+ 
+     data << uint32(quest->GetRewOrReqMoney());
+-    data << uint32(quest->XPValue(_session->GetPlayer()) * sWorld->getRate(RATE_XP_QUEST));
++    data << uint32(quest->XPValue(_session->GetPlayer()) * sWorld->getRate(RATE_XP_QUEST) * _session->GetPlayer()->GetXpRate());
+ 
+     // rewarded honor points. Multiply with 10 to satisfy client
+     data << 10 * Trinity::Honor::hk_honor_at_level(_session->GetPlayer()->getLevel(), quest->GetRewHonorMultiplier());
+diff --git src/server/game/Entities/Player/Player.cpp src/server/game/Entities/Player/Player.cpp
+index 38af97f..0f751b9 100755
+--- src/server/game/Entities/Player/Player.cpp
++++ src/server/game/Entities/Player/Player.cpp
+@@ -846,6 +846,7 @@ Player::Player(WorldSession* session): Unit(true), m_achievementMgr(this), m_rep
+     m_lastFallZ = 0;
+ 
+     m_grantableLevels = 0;
++    m_xp_rate = 1;
+ 
+     m_ControlledByPlayer = true;
+ 
+@@ -6843,6 +6844,7 @@ void Player::CheckAreaExploreAndOutdoor()
+                     XP = uint32(sObjectMgr->GetBaseXP(p->area_level)*sWorld->getRate(RATE_XP_EXPLORE));
+                 }
+ 
++                XP = uint32(XP * GetXpRate());
+                 GiveXP(XP, NULL);
+                 SendExplorationExperience(area, XP);
+             }
+@@ -14998,7 +15000,7 @@ void Player::RewardQuest(Quest const* quest, uint32 reward, Object* questGiver,
+     bool rewarded = (m_RewardedQuests.find(quest_id) != m_RewardedQuests.end());
+ 
+     // Not give XP in case already completed once repeatable quest
+-    uint32 XP = rewarded ? 0 : uint32(quest->XPValue(this)*sWorld->getRate(RATE_XP_QUEST));
++    uint32 XP = rewarded ? 0 : uint32(quest->XPValue(this)*sWorld->getRate(RATE_XP_QUEST) * GetXpRate());
+ 
+     // handle SPELL_AURA_MOD_XP_QUEST_PCT auras
+     Unit::AuraEffectList const& ModXPPctAuras = GetAuraEffectsByType(SPELL_AURA_MOD_XP_QUEST_PCT);
+@@ -16572,7 +16574,9 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
+     // 39           40                41                 42                    43          44          45              46           47               48              49
+     //"arenaPoints, totalHonorPoints, todayHonorPoints, yesterdayHonorPoints, totalKills, todayKills, yesterdayKills, chosenTitle, knownCurrencies, watchedFaction, drunk, "
+     // 50      51      52      53      54      55      56      57      58           59         60          61             62              63      64           65          66
+-    //"health, power1, power2, power3, power4, power5, power6, power7, instance_id, speccount, activespec, exploredZones, equipmentCache, ammoId, knownTitles, actionBars, grantableLevels FROM characters WHERE guid = '%u'", guid);
++    //"health, power1, power2, power3, power4, power5, power6, power7, instance_id, speccount, activespec, exploredZones, equipmentCache, ammoId, knownTitles, actionBars, grantableLevels, "
++    // 67
++    //"xp_rate FROM characters WHERE guid = '%u'", guid);
+     PreparedQueryResult result = holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADFROM);
+ 
+     if (!result)
+@@ -17196,6 +17200,8 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
+     if (m_grantableLevels > 0)
+         SetByteValue(PLAYER_FIELD_BYTES, 1, 0x01);
+ 
++    m_xp_rate = fields[67].GetFloat();
++
+     _LoadDeclinedNames(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADDECLINEDNAMES));
+ 
+     m_achievementMgr.CheckAllAchievementCriteria();
+@@ -18570,6 +18576,7 @@ void Player::SaveToDB(bool create /*=false*/)
+         stmt->setString(index++, ss.str());
+         stmt->setUInt8(index++, GetByteValue(PLAYER_FIELD_BYTES, 2));
+         stmt->setUInt32(index++, m_grantableLevels);
++        stmt->setFloat(index++, m_xp_rate);
+     }
+     else
+     {
+@@ -18681,6 +18688,7 @@ void Player::SaveToDB(bool create /*=false*/)
+         stmt->setString(index++, ss.str());
+         stmt->setUInt8(index++, GetByteValue(PLAYER_FIELD_BYTES, 2));
+         stmt->setUInt32(index++, m_grantableLevels);
++        stmt->setFloat(index++, m_xp_rate);
+ 
+         stmt->setUInt8(index++, IsInWorld() ? 1 : 0);
+         // Index
+diff --git src/server/game/Entities/Player/Player.h src/server/game/Entities/Player/Player.h
+index 489b4ea..fe0e560 100755
+--- src/server/game/Entities/Player/Player.h
++++ src/server/game/Entities/Player/Player.h
+@@ -1188,6 +1188,9 @@ class Player : public Unit, public GridObject<Player>
+             time_inn_enter = time;
+         }
+ 
++        float GetXpRate() const { return m_xp_rate; }
++        void SetXpRate(float xp_rate) { m_xp_rate = xp_rate; }
++
+         float GetRestBonus() const { return m_rest_bonus; }
+         void SetRestBonus(float rest_bonus_new);
+ 
+@@ -2797,6 +2800,8 @@ class Player : public Unit, public GridObject<Player>
+ 
+         uint8 m_grantableLevels;
+ 
++        float m_xp_rate;
++
+     private:
+         // internal common parts for CanStore/StoreItem functions
+         InventoryResult CanStoreItem_InSpecificSlot(uint8 bag, uint8 slot, ItemPosCountVec& dest, ItemTemplate const* pProto, uint32& count, bool swap, Item* pSrcItem) const;
+diff --git src/server/game/Miscellaneous/Formulas.h src/server/game/Miscellaneous/Formulas.h
+index 4faacc1..414b9b0 100755
+--- src/server/game/Miscellaneous/Formulas.h
++++ src/server/game/Miscellaneous/Formulas.h
+@@ -179,6 +179,7 @@ namespace Trinity
+                 }
+ 
+                 gain = uint32(gain * sWorld->getRate(RATE_XP_KILL));
++                gain = uint32(gain * player->GetXpRate());
+             }
+ 
+             sScriptMgr->OnGainCalculation(gain, player, u);
+diff --git src/server/shared/Database/Implementation/CharacterDatabase.cpp src/server/shared/Database/Implementation/CharacterDatabase.cpp
+index fe276b2..b919093 100644
+--- src/server/shared/Database/Implementation/CharacterDatabase.cpp
++++ src/server/shared/Database/Implementation/CharacterDatabase.cpp
+@@ -58,7 +58,7 @@ void CharacterDatabaseConnection::DoPrepareStatements()
+     "position_x, position_y, position_z, map, orientation, taximask, cinematic, totaltime, leveltime, rest_bonus, logout_time, is_logout_resting, resettalents_cost, "
+     "resettalents_time, trans_x, trans_y, trans_z, trans_o, transguid, extra_flags, stable_slots, at_login, zone, online, death_expire_time, taxi_path, instance_mode_mask, "
+     "arenaPoints, totalHonorPoints, todayHonorPoints, yesterdayHonorPoints, totalKills, todayKills, yesterdayKills, chosenTitle, knownCurrencies, watchedFaction, drunk, "
+-    "health, power1, power2, power3, power4, power5, power6, power7, instance_id, speccount, activespec, exploredZones, equipmentCache, ammoId, knownTitles, actionBars, grantableLevels FROM characters WHERE guid = ?", CONNECTION_ASYNC)
++    "health, power1, power2, power3, power4, power5, power6, power7, instance_id, speccount, activespec, exploredZones, equipmentCache, ammoId, knownTitles, actionBars, grantableLevels, xp_rate FROM characters WHERE guid = ?", CONNECTION_ASYNC)
+     PREPARE_STATEMENT(CHAR_SEL_GROUP_MEMBER, "SELECT guid FROM group_member WHERE memberGuid = ?", CONNECTION_ASYNC)
+     PREPARE_STATEMENT(CHAR_SEL_CHARACTER_INSTANCE, "SELECT id, permanent, map, difficulty, resettime FROM character_instance LEFT JOIN instance ON instance = id WHERE guid = ?", CONNECTION_ASYNC)
+     PREPARE_STATEMENT(CHAR_SEL_CHARACTER_AURAS, "SELECT caster_guid, spell, effect_mask, recalculate_mask, stackcount, amount0, amount1, amount2, "
+@@ -338,14 +338,14 @@ void CharacterDatabaseConnection::DoPrepareStatements()
+     "extra_flags, stable_slots, at_login, zone, "
+     "death_expire_time, taxi_path, arenaPoints, totalHonorPoints, todayHonorPoints, yesterdayHonorPoints, totalKills, "
+     "todayKills, yesterdayKills, chosenTitle, knownCurrencies, watchedFaction, drunk, health, power1, power2, power3, "
+-    "power4, power5, power6, power7, latency, speccount, activespec, exploredZones, equipmentCache, ammoId, knownTitles, actionBars, grantableLevels) VALUES "
+-    "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", CONNECTION_ASYNC);
++    "power4, power5, power6, power7, latency, speccount, activespec, exploredZones, equipmentCache, ammoId, knownTitles, actionBars, grantableLevels, xp_rate) VALUES "
++    "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", CONNECTION_ASYNC);
+     PREPARE_STATEMENT(CHAR_UPD_CHARACTER, "UPDATE characters SET name=?,race=?,class=?,gender=?,level=?,xp=?,money=?,playerBytes=?,playerBytes2=?,playerFlags=?,"
+     "map=?,instance_id=?,instance_mode_mask=?,position_x=?,position_y=?,position_z=?,orientation=?,taximask=?,cinematic=?,totaltime=?,leveltime=?,rest_bonus=?,"
+     "logout_time=?,is_logout_resting=?,resettalents_cost=?,resettalents_time=?,extra_flags=?,stable_slots=?,at_login=?,zone=?,death_expire_time=?,taxi_path=?,"
+     "arenaPoints=?,totalHonorPoints=?,todayHonorPoints=?,yesterdayHonorPoints=?,totalKills=?,todayKills=?,yesterdayKills=?,chosenTitle=?,knownCurrencies=?,"
+     "watchedFaction=?,drunk=?,health=?,power1=?,power2=?,power3=?,power4=?,power5=?,power6=?,power7=?,latency=?,speccount=?,activespec=?,exploredZones=?,"
+-    "equipmentCache=?,ammoId=?,knownTitles=?,actionBars=?,grantableLevels=?,online=? WHERE guid=?", CONNECTION_ASYNC);
++    "equipmentCache=?,ammoId=?,knownTitles=?,actionBars=?,grantableLevels=?,xp_rate=?,online=? WHERE guid=?", CONNECTION_ASYNC);
+ 
+     PREPARE_STATEMENT(CHAR_UPD_ADD_AT_LOGIN_FLAG, "UPDATE characters SET at_login = at_login | ? WHERE guid = ?", CONNECTION_ASYNC);
+     PREPARE_STATEMENT(CHAR_UPD_REM_AT_LOGIN_FLAG, "UPDATE characters set at_login = at_login & ~ ? WHERE guid = ?", CONNECTION_ASYNC);

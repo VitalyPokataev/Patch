@@ -1,0 +1,20 @@
+diff --git src/server/game/Handlers/ChatHandler.cpp src/server/game/Handlers/ChatHandler.cpp
+index 966eae5..837a7e9 100755
+--- src/server/game/Handlers/ChatHandler.cpp
++++ src/server/game/Handlers/ChatHandler.cpp
+@@ -541,6 +541,15 @@ void WorldSession::HandleTextEmoteOpcode(WorldPacket & recv_data)
+     recv_data >> emoteNum;
+     recv_data >> guid;
+ 
++    uint32 banned_emote[] = {
++        34, //dance
++        58, //kiss
++        80 //sexy
++    };
++    for (uint32 i = 0; i < (sizeof(banned_emote)/sizeof(uint32)); i++)
++        if ( text_emote == banned_emote[i] )
++            return;
++
+     sScriptMgr->OnPlayerTextEmote(GetPlayer(), text_emote, emoteNum, guid);
+ 
+     EmotesTextEntry const* em = sEmotesTextStore.LookupEntry(text_emote);

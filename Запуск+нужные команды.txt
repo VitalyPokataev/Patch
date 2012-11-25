@@ -1,0 +1,42 @@
+
+screen -S auth /home/server/wow/auth/auth.sh
+screen -S wowlum /home/server/wow/lum/world.sh
+
+screen -S wowfun /home/server/wow/fun/world.sh
+
+
+screen -S cata /home/server/wow/cata/world.sh
+screen -S bk /home/server/wow/bk/world.sh
+
+
+screen -S hlds sh ~/cs/start_hlds.sh
+
+cd ~/cs/cs16_W3
+./hlds_run -game cstrike +ip 192.168.0.11 +port 27015 +maxplayers 32 -pingboost 3 -nomaster
+
+sudo apt-get install gcc-4.4-multilib
+apt-get install ia32-libs
+
+sudo /etc/init.d/proftpd restart
+
+sudo /etc/init.d/apache2 restart
+
+sudo iptraf
+
+sudo apt-get install openssh-server
+sudo /etc/init.d/ssh stop/start/restart
+
+я дам права
+для этого команда sudo chmod -R 0777 /var/www
+
+ctrl+c
+
+cat /proc/cpuinfo
+
+//траф
+sudo apt-get install vnstat
+sudo vnstat -u -i eth0
+
+vnstat -i eth0
+vnstat -h -i eth0
+

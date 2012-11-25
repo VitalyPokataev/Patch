@@ -1,0 +1,185 @@
+diff -Nuar oregoncore-current/sql/CMakeLists.txt oregoncore-pq/sql/CMakeLists.txt
+--- oregoncore-current/sql/CMakeLists.txt	2011-01-01 10:03:07.000000000 -0500
++++ oregoncore-pq/sql/CMakeLists.txt	2011-01-01 10:19:57.000000000 -0500
+@@ -1,6 +1,7 @@
+ add_subdirectory(updates)
+ add_subdirectory(tools)
+ add_subdirectory(scripts)
++add_subdirectory(oc-patch)
+ 
+ 
+ ########### install files ###############
+diff -Nuar oregoncore-current/sql/oc-patch/characters-character_stats.sql oregoncore-pq/sql/oc-patch/characters-character_stats.sql
+--- oregoncore-current/sql/oc-patch/characters-character_stats.sql	1969-12-31 19:00:00.000000000 -0500
++++ oregoncore-pq/sql/oc-patch/characters-character_stats.sql	2011-01-01 10:19:57.000000000 -0500
+@@ -0,0 +1,82 @@
++-- MySQL dump 10.11
++--
++-- Host: localhost    Database: rscharacters
++-- ------------------------------------------------------
++-- Server version	5.0.51a-24+lenny1-log
++
++/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
++/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
++/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
++/*!40101 SET NAMES utf8 */;
++/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
++/*!40103 SET TIME_ZONE='+00:00' */;
++/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
++/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
++/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
++/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
++
++--
++-- Table structure for table `character_stats`
++--
++
++DROP TABLE IF EXISTS `character_stats`;
++SET @saved_cs_client     = @@character_set_client;
++SET character_set_client = utf8;
++CREATE TABLE `character_stats` (
++  `guid` int(11) unsigned NOT NULL default '0' COMMENT 'Global Unique Identifier, Low part',
++  `maxhealth` int(10) unsigned NOT NULL default '0',
++  `maxmana` int(10) unsigned NOT NULL default '0',
++  `strength` int(10) unsigned NOT NULL default '0',
++  `agility` int(10) unsigned NOT NULL default '0',
++  `stamina` int(10) unsigned NOT NULL default '0',
++  `intellect` int(10) unsigned NOT NULL default '0',
++  `spirit` int(10) unsigned NOT NULL default '0',
++  `armor` int(10) unsigned NOT NULL default '0',
++  `resHoly` int(10) unsigned NOT NULL default '0',
++  `resFire` int(10) unsigned NOT NULL default '0',
++  `resNature` int(10) unsigned NOT NULL default '0',
++  `resFrost` int(10) unsigned NOT NULL default '0',
++  `resShadow` int(10) unsigned NOT NULL default '0',
++  `resArcane` int(10) unsigned NOT NULL default '0',
++  `blockPct` float unsigned NOT NULL default '0',
++  `dodgePct` float unsigned NOT NULL default '0',
++  `parryPct` float unsigned NOT NULL default '0',
++  `critPct` float unsigned NOT NULL default '0',
++  `rangedCritPct` float unsigned NOT NULL default '0',
++  `spellCritPct` float unsigned NOT NULL default '0',
++  `attackPower` int(10) unsigned NOT NULL default '0',
++  `rangedAttackPower` int(10) unsigned NOT NULL default '0',
++  `minDamage` float unsigned NOT NULL default '0',
++  `maxDamage` float unsigned NOT NULL default '0',
++  `minOffhandDamage` float unsigned NOT NULL default '0',
++  `maxOffhandDamage` float unsigned NOT NULL default '0',
++  `minRangedDamage` float unsigned NOT NULL default '0',
++  `maxRangedDamage` float unsigned NOT NULL default '0',
++  `attackTime` int(10) unsigned NOT NULL default '0',
++  `rangedAttackTime` int(10) unsigned NOT NULL default '0',
++  `totalHonorKills` int(10) unsigned NOT NULL default '0',
++  `honorPoints` int(10) unsigned NOT NULL default '0',
++  `arenaPoints` int(10) unsigned NOT NULL default '0',
++  PRIMARY KEY  (`guid`)
++) ENGINE=MyISAM DEFAULT CHARSET=utf8;
++SET character_set_client = @saved_cs_client;
++
++--
++-- Dumping data for table `character_stats`
++--
++
++LOCK TABLES `character_stats` WRITE;
++/*!40000 ALTER TABLE `character_stats` DISABLE KEYS */;
++/*!40000 ALTER TABLE `character_stats` ENABLE KEYS */;
++UNLOCK TABLES;
++/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
++
++/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
++/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
++/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
++/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
++/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
++/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
++/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
++
++-- Dump completed on 2010-11-04 15:30:31
+diff -Nuar oregoncore-current/sql/oc-patch/CMakeLists.txt oregoncore-pq/sql/oc-patch/CMakeLists.txt
+--- oregoncore-current/sql/oc-patch/CMakeLists.txt	1969-12-31 19:00:00.000000000 -0500
++++ oregoncore-pq/sql/oc-patch/CMakeLists.txt	2011-01-01 10:19:57.000000000 -0500
+@@ -0,0 +1,6 @@
++
++########### install files ###############
++
++FILE(GLOB _SQL *.sql)
++
++install(FILES ${_SQL} DESTINATION share/oregon/sql/oc-patch)
+diff -Nuar oregoncore-current/src/game/Player.cpp oregoncore-pq/src/game/Player.cpp
+--- oregoncore-current/src/game/Player.cpp	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/Player.cpp	2011-01-01 10:19:57.000000000 -0500
+@@ -16333,6 +16333,8 @@
+     SetUInt32Value(UNIT_FIELD_FLAGS, tmp_flags);
+     SetUInt32Value(PLAYER_FLAGS, tmp_pflags);
+ 
++    _SaveStats();	
++
+     // save pet (hunter pet level and experience and all type pets health/mana).
+     if (Pet* pet = GetPet())
+         pet->SavePetToDB(PET_SAVE_AS_CURRENT);
+@@ -16660,6 +16662,54 @@
+     m_TutorialsChanged = false;
+ }
+ 
++// save player stats -- only for external usage
++// real stats will be recalculated on player login
++void Player::_SaveStats()
++{
++    CharacterDatabase.PExecute("DELETE FROM character_stats WHERE guid = '%u'", GetGUIDLow());
++    std::ostringstream ss;
++    ss << "INSERT INTO character_stats (guid, maxhealth, maxmana, "
++        "strength, agility, stamina, intellect, spirit, armor, resHoly, resFire, resNature, resFrost, resShadow, resArcane, "
++        "blockPct, dodgePct, parryPct, critPct, rangedCritPct, spellCritPct, attackPower, rangedAttackPower, minDamage, "
++        "maxDamage, minOffhandDamage, maxOffhandDamage, minRangedDamage, maxRangedDamage, attackTime, rangedAttackTime, "
++        "totalHonorKills, honorPoints, arenaPoints ) VALUES ("
++        << GetGUIDLow() << ", "
++        << GetMaxHealth() << ", "
++        << GetMaxPower(POWER_MANA) << ", "
++        << GetStat(STAT_STRENGTH) << ", "
++        << GetStat(STAT_AGILITY) << ", "
++        << GetStat(STAT_STAMINA) << ", "
++        << GetStat(STAT_INTELLECT) << ", "
++        << GetStat(STAT_SPIRIT) << ", "
++        << GetArmor() << ", "
++        << GetResistance(SPELL_SCHOOL_HOLY) << ", "
++        << GetResistance(SPELL_SCHOOL_FIRE) << ", "
++        << GetResistance(SPELL_SCHOOL_NATURE) << ", "
++        << GetResistance(SPELL_SCHOOL_FROST) << ", "
++        << GetResistance(SPELL_SCHOOL_SHADOW) << ", "
++        << GetResistance(SPELL_SCHOOL_ARCANE) << ", "
++        << GetFloatValue(PLAYER_BLOCK_PERCENTAGE) << ", "
++        << GetFloatValue(PLAYER_DODGE_PERCENTAGE) << ", "
++        << GetFloatValue(PLAYER_PARRY_PERCENTAGE) << ", "
++        << GetFloatValue(PLAYER_CRIT_PERCENTAGE) << ", "
++        << GetFloatValue(PLAYER_RANGED_CRIT_PERCENTAGE) << ", "
++        << GetFloatValue(PLAYER_SPELL_CRIT_PERCENTAGE1) << ", "
++        << GetUInt32Value(UNIT_FIELD_ATTACK_POWER) << ", "
++        << GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER) << ", "
++        << GetFloatValue(UNIT_FIELD_MINDAMAGE) << ", "
++        << GetFloatValue(UNIT_FIELD_MAXDAMAGE) << ", "
++        << GetFloatValue(UNIT_FIELD_MINOFFHANDDAMAGE) << ", "
++        << GetFloatValue(UNIT_FIELD_MAXOFFHANDDAMAGE) << ", "
++        << GetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE) << ", "
++        << GetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE) << ", "
++        << GetAttackTime(BASE_ATTACK) << ", "
++        << GetAttackTime(RANGED_ATTACK) << ", "
++        << GetUInt32Value(PLAYER_FIELD_KILLS) << ", "
++        << GetHonorPoints() << ", "
++        << GetArenaPoints() << ")"; 
++    CharacterDatabase.Execute(ss.str().c_str());
++}
++
+ void Player::outDebugValues() const
+ {
+     #ifdef OREGON_DEBUG
+diff -Nuar oregoncore-current/src/game/Player.h oregoncore-pq/src/game/Player.h
+--- oregoncore-current/src/game/Player.h	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/Player.h	2011-01-01 10:19:57.000000000 -0500
+@@ -2151,6 +2151,7 @@
+         void _SaveReputation();
+         void _SaveSpells();
+         void _SaveTutorials();
++        void _SaveStats();
+         void _SaveBGData();
+ 
+         void _SetCreateBits(UpdateMask *updateMask, Player *target) const;

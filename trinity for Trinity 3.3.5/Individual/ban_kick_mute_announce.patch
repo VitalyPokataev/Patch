@@ -1,0 +1,112 @@
+# HG changeset patch
+# User chaosua
+# Date 1281569247 -10800
+# Branch trunk
+# Node ID d7db98fb74fed827b4d9ea720d2d3a991d88f68e
+# Parent  5330a30aeeb3e63b30f728175c7f12a37c5563a5
+MOD ban mute kick announce
+
+diff -r 5330a30aeeb3 -r d7db98fb74fe src/server/game/Chat/Commands/Level2.cpp
+--- a/src/server/game/Chat/Commands/Level2.cpp	Fri Jul 23 00:51:40 2010 +0300
++++ b/src/server/game/Chat/Commands/Level2.cpp	Thu Aug 12 02:27:27 2010 +0300
+@@ -51,6 +51,8 @@
+ //mute player for some times
+ bool ChatHandler::HandleMuteCommand(const char* args)
+ {
++    std::string announce;
++
+     char* nameStr;
+     char* delayStr;
+     extractOptFirstArg((char*)args,&nameStr,&delayStr);
+@@ -60,7 +62,14 @@
+     char *mutereason = strtok(NULL, "\r");
+     std::string mutereasonstr = "No reason";
+     if (mutereason != NULL)
+-         mutereasonstr = mutereason;
++        mutereasonstr = mutereason;
++
++    if(!mutereason)
++    {
++        PSendSysMessage("You must enter a reason of mute");
++        SetSentErrorMessage(true);
++        return false;
++    }
+ 
+     Player* target;
+     uint64 target_guid;
+@@ -95,6 +104,16 @@
+ 
+     PSendSysMessage(LANG_YOU_DISABLE_CHAT, nameLink.c_str(), notspeaktime, mutereasonstr.c_str());
+ 
++    announce = "The character '";
++    announce += nameStr;
++    announce += "' was muted for ";
++    announce += delayStr;
++    announce += " minutes by the character '";
++    announce += m_session->GetPlayerName();
++    announce += "'. The reason is: ";
++    announce += mutereason;
++    HandleAnnounceCommand(announce.c_str());
++
+     return true;
+ }
+ 
+@@ -2108,6 +2127,9 @@
+         }
+     }*/
+     Player* target;
++
++    std::string announce;
++
+     if (!extractPlayerTarget((char*)args,&target))
+         return false;
+ 
+@@ -2125,6 +2147,14 @@
+     // send before target pointer invalidate
+     PSendSysMessage(LANG_COMMAND_KICKMESSAGE,GetNameLink(target).c_str());
+     target->GetSession()->KickPlayer();
++
++    announce = "The character '";
++    announce += target->GetName();
++    announce += "' was kicked by the character '";
++    announce += m_session->GetPlayerName();
++    announce += "'.";
++    HandleAnnounceCommand(announce.c_str());
++
+     return true;
+ }
+ 
+diff -r 5330a30aeeb3 -r d7db98fb74fe src/server/game/Chat/Commands/Level3.cpp
+--- a/src/server/game/Chat/Commands/Level3.cpp	Fri Jul 23 00:51:40 2010 +0300
++++ b/src/server/game/Chat/Commands/Level3.cpp	Thu Aug 12 02:27:27 2010 +0300
+@@ -5449,6 +5449,8 @@
+     if (!*args)
+         return false;
+ 
++    std::string announce;
++
+     char* cnameOrIP = strtok ((char*)args, " ");
+     if (!cnameOrIP)
+         return false;
+@@ -5514,6 +5516,21 @@
+             return false;
+     }
+ 
++	if (mode == BAN_CHARACTER)
++        announce = "The character '";
++    else if (mode == BAN_IP)
++        announce = "The IP '";
++    else
++    announce = "Account '";
++    announce += nameOrIP.c_str();
++    announce += "' was banned for ";
++    announce += duration;
++    announce += " by the character '";
++    announce += m_session->GetPlayerName();
++    announce += "'. The reason is: ";
++    announce += reason;
++    HandleAnnounceCommand(announce.c_str());
++
+     return true;
+ }
+ 

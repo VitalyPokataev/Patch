@@ -1,0 +1,234 @@
+# HG changeset patch
+# User artkeep
+# Date 1286819393 -10800
+# Branch trunk
+# Node ID c9bb0bf2fabd4cd3f14935a177534e05f0e8f24b
+# Parent  a1955d4e7abbc504dc1be6a7b02229b5031f6079
+VIP account
+
+diff -r a1955d4e7abb -r c9bb0bf2fabd sql/CoreUpdate/VIPAccounts/auth_VIPAccount.sql
+--- /dev/null    Thu Jan 01 00:00:00 1970 +0000
++++ b/sql/updates/UpCore/auth/2012_07_28_01_VIP_Account.sql    Mon Oct 11 20:49:53 2010 +0300
+@@ -0,0 +1,8 @@
++CREATE TABLE IF NOT EXISTS `account_premium` (
++  `id` int(11) NOT NULL default '0' COMMENT 'Account id',
++  `setdate` bigint(40) NOT NULL default '0',
++  `unsetdate` bigint(40) NOT NULL default '0',
++  `premium_type` tinyint(4) unsigned NOT NULL default '1',
++  `active` tinyint(4) NOT NULL default '1',
++  PRIMARY KEY  (`id`,`setdate`)
++) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Premium Accounts';
+\ No newline at end of file
+diff -r a1955d4e7abb -r c9bb0bf2fabd src/server/authserver/Server/AuthSocket.cpp
+--- a/src/server/authserver/Server/AuthSocket.cpp    Mon Oct 11 18:41:48 2010 +0300
++++ b/src/server/authserver/Server/AuthSocket.cpp    Mon Oct 11 20:49:53 2010 +0300
+@@ -407,6 +407,9 @@
+                 LoginDatabase.Execute(
+                         LoginDatabase.GetPreparedStatement(LOGIN_SET_EXPIREDACCBANS)
+                     );
++                LoginDatabase.Execute(
++                        LoginDatabase.GetPreparedStatement(LOGIN_SET_EXPIREDACCPREM)
++                    );
+ 
+                 ///- If the account is banned, reject the logon attempt
+                 stmt = LoginDatabase.GetPreparedStatement(LOGIN_GET_ACCBANNED);
+diff -r a1955d4e7abb -r c9bb0bf2fabd src/server/game/Entities/Player/Player.cpp
+--- a/src/server/game/Entities/Player/Player.cpp    Mon Oct 11 18:41:48 2010 +0300
++++ b/src/server/game/Entities/Player/Player.cpp    Mon Oct 11 20:49:53 2010 +0300
+@@ -6500,7 +6500,8 @@
+                 {
+                     XP = uint32(sObjectMgr.GetBaseXP(p->area_level)*sWorld.getRate(RATE_XP_EXPLORE));
+                 }
+-
++                if(GetSession()->IsPremium())
++                XP *= sWorld.getRate(RATE_XP_EXPLORE_PREMIUM);
+                 GiveXP(XP, NULL);
+                 SendExplorationExperience(area,XP);
+             }
+@@ -14534,6 +14534,9 @@
+     for (Unit::AuraEffectList::const_iterator i = ModXPPctAuras.begin(); i != ModXPPctAuras.end(); ++i)
+         XP = uint32(XP*(1.0f + (*i)->GetAmount() / 100.0f));
+ 
++    if (GetSession()->IsPremium())
++        XP *= sWorld.getRate(RATE_XP_QUEST_PREMIUM);
++
+     int32 moneyRew = 0;
+     if (getLevel() < sWorld.getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+         GiveXP(XP, NULL);
+diff -r a1955d4e7abb -r c9bb0bf2fabd src/server/game/Miscellaneous/Formulas.h
+--- a/src/server/game/Miscellaneous/Formulas.h    Mon Oct 11 18:41:48 2010 +0300
++++ b/src/server/game/Miscellaneous/Formulas.h    Mon Oct 11 20:49:53 2010 +0300
+@@ -179,8 +179,8 @@
+                     else
+                         gain *= 2;
+                 }
+-
+-                gain = uint32(gain * sWorld.getRate(RATE_XP_KILL));
++            float premium_rate = pl->GetSession()->IsPremium() ? sWorld.getRate(RATE_XP_KILL_PREMIUM) : 1.0f;
++                gain = uint32(gain * sWorld.getRate(RATE_XP_KILL)* premium_rate);
+             }
+ 
+             sScriptMgr.OnGainCalculation(gain, pl, u);
+diff -r a1955d4e7abb -r c9bb0bf2fabd src/server/game/Server/WorldSession.cpp
+--- a/src/server/game/Server/WorldSession.cpp    Mon Oct 11 18:41:48 2010 +0300
++++ b/src/server/game/Server/WorldSession.cpp    Mon Oct 11 20:49:53 2010 +0300
+@@ -44,9 +44,9 @@
+ #include "Transport.h"
+ 
+ /// WorldSession constructor
+-WorldSession::WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, uint8 expansion, time_t mute_time, LocaleConstant locale, uint32 recruiter):
++WorldSession::WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, bool ispremium, uint8 expansion, time_t mute_time, LocaleConstant locale, uint32 recruiter):
+ m_muteTime(mute_time), m_timeOutTime(0), _player(NULL), m_Socket(sock),
+-_security(sec), _accountId(id), m_expansion(expansion), _logoutTime(0),
++_security(sec), _ispremium(ispremium), _accountId(id), m_expansion(expansion), _logoutTime(0),
+ m_inQueue(false), m_playerLoading(false), m_playerLogout(false),
+ m_playerRecentlyLogout(false), m_playerSave(false),
+ m_sessionDbcLocale(sWorld.GetAvailableDbcLocale(locale)),
+diff -r a1955d4e7abb -r c9bb0bf2fabd src/server/game/Server/WorldSession.h
+--- a/src/server/game/Server/WorldSession.h    Mon Oct 11 18:41:48 2010 +0300
++++ b/src/server/game/Server/WorldSession.h    Mon Oct 11 20:49:53 2010 +0300
+@@ -134,7 +134,7 @@
+ {
+     friend class CharacterHandler;
+     public:
+-        WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, uint8 expansion, time_t mute_time, LocaleConstant locale, uint32 recruiter);
++        WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, bool ispremium, uint8 expansion, time_t mute_time, LocaleConstant locale, uint32 recruiter);
+         ~WorldSession();
+ 
+         bool PlayerLoading() const { return m_playerLoading; }
+@@ -162,6 +162,7 @@
+         void SendClientCacheVersion(uint32 version);
+ 
+         AccountTypes GetSecurity() const { return _security; }
++        bool IsPremium() const { return _ispremium; }
+         uint32 GetAccountId() const { return _accountId; }
+         Player* GetPlayer() const { return _player; }
+         char const* GetPlayerName() const;
+@@ -846,6 +847,7 @@
+         AccountTypes _security;
+         uint32 _accountId;
+         uint8 m_expansion;
++    bool _ispremium;
+ 
+         time_t _logoutTime;
+         bool m_inQueue;                                     // session wait in auth.queue
+diff -r a1955d4e7abb -r c9bb0bf2fabd src/server/game/Server/WorldSocket.cpp
+--- a/src/server/game/Server/WorldSocket.cpp    Mon Oct 11 18:41:48 2010 +0300
++++ b/src/server/game/Server/WorldSocket.cpp    Mon Oct 11 20:49:53 2010 +0300
+@@ -772,6 +772,7 @@
+     //uint8 expansion = 0;
+     LocaleConstant locale;
+     std::string account;
++    bool isPremium = false;
+     SHA1Hash sha1;
+     BigNumber v, s, g, N;
+     WorldPacket packet, SendAddonPacked;
+@@ -927,6 +928,17 @@
+         return -1;
+     }
+ 
++    QueryResult premresult =
++        LoginDatabase.PQuery ("SELECT 1 "
++                                "FROM account_premium "
++                                "WHERE id = '%u' "
++                                "AND active = 1",
++                                id);
++    if (premresult) // if account premium
++    {
++        isPremium = true;
++    }
++
+     // Check locked state for server
+     AccountTypes allowedAccountType = sWorld.GetPlayerSecurityLimit();
+     sLog.outDebug("Allowed Level: %u Player Level %u", allowedAccountType, AccountTypes(security));
+@@ -982,7 +994,7 @@
+                             safe_account.c_str());
+ 
+     // NOTE ATM the socket is single-threaded, have this in mind ...
+-    ACE_NEW_RETURN (m_Session, WorldSession (id, this, AccountTypes(security), expansion, mutetime, locale, recruiter), -1);
++    ACE_NEW_RETURN (m_Session, WorldSession (id, this, AccountTypes(security), isPremium, expansion, mutetime, locale, recruiter), -1);
+ 
+     m_Crypt.Init(&K);
+ 
+diff -r a1955d4e7abb -r c9bb0bf2fabd src/server/game/World/World.cpp
+--- a/src/server/game/World/World.cpp    Mon Oct 11 18:41:48 2010 +0300
++++ b/src/server/game/World/World.cpp    Mon Oct 11 20:49:53 2010 +0300
+@@ -450,9 +450,12 @@
+     rate_values[RATE_DROP_ITEM_REFERENCED] = sConfig.GetFloatDefault("Rate.Drop.Item.Referenced", 1.0f);
+     rate_values[RATE_DROP_ITEM_REFERENCED_AMOUNT] = sConfig.GetFloatDefault("Rate.Drop.Item.ReferencedAmount", 1.0f);
+     rate_values[RATE_DROP_MONEY]  = sConfig.GetFloatDefault("Rate.Drop.Money", 1.0f);
+-    rate_values[RATE_XP_KILL]     = sConfig.GetFloatDefault("Rate.XP.Kill", 1.0f);
+-    rate_values[RATE_XP_QUEST]    = sConfig.GetFloatDefault("Rate.XP.Quest", 1.0f);
+-    rate_values[RATE_XP_EXPLORE]  = sConfig.GetFloatDefault("Rate.XP.Explore", 1.0f);
++    rate_values[RATE_XP_KILL]            = sConfig.GetFloatDefault("Rate.XP.Kill", 1.0f);
++    rate_values[RATE_XP_KILL_PREMIUM]    = sConfig.GetFloatDefault("Rate.XP.Kill.Premium", 1.0f);
++    rate_values[RATE_XP_QUEST]           = sConfig.GetFloatDefault("Rate.XP.Quest", 1.0f);
++    rate_values[RATE_XP_QUEST_PREMIUM]   = sConfig.GetFloatDefault("Rate.XP.Quest.Premium", 1.0f);
++    rate_values[RATE_XP_EXPLORE]         = sConfig.GetFloatDefault("Rate.XP.Explore", 1.0f);
++    rate_values[RATE_XP_EXPLORE_PREMIUM] = sConfig.GetFloatDefault("Rate.XP.Explore.Premium", 1.0f);
+     rate_values[RATE_REPAIRCOST]  = sConfig.GetFloatDefault("Rate.RepairCost", 1.0f);
+     if (rate_values[RATE_REPAIRCOST] < 0.0f)
+     {
+diff -r a1955d4e7abb -r c9bb0bf2fabd src/server/game/World/World.h
+--- a/src/server/game/World/World.h    Mon Oct 11 18:41:48 2010 +0300
++++ b/src/server/game/World/World.h    Mon Oct 11 20:49:53 2010 +0300
+@@ -349,8 +349,11 @@
+     RATE_DROP_ITEM_REFERENCED_AMOUNT,
+     RATE_DROP_MONEY,
+     RATE_XP_KILL,
++    RATE_XP_KILL_PREMIUM,
+     RATE_XP_QUEST,
++    RATE_XP_QUEST_PREMIUM,
+     RATE_XP_EXPLORE,
++    RATE_XP_EXPLORE_PREMIUM,
+     RATE_REPAIRCOST,
+     RATE_REPUTATION_GAIN,
+     RATE_REPUTATION_LOWLEVEL_KILL,
+diff -r a1955d4e7abb -r c9bb0bf2fabd src/server/shared/Database/Implementation/LoginDatabase.cpp
+--- a/src/server/shared/Database/Implementation/LoginDatabase.cpp    Mon Oct 11 18:41:48 2010 +0300
++++ b/src/server/shared/Database/Implementation/LoginDatabase.cpp    Mon Oct 11 20:49:53 2010 +0300
+@@ -32,6 +32,7 @@
+     PrepareStatement(LOGIN_GET_REALMLIST, "SELECT id, name, address, port, icon, color, timezone, allowedSecurityLevel, population, gamebuild FROM realmlist WHERE color <> 3 ORDER BY name");
+     PrepareStatement(LOGIN_SET_EXPIREDIPBANS, "DELETE FROM ip_banned WHERE unbandate<=UNIX_TIMESTAMP() AND unbandate<>bandate");
+     PrepareStatement(LOGIN_SET_EXPIREDACCBANS, "UPDATE account_banned SET active = 0 WHERE unbandate<=UNIX_TIMESTAMP() AND unbandate<>bandate");
++    PrepareStatement(LOGIN_SET_EXPIREDACCPREM, "UPDATE account_premium SET active = 0 WHERE unsetdate<=UNIX_TIMESTAMP() AND unsetdate<>setdate");
+     PrepareStatement(LOGIN_GET_IPBANNED, "SELECT * FROM ip_banned WHERE ip = ?");
+     PrepareStatement(LOGIN_SET_IPAUTOBANNED, "INSERT INTO ip_banned VALUES (?, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()+?,'Trinity realmd', 'Failed login autoban')");
+     PrepareStatement(LOGIN_GET_ACCBANNED, "SELECT bandate,unbandate FROM account_banned WHERE id = ? AND active = 1");
+diff -r a1955d4e7abb -r c9bb0bf2fabd src/server/shared/Database/Implementation/LoginDatabase.h
+--- a/src/server/shared/Database/Implementation/LoginDatabase.h    Mon Oct 11 18:41:48 2010 +0300
++++ b/src/server/shared/Database/Implementation/LoginDatabase.h    Mon Oct 11 20:49:53 2010 +0300
+@@ -45,6 +45,7 @@
+     LOGIN_GET_REALMLIST,
+     LOGIN_SET_EXPIREDIPBANS,
+     LOGIN_SET_EXPIREDACCBANS,
++    LOGIN_SET_EXPIREDACCPREM,
+     LOGIN_GET_IPBANNED,
+     LOGIN_SET_IPAUTOBANNED,
+     LOGIN_GET_ACCBANNED,
+diff -r a1955d4e7abb -r c9bb0bf2fabd src/server/worldserver/worldserver.conf.dist
+--- a/src/server/worldserver/worldserver.conf.dist    Mon Oct 11 18:41:48 2010 +0300
++++ b/src/server/worldserver/worldserver.conf.dist    Mon Oct 11 20:49:53 2010 +0300
+@@ -1541,6 +1541,12 @@
+ #        Reputation Gain rate
+ #        Default: 1
+ #
++#    Rate.XP.Kill.Premium
++#    Rate.XP.Quest.Premium
++#    Rate.XP.Explore.Premium
++#        XP rates Premium modifier
++#        Default: 1
++#
+ #    Rate.Reputation.RecruitAFriendBonus
+ #        Reputation bonus amount for recruit-a-friend. 0.1 = 10% bonus.
+ #        Default: 0.1 (blizzlike)
+@@ -1660,6 +1666,9 @@
+ Rate.XP.Kill    = 1
+ Rate.XP.Quest   = 1
+ Rate.XP.Explore = 1
++Rate.XP.Kill.Premium    = 1
++Rate.XP.Quest.Premium   = 1
++Rate.XP.Explore.Premium = 1
+ Rate.RepairCost = 1
+ Rate.Rest.InGame = 1
+ Rate.Rest.Offline.InTavernOrCity = 1

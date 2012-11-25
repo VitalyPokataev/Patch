@@ -1,0 +1,116 @@
+diff -Nuar oregoncore-current/sql/oc-patch/world-commandwarp.sql oregoncore-pq/sql/oc-patch/world-commandwarp.sql
+--- oregoncore-current/sql/oc-patch/world-commandwarp.sql	1969-12-31 19:00:00.000000000 -0500
++++ oregoncore-pq/sql/oc-patch/world-commandwarp.sql	2011-01-01 10:22:33.000000000 -0500
+@@ -0,0 +1,5 @@
++DELETE FROM `command` WHERE `name` = 'warp';
++
++INSERT INTO `command` (`name`, `security`, `help`) VALUES
++('warp', 3, 'Syntax: .warp $dir #value\r\n\r\nTeleport in the direction indicated by dir (f=forward,b=backward,u=up,d=down) by the number of coordinate units specified as value.');
++
+diff -Nuar oregoncore-current/src/game/Chat.cpp oregoncore-pq/src/game/Chat.cpp
+--- oregoncore-current/src/game/Chat.cpp	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/Chat.cpp	2011-01-01 10:22:33.000000000 -0500
+@@ -671,6 +671,9 @@
+         { "bindsight",      SEC_ADMINISTRATOR,  false, &ChatHandler::HandleBindSightCommand,           "", NULL },
+         { "unbindsight",    SEC_ADMINISTRATOR,  false, &ChatHandler::HandleUnbindSightCommand,         "", NULL },
+ 
++        // warp command
++        { "warp",           SEC_ADMINISTRATOR,  false, &ChatHandler::HandleWarpCommand,                "", NULL },
++
+         { NULL,             0,                  false, NULL,                                           "", NULL }
+     };
+ 
+diff -Nuar oregoncore-current/src/game/Chat.h oregoncore-pq/src/game/Chat.h
+--- oregoncore-current/src/game/Chat.h	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/Chat.h	2011-01-01 10:22:33.000000000 -0500
+@@ -434,6 +434,8 @@
+ 
+         bool HandleResetAllCommand(const char * args);
+ 
++        // warp command
++        bool HandleWarpCommand(const char * args);                                              
+ 
+         // GM ticket command handlers
+         bool HandleGMTicketListCommand(const char* args);
+diff -Nuar oregoncore-current/src/game/Level3.cpp oregoncore-pq/src/game/Level3.cpp
+--- oregoncore-current/src/game/Level3.cpp	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/Level3.cpp	2011-01-01 10:22:33.000000000 -0500
+@@ -7440,3 +7440,78 @@
+     return true;
+ }
+ 
++bool ChatHandler::HandleWarpCommand(const char* args)
++{
++    // Based on a concept by Pwntzyou
++    if (!*args)
++        return false;
++
++    Player* _player = m_session->GetPlayer();
++
++    char* arg1 = strtok((char*)args, " ");
++    char* arg2 = strtok(NULL, " ");
++
++    if (! arg1)
++        return false;
++
++    if (! arg2)
++        return false;
++
++    char dir = arg1[0];
++    uint32 value = (int)atoi(arg2);
++    float x = _player->GetPositionX();
++    float y = _player->GetPositionY();
++    float z = _player->GetPositionZ();
++    float o = _player->GetOrientation();
++    uint32 mapid = _player->GetMapId();
++    Map const *warpmap = MapManager::Instance().CreateBaseMap(mapid);
++
++    if (!MapManager::IsValidMapCoord(mapid,x,y,z))
++    {
++        PSendSysMessage(LANG_INVALID_TARGET_COORD,x,y,mapid);
++        SetSentErrorMessage(true);
++        return false;
++    }
++
++    // stop flight if need
++    if (_player->isInFlight())
++    {
++        _player->GetMotionMaster()->MovementExpired();
++        _player->CleanupAfterTaxiFlight();
++    }
++    // save only in non-flight case
++    else
++        _player->SaveRecallPosition();
++
++    switch (dir)
++    {
++    case 'u':
++        {
++            _player->TeleportTo(mapid, x, y, z + value, o);
++        }
++        break;
++    case 'd':
++        {
++            _player->TeleportTo(mapid, x, y, z - value, o);
++        }
++        break;
++    case 'f':
++        {
++            float fx = x + cosf(o)*value;
++            float fy = y + sinf(o)*value; 
++            float fz = std::max(warpmap->GetHeight(fx, fy, MAX_HEIGHT), warpmap->GetWaterLevel(fx, fy));
++            _player->TeleportTo(mapid, fx, fy, fz, o);
++        }
++        break;
++    case 'b':
++        {
++            float bx = x - cosf(o)*value;
++            float by = y - sinf(o)*value;
++            float bz = std::max(warpmap->GetHeight(bx, by, MAX_HEIGHT), warpmap->GetWaterLevel(bx, by));
++            _player->TeleportTo(mapid, bx, by, bz, o);
++        }
++        break;
++    }
++    return true;
++}
++

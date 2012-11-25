@@ -1,0 +1,36 @@
+
+  Custom/npc_mount.cpp 
+  Custom/npc_vip_vendor.cpp
+  Custom/npc_buff.cpp
+  Custom/npc_proff.cpp
+  Custom/npc_morph.cpp
+  Custom/npc_title.cpp
+  Custom/npc_other.cpp
+  Custom/arena_honor_change.cpp
+
+//NPC Transport Service
+void AddSC_npc_mount();	
+// NPC Vip
+void AddSC_npc_vip_vendor();
+void AddSC_npc_buffer();
+void AddSC_npc_proff();
+void AddSC_npc_morph();
+void AddSC_npc_title();
+void AddSC_npc_other();
+void AddSC_arena_honor_change();
+
+
+void AddCustomScripts()
+{
+#ifdef SCRIPTS
+     AddSC_arena_honor_change();	
+    // Custom
+    AddSC_npc_mount();		
+    AddSC_npc_vip_vendor();
+    AddSC_npc_buffer();
+    AddSC_npc_proff();
+    AddSC_npc_morph();
+    AddSC_npc_title();
+    AddSC_npc_other();
+#endif
+}

@@ -1,0 +1,1079 @@
+From 55d474e078d08ade4db9cae15d06a973f81a3763 Mon Sep 17 00:00:00 2001
+From: LordPsyan <uppp@juno.com>
+Date: Wed, 9 Nov 2011 10:50:44 -0600
+Subject: [PATCH] 2011-11-09_City-Conquest
+
+---
+ sql/All/world-example_gmisland.sql                 |  117 +++++++
+ src/server/game/CMakeLists.txt                     |    3 +
+ src/server/game/CityConquest/CityConquestMgr.cpp   |  321 ++++++++++++++++++++
+ src/server/game/CityConquest/CityConquestMgr.h     |   84 +++++
+ src/server/game/Scripting/ScriptLoader.cpp         |   11 +-
+ src/server/game/Scripting/ScriptMgr.cpp            |    3 +
+ src/server/scripts/Custom/CMakeLists.txt           |    4 +
+ src/server/scripts/Custom/city_conquest_boss.cpp   |   76 +++++
+ .../scripts/Custom/city_conquest_generic.cpp       |   51 +++
+ src/server/scripts/Custom/city_conquest_portal.cpp |  199 ++++++++++++
+ .../scripts/Custom/city_conquest_spawner.cpp       |   67 ++++
+ 11 files changed, 935 insertions(+), 1 deletions(-)
+ create mode 100644 sql/All/world-example_gmisland.sql
+ create mode 100644 src/server/game/CityConquest/CityConquestMgr.cpp
+ create mode 100644 src/server/game/CityConquest/CityConquestMgr.h
+ create mode 100644 src/server/scripts/Custom/city_conquest_boss.cpp
+ create mode 100644 src/server/scripts/Custom/city_conquest_generic.cpp
+ create mode 100644 src/server/scripts/Custom/city_conquest_portal.cpp
+ create mode 100644 src/server/scripts/Custom/city_conquest_spawner.cpp
+
+diff --git a/sql/All/world-example_gmisland.sql b/sql/All/world-example_gmisland.sql
+new file mode 100644
+index 0000000..022a9c2
+--- /dev/null
++++ b/sql/All/world-example_gmisland.sql
+@@ -0,0 +1,117 @@
++-- ----------------------------
++-- Table structure for `city_capture_bosses`
++-- ----------------------------
++DROP TABLE IF EXISTS `city_capture_bosses`;
++CREATE TABLE `city_capture_bosses` (
++  `city_id` int(11) NOT NULL default '0',
++  `boss_entry_A` int(11) default NULL,
++  `boss_entry_H` int(11) default NULL,
++  `spawner_entry` int(11) default NULL,
++  `spawn_timer` int(11) default NULL,
++  PRIMARY KEY  (`city_id`)
++) ENGINE=MyISAM DEFAULT CHARSET=latin1;
++
++-- ----------------------------
++-- Records of city_capture_bosses
++-- ----------------------------
++INSERT INTO `city_capture_bosses` VALUES ('1', '150001', '150002', '150000', '1');
++
++-- ----------------------------
++-- Table structure for `city_capture_cities`
++-- ----------------------------
++DROP TABLE IF EXISTS `city_capture_cities`;
++CREATE TABLE `city_capture_cities` (
++  `id` int(11) NOT NULL default '0',
++  `minlevel` int(11) default NULL,
++  `maxlevel` int(11) default NULL,
++  `name` text,
++  `controlled` tinyint(4) default NULL,
++  PRIMARY KEY  (`id`)
++) ENGINE=MyISAM DEFAULT CHARSET=latin1;
++
++-- ----------------------------
++-- Records of city_capture_cities
++-- ----------------------------
++INSERT INTO `city_capture_cities` VALUES ('1', '1', '80', 'GM Island', '1');
++
++-- ----------------------------
++-- Table structure for `city_capture_creatures`
++-- ----------------------------
++DROP TABLE IF EXISTS `city_capture_creatures`;
++CREATE TABLE `city_capture_creatures` (
++  `city_id` int(11) default NULL,
++  `entry` int(11) NOT NULL default '0',
++  `faction_A` int(11) default NULL,
++  `faction_H` int(11) default NULL,
++  PRIMARY KEY  (`entry`)
++) ENGINE=MyISAM DEFAULT CHARSET=latin1;
++
++-- ----------------------------
++-- Records of city_capture_creatures
++-- ----------------------------
++INSERT INTO `city_capture_creatures` VALUES ('1', '150003', '210', '83');
++INSERT INTO `city_capture_creatures` VALUES ('1', '150004', '210', '83');
++
++-- ----------------------------
++-- Table structure for `city_capture_ports`
++-- ----------------------------
++DROP TABLE IF EXISTS `city_capture_ports`;
++CREATE TABLE `city_capture_ports` (
++  `city_id` int(11) NOT NULL default '0',
++  `side` int(11) NOT NULL default '0',
++  `x` float default NULL,
++  `y` float default NULL,
++  `z` float default NULL,
++  `o` float default NULL,
++  `map` int(11) default NULL,
++  PRIMARY KEY  (`city_id`,`side`)
++) ENGINE=MyISAM DEFAULT CHARSET=latin1;
++
++-- ----------------------------
++-- Records of city_capture_ports
++-- ----------------------------
++INSERT INTO `city_capture_ports` VALUES ('1', '0', '16255.1', '16289.2', '21', '3.26', '1');
++INSERT INTO `city_capture_ports` VALUES ('1', '1', '16221.3', '16246.5', '12', '1.47', '1');
++
++-- ----------------------------
++-- Table structure for `city_capture_progress`
++-- ----------------------------
++DROP TABLE IF EXISTS `city_capture_progress`;
++CREATE TABLE `city_capture_progress` (
++  `city_id` int(11) NOT NULL default '0',
++  `time` int(11) default NULL,
++  PRIMARY KEY  (`city_id`)
++) ENGINE=MyISAM DEFAULT CHARSET=latin1;
++
++-- ----------------------------
++-- Records of city_capture_progress
++-- ----------------------------
++INSERT INTO `city_capture_progress` VALUES ('1', '1274630992');
++INSERT INTO `city_capture_progress` VALUES ('5', '1274628002');
++INSERT INTO `city_capture_progress` VALUES ('10', '1274628031');
++INSERT INTO `city_capture_progress` VALUES ('7', '1274628034');
++INSERT INTO `city_capture_progress` VALUES ('12', '1274628356');
++INSERT INTO `city_capture_progress` VALUES ('4', '1274628349');
++INSERT INTO `city_capture_progress` VALUES ('9', '1274628352');
++INSERT INTO `city_capture_progress` VALUES ('2', '1274628366');
++
++INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES (150000, 0, 0, 0, 0, 0, 328, 0, 328, 0, 'CQ: Boss Spawning Bunny GM ISLAND', '', '', 0, 82, 82, 0, 35, 35, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 2000, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 43, 1, 0, 0, 130, 'city_conquest_spawner', 0);
++INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES (150001, 0, 0, 0, 0, 0, 19543, 0, 19543, 0, 'Alliance Commander', NULL, NULL, 0, 52, 52, 0, 210, 210, 0, 1.125, 1.14286, 1, 0, 571, 571, 0, 137, 1, 1400, 1900, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 'city_conquest_boss', 0);
++INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES (150002, 0, 0, 0, 0, 0, 1735, 0, 1735, 0, 'Horde Commander', NULL, NULL, 0, 80, 80, 0, 29, 29, 2, 1.1, 1.14286, 1, 1, 953, 1089, 0, 245, 1, 2000, 0, 2, 4608, 0, 0, 0, 0, 0, 0, 58.872, 80.949, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1115, 0, 0, 'city_conquest_boss', 0);
++INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES (150003, 0, 0, 0, 0, 0, 103, 0, 103, 0, 'GM Island Creature 1', NULL, NULL, 0, 40, 50, 0, 83, 83, 0, 1.125, 1.14286, 1, 0, 19, 23, 0, 5, 1, 1400, 1900, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 'city_conquest_generic', 0);
++INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES (150004, 0, 0, 0, 0, 0, 146, 0, 146, 0, 'GM Island Ghost 1', NULL, NULL, 0, 15, 15, 0, 83, 83, 0, 0.99, 1.14286, 1, 0, 35, 40, 0, 9, 1, 1860, 2046, 2, 0, 0, 0, 0, 0, 0, 0, 24.552, 33.759, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 57, '', 0, 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 8388624, 2, 'city_conquest_generic', 0);
++INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES (150005, 0, 0, 0, 0, 0, 26501, 0, 26501, 0, 'City Conquest', 'Portal & Manager', 'Interact', 0, 1, 1, 0, 35, 35, 1, 1, 1.14286, 1, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 'city_conquest_portal', 0);
++
++INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`) VALUES (150000, 1, 1, 1, 0, 0, 16224.1, 16279.3, 20.885, 4.52855, 300, 0, 0, 4518, 4169, 0, 0);
++INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`) VALUES (150003, 1, 1, 1, 0, 0, 16225.4, 16271.1, 12.9997, 4.54034, 300, 0, 0, 1226, 1283, 0, 0);
++INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`) VALUES (150003, 1, 1, 1, 0, 0, 16230.3, 16295.1, 13.1757, 2.63968, 300, 0, 0, 1321, 1381, 0, 0);
++INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`) VALUES (150003, 1, 1, 1, 0, 0, 16235.2, 16301.1, 13.1757, 5.10582, 300, 0, 0, 1226, 1283, 0, 0);
++INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`) VALUES (150003, 1, 1, 1, 0, 0, 16226.1, 16317.2, 20.8459, 4.85056, 300, 0, 0, 1772, 1807, 0, 0);
++INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`) VALUES (150004, 1, 1, 1, 0, 0, 16220.7, 16271.6, 12.9754, 4.63851, 300, 0, 0, 301, 326, 0, 0);
++INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`) VALUES (150004, 1, 1, 1, 0, 0, 16224.1, 16284.6, 13.1756, 4.58746, 300, 0, 0, 301, 326, 0, 0);
++INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`) VALUES (150004, 1, 1, 1, 0, 0, 16221.3, 16298.9, 13.1756, 5.14117, 300, 0, 0, 301, 326, 0, 0);
++INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`) VALUES (150004, 1, 1, 1, 0, 0, 16234.9, 16299.6, 20.8456, 1.4812, 300, 0, 0, 301, 326, 0, 0);
++INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`) VALUES (150004, 1, 1, 1, 0, 0, 16217.7, 16284.2, 20.8895, 4.45001, 300, 0, 0, 301, 326, 0, 0);
++INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`) VALUES (150005, 1, 1, 1, 0, 0, 16228.4, 16244.6, 12.2895, 2.02771, 300, 0, 0, 41, 60, 0, 0);
++INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`) VALUES (150005, 530, 1, 1, 0, 0, -2047.61, 6658.8, 13.0538, 0.698243, 300, 0, 0, 41, 60, 0, 0);
++
+diff --git a/src/server/game/CMakeLists.txt b/src/server/game/CMakeLists.txt
+index 65ba160..5156655 100644
+--- a/src/server/game/CMakeLists.txt
++++ b/src/server/game/CMakeLists.txt
+@@ -20,6 +20,7 @@ file(GLOB_RECURSE sources_AuctionHouse AuctionHouse/*.cpp AuctionHouse/*.h)
+ file(GLOB_RECURSE sources_Battlegrounds Battlegrounds/*.cpp Battlegrounds/*.h)
+ file(GLOB_RECURSE sources_Calendar Calendar/*.cpp Calendar/*.h)
+ file(GLOB_RECURSE sources_Chat Chat/*.cpp Chat/*.h)
++file(GLOB_RECURSE sources_CityConquest CityConquest/*.cpp CityConquest/*.h)
+ file(GLOB_RECURSE sources_Combat Combat/*.cpp Combat/*.h)
+ file(GLOB_RECURSE sources_Conditions Conditions/*.cpp Conditions/*.h)
+ file(GLOB_RECURSE sources_DataStores DataStores/*.cpp DataStores/*.h)
+@@ -69,6 +70,7 @@ set(game_STAT_SRCS
+   ${sources_Battlegrounds}
+   ${sources_Calendar}
+   ${sources_Chat}
++  ${sources_CityConquest}
+   ${sources_Combat}
+   ${sources_Conditions}
+   ${sources_DataStores}
+@@ -136,6 +138,7 @@ include_directories(
+   ${CMAKE_CURRENT_SOURCE_DIR}/Battlegrounds/Zones
+   ${CMAKE_CURRENT_SOURCE_DIR}/Calendar
+   ${CMAKE_CURRENT_SOURCE_DIR}/Chat
++  ${CMAKE_CURRENT_SOURCE_DIR}/CityConquest
+   ${CMAKE_CURRENT_SOURCE_DIR}/Chat/Channels
+   ${CMAKE_CURRENT_SOURCE_DIR}/Chat/Commands
+   ${CMAKE_CURRENT_SOURCE_DIR}/Combat
+diff --git a/src/server/game/CityConquest/CityConquestMgr.cpp b/src/server/game/CityConquest/CityConquestMgr.cpp
+new file mode 100644
+index 0000000..fbc936d
+--- /dev/null
++++ b/src/server/game/CityConquest/CityConquestMgr.cpp
+@@ -0,0 +1,321 @@
++#include "ScriptPCH.h"
++#include "Creature.h"
++#include <stdio.h>
++#include <time.h>
++#include <list>
++#include "CityConquestMgr.h"
++#include "World.h"
++
++CityConquestMgr CityConquest;
++
++CityConquestMgr::CityConquestMgr(){}
++
++City::City(){}
++
++Coords::Coords(){}
++
++Spawn::Spawn(){}
++
++void CityConquestMgr::StartSiege(int id, int faction)
++{
++	if (CanStartSiege(id, faction))
++	{
++		City * city = GetCityFromId(id);
++		if (city->summonerSet)
++			SpawnBoss(id, faction);
++		else
++		{
++			int t = time (NULL) + 1800;
++			WorldDatabase.PExecute("UPDATE city_capture_bosses SET spawn_timer = %u WHERE city_id = %u", t, id);
++		}
++
++		city->active = true;
++
++		char * fname;
++		if (faction == 0)
++			fname = "Aliance";
++		else
++			fname = "Horde";
++
++		char * nm;
++		nm = new char[city->name.size()+1];
++		nm[city->name.size()] = 0;
++		memcpy(nm, city->name.c_str(), city->name.size());
++
++		char msg[500];
++		sprintf(msg, "City Conquest: %s declared war to %s. Opposite team has got 30 minutes to engage commander of %s!", fname, nm, nm);
++		sWorld->SendWorldText(LANG_SYSTEMMESSAGE, msg);
++
++		WorldDatabase.PExecute("REPLACE INTO city_capture_progress (city_id, time) VALUES (%u, %u)",
++			id, time (NULL));
++
++		//OpenPortal(id);
++	}
++}
++
++void CityConquestMgr::EndSiege(int id)
++{
++	City *city = GetCityFromId(id);
++	if (!city->active)
++		return;
++	city->active = false;
++	WorldDatabase.PExecute("REPLACE INTO city_capture_progress (city_id, time) VALUES (%u, %u, %u)",
++			id, time (NULL));
++
++	WorldDatabase.PExecute("UPDATE city_capture_bosses SET spawn_timer =  1 WHERE city_id = %u", id);
++
++	char * fname;
++	if (city->controlled == 0)
++		fname = "Aliance";
++	else
++		fname = "Horde";
++
++	char * nm;
++	nm = new char[city->name.size()+1];
++	nm[city->name.size()] = 0;
++	memcpy(nm, city->name.c_str(), city->name.size());
++
++	char msg[255];
++	sprintf(msg, "City Conquest: Battle for %s is over! %s is controlled by %s", nm, nm, fname);
++	sWorld->SendWorldText(LANG_SYSTEMMESSAGE, msg);
++}
++
++
++void CityConquestMgr::SwitchFaction(int id)
++{
++	City * city = GetCityFromId(id);
++
++	if (city->active)
++	{
++		Spawns::iterator l;
++		for (l = city->spawns.begin(); l != city->spawns.end(); ++l)
++		{
++			Spawn *spawn = *l;
++			if (city->controlled == 1)
++			{
++				spawn->creature->setFaction(spawn->faction_A);
++
++				if(CreatureTemplate const *cinfo = spawn->creature->GetCreatureInfo())
++				{
++					const_cast<CreatureTemplate*>(cinfo)->faction_A = spawn->faction_A;
++					const_cast<CreatureTemplate*>(cinfo)->faction_H = spawn->faction_A;
++				}
++				WorldDatabase.PExecute("UPDATE creature_template SET faction_A = '%u', faction_H = '%u' WHERE entry = '%u'", spawn->faction_A, spawn->faction_A, spawn->creature->GetEntry());
++			}
++			else if (city->controlled == 0)
++			{
++				spawn->creature->setFaction(spawn->faction_H);
++
++				if(CreatureTemplate const *cinfo = spawn->creature->GetCreatureInfo())
++				{
++					const_cast<CreatureTemplate*>(cinfo)->faction_A = spawn->faction_H;
++					const_cast<CreatureTemplate*>(cinfo)->faction_H = spawn->faction_H;
++				}
++				WorldDatabase.PExecute("UPDATE creature_template SET faction_A = '%u', faction_H = '%u' WHERE entry = '%u'", spawn->faction_H, spawn->faction_H, spawn->creature->GetEntry());
++			}
++		}
++		if (city->controlled == 0)
++			city->controlled = 1;
++		else
++			city->controlled = 0;
++		WorldDatabase.PExecute("UPDATE city_capture_cities SET controlled = %u WHERE id = %u", city->controlled, city->id);
++		EndSiege(id);
++	}
++}
++
++void CityConquestMgr::SpawnBoss(int id, int faction)
++{
++	City * city = GetCityFromId(id);
++	if (faction == 0)
++		city->summoner->SummonCreature(city->boss_H, city->summoner->GetPositionX(), city->summoner->GetPositionY(), city->summoner->GetPositionZ(),
++		city->summoner->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1800000);
++	else if (faction == 1)
++		city->summoner->SummonCreature(city->boss_A, city->summoner->GetPositionX(), city->summoner->GetPositionY(), city->summoner->GetPositionZ(),
++		city->summoner->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1800000);
++
++	WorldDatabase.PExecute("UPDATE city_capture_bosses SET spawn_timer =  1 WHERE city_id = %u", id);
++}
++
++City * CityConquestMgr::GetCityFromId(int id)
++{
++	Cities::iterator l;
++	for (l = cities.begin(); l != cities.end(); ++l)
++	{
++		City *ct = *l;
++		if (ct->id == id)
++			return ct;
++	}
++	return new City();
++}
++
++bool CityConquestMgr::CanStartSiege(int id, int faction)
++{
++	City *city = GetCityFromId(id);
++	if (city->active == true)
++		return false;
++	if (city->controlled == faction)
++		return false;
++
++	QueryResult result = WorldDatabase.PQuery("SELECT time FROM city_capture_progress WHERE city_id = %u", id);
++	//														  0
++	if (result)
++	{
++		Field *fields = result->Fetch();
++		// 60 = 1 min, will be increased in release
++		if (fields[0].GetInt32() + 3600 > time (NULL))
++			return false;
++	}
++
++	return true;
++}
++
++void CityConquestMgr::LoadCities()
++{
++	QueryResult result = WorldDatabase.Query("SELECT id, minlevel, maxlevel, name, controlled, boss_entry_A, boss_entry_H FROM city_capture_cities LEFT JOIN city_capture_bosses ON id = city_id ORDER BY id ASC");
++	//														  0   1         2         3     4           5             6
++	if (result)
++	{
++		do
++		{
++			City *city = new City();
++			Field *fields = result->Fetch();
++			city->id = fields[0].GetInt32();
++			city->minlevel = fields[1].GetInt32();
++			city->maxlevel = fields[2].GetInt32();
++			city->name = fields[3].GetString();
++			city->controlled = fields[4].GetInt32();
++			city->summonerSet = false;
++			city->active = false; // todo activecheck
++			city->boss_A = fields[5].GetInt32();
++			city->boss_H = fields[6].GetInt32();
++			// sLog->outString("CQM: City Loaded - %s", fields[3].GetString()); -- causes crash during startup (LordPsyan)
++			cities.push_back(city);
++			city->LoadPorts();
++
++		}
++		while (result->NextRow());
++	}
++}
++
++void CityConquestMgr::RegisterCreature(Creature * creature, int type)
++{
++	QueryResult result;
++	if (type == 0)
++	{
++		sLog->outString("CQM: Creature Registered - %u", creature->GetEntry());
++		result
++			= WorldDatabase.PQuery("SELECT city_id, faction_A, faction_H FROM city_capture_creatures WHERE entry = %u",
++			//                             0        1          2
++			creature->GetEntry());
++		if (result)
++		{
++			Field *fields = result->Fetch();
++			Cities::iterator l;
++			for (l = cities.begin(); l != cities.end(); ++l)
++			{
++				City *ct = *l;
++				if (ct->id == fields[0].GetInt32())
++				{
++					Spawn *spawn = new Spawn();
++					spawn->creature = creature;
++					spawn->faction_A = fields[1].GetInt32();
++					spawn->faction_H = fields[2].GetInt32();
++
++					spawn->creature->setFaction(spawn->faction_A);
++
++					if (ct->controlled == 1)
++					{
++						spawn->creature->setFaction(spawn->faction_H);
++
++						if(CreatureTemplate const *cinfo = spawn->creature->GetCreatureInfo())
++						{
++							const_cast<CreatureTemplate*>(cinfo)->faction_A = spawn->faction_H;
++							const_cast<CreatureTemplate*>(cinfo)->faction_H = spawn->faction_H;
++						}
++						WorldDatabase.PExecute("UPDATE creature_template SET faction_A = '%u', faction_H = '%u' WHERE entry = '%u'", spawn->faction_H, spawn->faction_H, spawn->creature->GetEntry());
++					}
++					else if (ct->controlled == 0)
++					{
++						spawn->creature->setFaction(spawn->faction_A);
++
++						if(CreatureTemplate const *cinfo = spawn->creature->GetCreatureInfo())
++						{
++							const_cast<CreatureTemplate*>(cinfo)->faction_A = spawn->faction_A;
++							const_cast<CreatureTemplate*>(cinfo)->faction_H = spawn->faction_A;
++						}
++						WorldDatabase.PExecute("UPDATE creature_template SET faction_A = '%u', faction_H = '%u' WHERE entry = '%u'", spawn->faction_A, spawn->faction_A, spawn->creature->GetEntry());
++					}
++
++					ct->spawns.push_back(spawn);
++					return;
++				}
++			}
++		}
++	}
++	else if (type == 2)
++	{
++		sLog->outString("CQM: City Spawner attmpts to register - %u", creature->GetEntry());
++		result
++			= WorldDatabase.PQuery("SELECT city_id, spawner_entry, spawn_timer FROM city_capture_bosses WHERE spawner_entry = %u", creature->GetEntry());
++
++		if (result)
++		{
++			sLog->outString("CQM: City Spawner passed first check - %u", creature->GetEntry());
++			Field *fields = result->Fetch();
++			Cities::iterator l;
++			for (l = cities.begin(); l != cities.end(); ++l)
++			{
++				City *ct = *l;
++				sLog->outString("CQM: City Spawner browses through cities - %u", creature->GetEntry());
++				if (ct->id == fields[0].GetInt32())
++				{
++					if (creature->GetEntry() == fields[1].GetInt32())
++					{
++						sLog->outString("CQM: City Spawner Registered - %u", creature->GetEntry());
++						if (!ct->summonerSet)
++						{
++							ct->summoner = creature;
++							ct->summonerSet = true;
++							if (fields[2].GetInt32() > time(NULL))
++							{
++								if (ct->controlled == 1)
++									SpawnBoss(ct->id, 0);
++								else
++									SpawnBoss(ct->id, 1);
++							}
++							else
++								EndSiege(ct->id);
++
++						}
++					}
++					return;
++				}
++			}
++		}
++
++	}
++}
++
++void City::LoadPorts()
++{
++	QueryResult result = WorldDatabase.PQuery("SELECT x, y, z, o, map, side FROM city_capture_ports WHERE city_id = %u", id);
++	//														  0  1  2  3  4    5
++	if (result)
++	{
++		do
++		{
++			Field *fields = result->Fetch();
++			Coords *coords = new Coords();
++			coords->x = fields[0].GetFloat();
++			coords->y = fields[1].GetFloat();
++			coords->z = fields[2].GetFloat();
++			coords->o = fields[3].GetFloat();
++			coords->map = fields[4].GetInt32();
++			if (fields[5].GetInt32() == 0)
++				port_defense = coords;
++			else if (fields[5].GetInt32() == 1)
++				port_attack = coords;
++		}
++		while (result->NextRow());
++	}
++}
+diff --git a/src/server/game/CityConquest/CityConquestMgr.h b/src/server/game/CityConquest/CityConquestMgr.h
+new file mode 100644
+index 0000000..cc4735e
+--- /dev/null
++++ b/src/server/game/CityConquest/CityConquestMgr.h
+@@ -0,0 +1,84 @@
++#ifndef CITYCONQUESTMGR_H
++#define CITYCONQUESTMGR_H
++extern WorldDatabaseWorkerPool WorldDatabase;
++
++class Coords
++{
++public:
++	float x;
++	float y;
++	float z;
++	float o;
++	int map;
++	Coords(void);
++};
++
++class Spawn
++{
++public:
++	Creature *creature;
++	int faction_A;
++	int faction_H;
++	Spawn(void);
++private:
++	void GetCreatureData(int entry);
++};
++
++typedef std::list<Spawn *> Spawns;
++
++class City
++{
++public:
++	int id;
++	Spawns spawns;
++	int boss_A;
++	int boss_H;
++	bool summonerSet;
++	Creature * summoner;
++	Coords * port_defense;
++	Coords * port_attack;
++	int controlled;
++	//	0 aliance
++	//  1 horde
++	int minlevel;
++	int maxlevel;
++	std::string name;
++	bool active;
++	//   true - siege in progress
++	//   false - not under siege
++	City(void);
++	void LoadPorts(void);									// done
++
++
++};
++
++typedef std::list<City *> Cities;
++
++class CityConquestMgr
++{
++public:
++	Cities cities;
++	CityConquestMgr(void);
++	void LoadCities(void); // done
++	void RegisterCreature(Creature *creature, int type);	// done
++	//                                            0 normal
++	//                                            1 boss
++	//                                            2 spawner
++	bool CanStartSiege(int id, int faction);				// done
++	//							   0 aliance
++	//                             1 horde
++	void StartSiege(int id, int faction);				    // done
++	void SpawnBoss(int id, int faction);					// done
++	//						   0 aliance
++	//                         1 horde
++	void EndSiege(int id);									// done
++	void OpenPortal(int id);								// todo
++	void SwitchFaction(int id);				                // done
++	//							   0 aliance
++	//                             1 horde
++	City * GetCityFromId(int id);							// done
++};
++
++extern CityConquestMgr CityConquest;
++
++#endif
+diff --git a/src/server/game/Scripting/ScriptLoader.cpp b/src/server/game/Scripting/ScriptLoader.cpp
+index 26d7034..f6f5167 100755
+--- a/src/server/game/Scripting/ScriptLoader.cpp
++++ b/src/server/game/Scripting/ScriptLoader.cpp
+@@ -62,6 +62,12 @@ void AddSC_titles_commandscript();
+ void AddSC_wp_commandscript();
+ void AddSC_gps_commandscript();
+ 
++// Custom
++void AddSC_city_conquest_boss();
++void AddSC_city_conquest_generic();
++void AddSC_city_conquest_portal();
++void AddSC_city_conquest_spawner();
++
+ #ifdef SCRIPTS
+ //world
+ void AddSC_areatrigger_scripts();
+@@ -1233,6 +1239,9 @@ void AddCustomScripts()
+ {
+ #ifdef SCRIPTS
+     /* This is where custom scripts should be added. */
+-
++	AddSC_city_conquest_boss();
++	AddSC_city_conquest_generic();
++	AddSC_city_conquest_portal();
++	AddSC_city_conquest_spawner();
+ #endif
+ }
+diff --git a/src/server/game/Scripting/ScriptMgr.cpp b/src/server/game/Scripting/ScriptMgr.cpp
+index 925b352..9adf5bc 100755
+--- a/src/server/game/Scripting/ScriptMgr.cpp
++++ b/src/server/game/Scripting/ScriptMgr.cpp
+@@ -27,6 +27,7 @@
+ #include "ScriptSystem.h"
+ #include "Transport.h"
+ #include "Vehicle.h"
++#include "CityConquestMgr.h"
+ 
+ // This is the global static registry of scripts.
+ template<class TScript>
+@@ -247,6 +248,8 @@ void ScriptMgr::Initialize()
+     uint32 oldMSTime = getMSTime();
+ 
+     LoadDatabase();
++    sLog->outString("Initializing City Conquest Engine (c) Hkarta");
++    CityConquest.LoadCities();
+ 
+     sLog->outString("Loading C++ scripts");
+ 
+diff --git a/src/server/scripts/Custom/CMakeLists.txt b/src/server/scripts/Custom/CMakeLists.txt
+index 1570ca1..192376b 100644
+--- a/src/server/scripts/Custom/CMakeLists.txt
++++ b/src/server/scripts/Custom/CMakeLists.txt
+@@ -10,6 +10,10 @@
+ 
+ set(scripts_STAT_SRCS
+   ${scripts_STAT_SRCS}
++  Custom/city_conquest_boss.cpp
++  Custom/city_conquest_generic.cpp
++  Custom/city_conquest_portal.cpp
++  Custom/city_conquest_spawner.cpp
+ )
+ 
+ message("  -> Prepared: Custom")
+diff --git a/src/server/scripts/Custom/city_conquest_boss.cpp b/src/server/scripts/Custom/city_conquest_boss.cpp
+new file mode 100644
+index 0000000..334a0de
+--- /dev/null
++++ b/src/server/scripts/Custom/city_conquest_boss.cpp
+@@ -0,0 +1,76 @@
++#include "ScriptPCH.h"
++#include <stdio.h>
++#include <stdlib.h>
++#include "../../game/CityConquest/CityConquestMgr.h"
++
++static int entry;
++
++struct city_conquest_bossAI : public ScriptedAI
++{
++    city_conquest_bossAI(Creature *c) : ScriptedAI(c)
++	{
++		sLog->outString("CQM: Boss loaded to world - %u", me->GetEntry());
++		CityConquest.RegisterCreature(me, 1);
++		entry = me->GetEntry();
++	}
++
++    void Reset()
++    {
++
++    }
++
++    void EnterCombat(Unit* pWho)
++    {
++
++    }
++
++    void EnterEvadeMode()
++    {
++    }
++
++    void UpdateAI(const uint32 uiDiff)
++    {
++        DoMeleeAttackIfReady();
++    }
++
++	void JustDied(Unit* Killer)
++    {
++		QueryResult result
++			= WorldDatabase.PQuery("SELECT city_id, boss_entry_A, boss_entry_H FROM city_capture_bosses WHERE boss_entry_A = %u OR boss_entry_H = %u OR "
++			//                             0        1             2
++			"spawner_entry = %u", entry, entry, entry);
++
++		if (result)
++		{
++			Field *fields = result->Fetch();
++			Cities::iterator l;
++			for (l = CityConquest.cities.begin(); l != CityConquest.cities.end(); ++l)
++			{
++				City *ct = *l;
++				if (ct->id == fields[0].GetInt32())
++				{
++					if (entry == fields[2].GetInt32() || entry == fields[1].GetInt32())
++					{
++						CityConquest.SwitchFaction(ct->id);
++						return;
++					}
++				}
++			}
++		}
++    }
++};
++class city_conquest_boss : public CreatureScript
++{
++public:
++    city_conquest_boss() : CreatureScript("city_conquest_boss") { }
++
++    CreatureAI *GetAI(Creature *creature) const
++    {
++    return new city_conquest_bossAI (creature);
++	}
++};
++
++void AddSC_city_conquest_boss()
++{
++    new city_conquest_boss;
++}
+diff --git a/src/server/scripts/Custom/city_conquest_generic.cpp b/src/server/scripts/Custom/city_conquest_generic.cpp
+new file mode 100644
+index 0000000..a8c82ac
+--- /dev/null
++++ b/src/server/scripts/Custom/city_conquest_generic.cpp
+@@ -0,0 +1,51 @@
++#include "ScriptPCH.h"
++#include <stdio.h>
++#include <stdlib.h>
++#include "../../game/CityConquest/CityConquestMgr.h"
++
++struct city_conquest_genericAI : public ScriptedAI
++{
++    city_conquest_genericAI(Creature *c) : ScriptedAI(c)
++	{
++		sLog->outString("CQM: Generic creature loaded to world - %u", me->GetEntry());
++		CityConquest.RegisterCreature(me, 0);
++	}
++
++    void Reset()
++    {
++
++    }
++
++    void EnterCombat(Unit* pWho)
++    {
++
++    }
++
++    void EnterEvadeMode()
++    {
++    }
++
++    void UpdateAI(const uint32 uiDiff)
++    {
++        DoMeleeAttackIfReady();
++    }
++};
++
++class city_conquest_generic : public CreatureScript
++{
++public:
++    city_conquest_generic() : CreatureScript("city_conquest_generic") { }
++
++	CreatureAI *GetAI(Creature *creature) const
++    {
++    return new city_conquest_genericAI (creature);
++	}
++
++};
++
++void AddSC_city_conquest_generic()
++{
++
++    new city_conquest_generic;
++
++}
+diff --git a/src/server/scripts/Custom/city_conquest_portal.cpp b/src/server/scripts/Custom/city_conquest_portal.cpp
+new file mode 100644
+index 0000000..a44233c
+--- /dev/null
++++ b/src/server/scripts/Custom/city_conquest_portal.cpp
+@@ -0,0 +1,199 @@
++#include "ScriptPCH.h"
++#include "../../game/CityConquest/CityConquestMgr.h"
++#include <stdio.h>
++#include <time.h>
++#include <list>
++#define START_OFFSET			2000
++#define PORT_OFFSET				5000
++#define GOSSIP_ACTION_MAIN		1000
++#define GOSSIP_ACTION_SARTLIST	1003
++#define GOSSIP_ACTION_PORTLIST	1001
++#define GOSSIP_ACTION_CLOSE		1002
++
++int GetActiveSieges(Player* pPlayer)
++{
++	int side = 1;
++	if(pPlayer->TeamForRace(pPlayer->getRace())==ALLIANCE)
++		side = 0;
++	Cities::iterator l;
++	int i = 0;
++	for (l = CityConquest.cities.begin(); l != CityConquest.cities.end(); ++l)
++	{
++		City *ct = *l;
++		if (ct->controlled != side && ct->active == true)
++		{
++			i++;
++		}
++	}
++	return i;
++}
++
++int GetActiveSiegesAll(Player* pPlayer)
++{
++	Cities::iterator l;
++	int i = 0;
++	for (l = CityConquest.cities.begin(); l != CityConquest.cities.end(); ++l)
++	{
++		City *ct = *l;
++		if (ct->active == true)
++		{
++			i++;
++		}
++	}
++	return i;
++}
++
++void StartSiegeList(int beginAt, Player* pPlayer, Creature* pCreature)
++{
++	Cities::iterator l;
++	int side = 1;
++	if(pPlayer->TeamForRace(pPlayer->getRace())==ALLIANCE)
++		side = 0;
++
++	int i = 0;
++	int lastid = 0;
++	for (l = CityConquest.cities.begin(); l != CityConquest.cities.end(); ++l)
++	{
++		City *ct = *l;
++		if (ct->controlled != side && ct->active == false && ct->minlevel <= pPlayer->getLevel() && ct->maxlevel >= pPlayer->getLevel() && CityConquest.CanStartSiege(ct->id, side) && ct->id >= beginAt)
++		{
++			if (i < 8)
++				lastid = ct->id;
++			if (i < 9)
++			{
++				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, ct->name, GOSSIP_SENDER_MAIN, START_OFFSET + ct->id);
++				i++;
++			}
++			else if (i == 9)
++			{
++				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Next >>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_SARTLIST + lastid);
++				i++;
++			}
++
++		}
++	}
++	pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "<< Back", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_MAIN);
++	pPlayer->SEND_GOSSIP_MENU(1, pCreature->GetGUID());
++}
++
++void TeleportList( Player* pPlayer, Creature* pCreature)
++{
++	Cities::iterator l;
++	int side = 1;
++	if(pPlayer->TeamForRace(pPlayer->getRace())==ALLIANCE)
++		side = 0;
++
++	for (l = CityConquest.cities.begin(); l != CityConquest.cities.end(); ++l)
++	{
++		City *ct = *l;
++		if (ct->active == true)
++		{
++			char * nm;
++			nm = new char[ct->name.size()+1];
++			nm[ct->name.size()] = 0;
++			memcpy(nm, ct->name.c_str(), ct->name.size());
++			char msg[500];
++
++			if (ct->controlled == side)
++			{
++				sprintf(msg, "Defend: %s", nm);
++
++				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, msg, GOSSIP_SENDER_MAIN, PORT_OFFSET + ct->id);
++			}
++			else
++			{
++				sprintf(msg, "Attack: %s", nm);
++				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, msg, GOSSIP_SENDER_MAIN, PORT_OFFSET + ct->id);
++			}
++
++		}
++	}
++
++	pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "<< Back", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_MAIN);
++	pPlayer->SEND_GOSSIP_MENU(1, pCreature->GetGUID());
++}
++
++void MainMenu(Player* pPlayer, Creature* pCreature)
++{
++	
++	if (GetActiveSieges(pPlayer) < 5)
++		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "New Conquest", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_SARTLIST + 1);
++	    
++	if (GetActiveSiegesAll(pPlayer) > 0)
++		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Aid in Conquest", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_PORTLIST);
++	    
++	pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Bye", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_CLOSE);
++	pPlayer->SEND_GOSSIP_MENU(1, pCreature->GetGUID());
++}
++class city_conquest_portal : public CreatureScript
++{
++public:
++    city_conquest_portal() : CreatureScript("city_conquest_portal") {}
++
++bool OnGossipHello(Player* pPlayer, Creature* pCreature)
++{
++    MainMenu(pPlayer, pCreature);
++	return true;
++}
++
++bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 action)
++{
++	pPlayer->PlayerTalkClass->ClearMenus();
++	int id = 0;
++	int side = 1;
++		if(pPlayer->TeamForRace(pPlayer->getRace())==ALLIANCE)
++			side = 0;
++
++	if (action >= PORT_OFFSET)
++	{
++		id = action - PORT_OFFSET;
++		Cities::iterator l;
++		for (l = CityConquest.cities.begin(); l != CityConquest.cities.end(); ++l)
++		{
++			City *ct = *l;
++			if (ct->id == id)
++			{
++				if (ct->controlled == side)
++					pPlayer->TeleportTo(ct->port_defense->map, ct->port_defense->x, ct->port_defense->y, ct->port_defense->z, ct->port_defense->o, 0);
++				else
++					pPlayer->TeleportTo(ct->port_attack->map, ct->port_attack->x, ct->port_attack->y, ct->port_attack->z, ct->port_attack->o, 0);
++				pPlayer->PlayerTalkClass->SendCloseGossip();
++			}
++		}
++	}
++	else if (action >= START_OFFSET)
++	{
++		int side = 1;
++		if(pPlayer->TeamForRace(pPlayer->getRace())==ALLIANCE)
++			side = 0;
++		id = action - START_OFFSET;
++		CityConquest.StartSiege(id, side);
++		MainMenu(pPlayer, pCreature);
++	}
++	else if (action >= GOSSIP_ACTION_SARTLIST)
++	{
++		id = action - GOSSIP_ACTION_SARTLIST;
++		StartSiegeList(id, pPlayer, pCreature);
++	}
++	else if (action == GOSSIP_ACTION_CLOSE)
++	{
++		pPlayer->PlayerTalkClass->SendCloseGossip();
++	}
++	else if (action == GOSSIP_ACTION_PORTLIST)
++	{
++		TeleportList(pPlayer, pCreature);
++	}
++	else if (action == GOSSIP_ACTION_MAIN)
++	{
++		MainMenu(pPlayer, pCreature);
++	}
++
++    return true;
++}
++};
++
++
++void AddSC_city_conquest_portal()
++{
++    new city_conquest_portal;
++}
+diff --git a/src/server/scripts/Custom/city_conquest_spawner.cpp b/src/server/scripts/Custom/city_conquest_spawner.cpp
+new file mode 100644
+index 0000000..aa3404b
+--- /dev/null
++++ b/src/server/scripts/Custom/city_conquest_spawner.cpp
+@@ -0,0 +1,67 @@
++#include "ScriptPCH.h"
++#include <stdio.h>
++#include <stdlib.h>
++#include "../../game/CityConquest/CityConquestMgr.h"
++
++static int entry;
++
++struct city_conquest_spawnerAI : public ScriptedAI
++{
++    city_conquest_spawnerAI(Creature *c) : ScriptedAI(c)
++	{
++		sLog->outString("CQM: Generic creature loaded to world - %u", me->GetEntry());
++		CityConquest.RegisterCreature(me, 2);
++		entry = me->GetEntry();
++	}
++
++    void Reset()
++    {
++
++    }
++
++    void EnterCombat(Unit* pWho)
++    {
++
++    }
++
++    void EnterEvadeMode()
++    {
++    }
++
++	void SummonedCreatureDespawn(Creature *pSummoned)
++    {
++		QueryResult result
++			= WorldDatabase.PQuery("SELECT city_id FROM city_capture_bosses WHERE  "
++			//                             0
++			"spawner_entry = %u", entry);
++
++		if (result)
++		{
++			Field *fields = result->Fetch();
++			CityConquest.EndSiege(fields[0].GetInt32());
++		}
++
++    }
++
++
++    void UpdateAI(const uint32 uiDiff)
++    {
++        DoMeleeAttackIfReady();
++    }
++};
++
++class city_conquest_spawner : public CreatureScript
++{
++public:
++    city_conquest_spawner() : CreatureScript("city_conquest_spawner") {}
++
++	CreatureAI *GetAI(Creature *creature) const
++    {
++    return new city_conquest_spawnerAI (creature);
++	}
++};
++
++void AddSC_city_conquest_spawner()
++{
++    new city_conquest_spawner;
++}
+\ No newline at end of file
+-- 
+1.7.2.3
+

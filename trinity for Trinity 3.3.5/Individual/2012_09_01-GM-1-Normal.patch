@@ -1,0 +1,39 @@
+From f2ff801918adbea4aa68f8a50440c93c08992d70 Mon Sep 17 00:00:00 2001
+From: LordPsyan <realmsofwarcraft@gmail.com>
+Date: Sat, 1 Sep 2012 10:24:04 -0500
+Subject: [PATCH] Updated GM1 Normal
+
+---
+ src/server/scripts/Commands/cs_gm.cpp              |    2 +-
+ .../Database/Implementation/LoginDatabase.cpp      |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/server/scripts/Commands/cs_gm.cpp b/src/server/scripts/Commands/cs_gm.cpp
+index 3dfc6f9..ce6327d 100644
+--- a/src/server/scripts/Commands/cs_gm.cpp
++++ b/src/server/scripts/Commands/cs_gm.cpp
+@@ -123,7 +123,7 @@ public:
+         for (HashMapHolder<Player>::MapType::const_iterator itr = m.begin(); itr != m.end(); ++itr)
+         {
+             AccountTypes itrSec = itr->second->GetSession()->GetSecurity();
+-            if ((itr->second->isGameMaster() || (!AccountMgr::IsPlayerAccount(itrSec) && itrSec <= AccountTypes(sWorld->getIntConfig(CONFIG_GM_LEVEL_IN_GM_LIST)))) &&
++            if ((itr->second->isGameMaster() || (!AccountMgr::IsModeratorAccount(itrSec) && itrSec <= AccountTypes(sWorld->getIntConfig(CONFIG_GM_LEVEL_IN_GM_LIST)))) &&
+                 (!handler->GetSession() || itr->second->IsVisibleGloballyFor(handler->GetSession()->GetPlayer())))
+             {
+                 if (first)
+diff --git a/src/server/shared/Database/Implementation/LoginDatabase.cpp b/src/server/shared/Database/Implementation/LoginDatabase.cpp
+index 31d9f5e..57781ea 100755
+--- a/src/server/shared/Database/Implementation/LoginDatabase.cpp
++++ b/src/server/shared/Database/Implementation/LoginDatabase.cpp
+@@ -78,7 +78,7 @@ void LoginDatabaseConnection::DoPrepareStatements()
+     PREPARE_STATEMENT(LOGIN_SEL_CHECK_PASSWORD_BY_NAME, "SELECT 1 FROM account WHERE username = ? AND sha_pass_hash = ?", CONNECTION_SYNCH);
+     PREPARE_STATEMENT(LOGIN_SEL_PINFO, "SELECT a.username, aa.gmlevel, a.email, a.last_ip, DATE_FORMAT(a.last_login, '%Y-%m-%d %T'), a.mutetime FROM account a LEFT JOIN account_access aa ON (a.id = aa.id AND (aa.RealmID = ? OR aa.RealmID = -1)) WHERE a.id = ?", CONNECTION_SYNCH);
+     PREPARE_STATEMENT(LOGIN_SEL_PINFO_BANS, "SELECT unbandate, bandate = unbandate, bannedby, banreason FROM account_banned WHERE id = ? AND active ORDER BY bandate ASC LIMIT 1", CONNECTION_SYNCH);
+-    PREPARE_STATEMENT(LOGIN_SEL_GM_ACCOUNTS, "SELECT a.username, aa.gmlevel FROM account a, account_access aa WHERE a.id=aa.id AND aa.gmlevel >= ? AND (aa.realmid = -1 OR aa.realmid = ?)", CONNECTION_SYNCH);
++    PREPARE_STATEMENT(LOGIN_SEL_GM_ACCOUNTS, "SELECT a.username, aa.gmlevel FROM account a, account_access aa WHERE a.id=aa.id AND aa.gmlevel > ? AND (aa.realmid = -1 OR aa.realmid = ?)", CONNECTION_SYNCH);
+     PREPARE_STATEMENT(LOGIN_SEL_ACCOUNT_INFO, "SELECT a.username, a.last_ip, aa.gmlevel, a.expansion FROM account a LEFT JOIN account_access aa ON (a.id = aa.id) WHERE a.id = ?", CONNECTION_SYNCH);
+     PREPARE_STATEMENT(LOGIN_SEL_ACCOUNT_ACCESS_GMLEVEL_TEST, "SELECT 1 FROM account_access WHERE id = ? AND gmlevel > ?", CONNECTION_SYNCH);
+     PREPARE_STATEMENT(LOGIN_SEL_ACCOUNT_ACCESS, "SELECT a.id, aa.gmlevel, aa.RealmID FROM account a LEFT JOIN account_access aa ON (a.id = aa.id) WHERE a.username = ?", CONNECTION_SYNCH);
+-- 
+1.7.2.5
+

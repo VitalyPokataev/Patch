@@ -1,0 +1,469 @@
+From 4b3327e1351e6fd615c1cd8a7733a5969b8282fc Mon Sep 17 00:00:00 2001
+From: Neket007 <neket007wow@gmail.com>
+Date: Fri, 28 Sep 2012 23:46:50 +1000
+Subject: [PATCH] =?UTF-8?q?=D0=A6=D0=B8=D1=82=D0=B0=D0=B4=D0=B5=D0=BB=D1=8C=20?=
+ =?UTF-8?q?=D0=9B=D0=B5=D0=B4=D1=8F=D0=BD=D0=BE=D0=B9=20=D0=9A=D0=BE=D1=80=D0?=
+ =?UTF-8?q?=BE=D0=BD=D1=8B:=20=D0=98=D0=BC=D0=BF=D0=BB=D0=B5=D0=BC=D0=B5=D0=BD?=
+ =?UTF-8?q?=D1=82=D0=B0=D1=86=D0=B8=D1=8F=20=D0=AD=D0=B2=D0=B5=D0=BD=D1=82=D0?=
+ =?UTF-8?q?=B0=20=D1=81=20=D0=BF=D0=B0=D1=83=D0=BA=D0=B0=D0=BC=D0=B8=20=D0=BF?=
+ =?UTF-8?q?=D0=B5=D1=80=D0=B5=D0=B4=20=D0=A1=D0=B8=D0=BD=D0=B4=D1=80=D0=B0=D0?=
+ =?UTF-8?q?=B3=D0=BE=D1=81=D0=BE=D0=B9.?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ sql/updates/SliceCore/world.sql                    |   35 +++
+ .../Northrend/IcecrownCitadel/icecrown_citadel.cpp |  231 ++++++++++++++++++++
+ .../Northrend/IcecrownCitadel/icecrown_citadel.h   |   65 +++---
+ .../IcecrownCitadel/instance_icecrown_citadel.cpp  |   10 +-
+ 4 files changed, 312 insertions(+), 29 deletions(-)
+
+diff --git a/sql/updates/SliceCore/world.sql b/sql/updates/SliceCore/world.sql
+index 9de7bf9..2e69ef3 100644
+--- a/sql/updates/SliceCore/world.sql
++++ b/sql/updates/SliceCore/world.sql
+@@ -41,3 +41,38 @@ INSERT INTO `trinity_string`(`entry`,`content_default`, `content_loc8`) VALUES
+ (11009, 'You can\`t do this at the moment.', 'Вы не можете сделать это сейчас.'),
+ (11007,'You are not VIP.', 'Вы не владеете правами VIP аккаунта.'),
+ (11008,'You are not VIP.', 'Вам недоступна эта VIP команда.');
++
++-- Эфент перед Синдрагосой в ЦЛК
++
++UPDATE `creature_template` SET `modelid1` = 25455, `modelid2` = 0, `unit_flags` = 33555202, `flags_extra` = 129, `ScriptName` = 'npc_sindragosas_ward' WHERE `entry` = 37503;
++DELETE FROM `creature` WHERE `id` = 37503;
++INSERT INTO `creature` (id, map, spawnMask, phaseMask, modelid, equipment_id, position_x, position_y, position_z, orientation, spawntimesecs, spawndist, currentwaypoint, curhealth, curmana, MovementType, npcflag, unit_flags, dynamicflags) VALUES
++(37503, 631, 15, 1, 0, 0, 4181.54, 2551.65, 211.033, 4.72777, 604800, 0, 0, 27890000, 8516000, 0, 0, 0, 0);
++UPDATE `gameobject` SET `state` = 0 WHERE `id` = 201373;
++DELETE FROM `areatrigger_scripts` WHERE `entry` = 5623;
++INSERT INTO `areatrigger_scripts` (entry, ScriptName) VALUES
++(5623, 'at_icc_start_sindragosa_gauntlet');
++UPDATE `creature_template` SET `minlevel` = 80, `maxlevel` = 80, `exp` = 2, `faction_A` = 21, `faction_H` = 21, `mechanic_immune_mask` = 8388624 WHERE `entry` IN (37228, 37229, 37232, 37501, 37502, 38197, 38198, 38362, 38134, 38137);
++UPDATE `creature_template` SET `mindmg` = 422, `maxdmg` = 586, `attackpower` = 642, `dmg_multiplier` = 7.5, `minrangedmg` = 345, `maxrangedmg` = 509, `rangedattackpower` = 103 WHERE `entry` IN (37228, 37229);
++UPDATE `creature_template` SET `mindmg` = 422, `maxdmg` = 586, `attackpower` = 642, `dmg_multiplier` = 13, `lootid` = 100002, `minrangedmg` = 345, `maxrangedmg` = 509, `rangedattackpower` = 103 WHERE `entry` IN (38134, 38137);
++UPDATE `creature_template` SET `dmg_multiplier` = 2 WHERE `entry` = 38362;
++UPDATE `creature_template` SET `difficulty_entry_1` = 38134 WHERE `entry` = 37228;
++UPDATE `creature_template` SET `difficulty_entry_1` = 38137 WHERE `entry` = 37229;
++UPDATE `creature_template` SET `AIName` = 'SmartAI' WHERE `entry` IN (37228, 37229, 37501, 37502);
++DELETE FROM `smart_scripts` WHERE `entryorguid` IN (37228, 37229, 37501, 37502) AND `source_type` = 0;	
++INSERT INTO `smart_scripts` (entryorguid, source_type, id, link, event_type, event_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action_type, action_param1, action_param2, action_param3, action_param4, action_param5, action_param6, target_type, target_param1, target_param2, target_param3, target_x, target_y, target_z, target_o, comment) VALUES
++-- Frostwarden Warrior: 37228 / 38134
++(37228, 0, 0, 0, 0, 0, 100, 30, 5000, 15000, 10000, 25000, 11, 71323, 3, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 'Frostwarden Warrior - Cast Frostblade'),
++(37228, 0, 1, 0, 6, 0, 100, 30, 0, 0, 0, 0, 11, 71203, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 'Frostwarden Warrior - Cast Soul Feast On Death'),
++-- Frostwarden Sorceress: 37229 / 38137
++(37229, 0, 0, 0, 0, 0, 100, 20, 15000, 20000, 20000, 25000, 11, 71331, 1, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 'Frostwarden Sorceress - Cast Ice Tomb (25 man only)'),
++(37229, 0, 1, 0, 0, 0, 100, 30, 10000, 15000, 10000, 20000, 11, 71320, 3, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 'Frostwarden Sorceress - Cast Frost Nova'),
++(37229, 0, 2, 0, 0, 0, 100, 30, 3000, 5000, 3000, 4000, 11, 71318, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 'Frostwarden Sorceress - Cast Frostbolt'),
++(37229, 0, 3, 0, 6, 0, 100, 30, 0, 0, 0, 0, 11, 71203, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 'Frostwarden Sorceress - Cast Soul Feast On Death'),
++-- Nerub'ar Champion: 37501 / 38197
++(37501, 0, 0, 0, 0, 0, 100, 30, 3000, 5000, 10000, 15000, 11, 71801, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 'Nerub\'ar Champion - Cast Rush'),
++(37501, 0, 1, 0, 6, 0, 100, 30, 0, 0, 0, 0, 11, 71203, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 'Nerub\'ar Champion - Cast Soul Feast On Death'),
++-- Nerub'ar Webweaver: 37502 / 38198
++(37502, 0, 0, 0, 0, 0, 100, 30, 3000, 5000, 10000, 15000, 11, 71326, 1, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 'Nerub\'ar Webweaver - Cast Crypt Scarabs'),	
++(37502, 0, 1, 0, 0, 0, 100, 30, 10000, 15000, 10000, 20000, 11, 71327, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 'Nerub\'ar Webweaver - Cast Web'),
++(37502, 0, 2, 0, 6, 0, 100, 30, 0, 0, 0, 0, 11, 71203, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 'Nerub\'ar Webweaver - Cast Soul Feast On Death');
+diff --git a/src/server/scripts/Northrend/IcecrownCitadel/icecrown_citadel.cpp b/src/server/scripts/Northrend/IcecrownCitadel/icecrown_citadel.cpp
+index 17e3391..1974951 100644
+--- a/src/server/scripts/Northrend/IcecrownCitadel/icecrown_citadel.cpp
++++ b/src/server/scripts/Northrend/IcecrownCitadel/icecrown_citadel.cpp
+@@ -255,6 +255,11 @@ enum EventTypes
+ 
+     // Invisible Stalker (Float, Uninteractible, LargeAOI)
+     EVENT_SOUL_MISSILE                  = 55,
++
++    // Sindragosas Ward	
++    EVENT_SUB_WAVE_1                    = 56,	
++    EVENT_SUB_WAVE_2                    = 57,	
++    EVENT_UPDATE_CHECK                  = 58,
+ };
+ 
+ enum DataTypesICC
+@@ -285,6 +290,22 @@ enum MovementPoints
+     POINT_LAND  = 1,
+ };
+ 
++const Position SindragosaGauntletSpawn[12] =	
++{
++    { 4130.71f, 2484.10f, 211.033f, 0 },	
++    { 4137.93f, 2505.52f, 211.033f, 0 },	
++    { 4160.64f, 2528.13f, 211.033f, 0 },	
++    { 4180.81f, 2533.88f, 211.033f, 0 },	
++    { 4200.92f, 2527.18f, 211.033f, 0 },	
++    { 4222.23f, 2503.56f, 211.033f, 0 },	
++    { 4229.40f, 2484.63f, 211.033f, 0 },
++    { 4222.01f, 2464.93f, 211.033f, 0 },	
++    { 4201.55f, 2441.03f, 211.033f, 0 },	
++    { 4181.29f, 2433.38f, 211.033f, 0 },
++    { 4161.86f, 2441.94f, 211.033f, 0 },
++    { 4138.78f, 2463.95f, 211.033f, 0 },
++};	
++
+ class FrostwingVrykulSearcher
+ {
+     public:
+@@ -2135,6 +2156,214 @@ class at_icc_start_frostwing_gauntlet : public AreaTriggerScript
+         }
+ };
+ 
++class npc_sindragosas_ward : public CreatureScript	
++{	
++    public:
++        npc_sindragosas_ward() : CreatureScript("npc_sindragosas_ward") { }
++
++        struct npc_sindragosas_wardAI : public BossAI
++        {
++            npc_sindragosas_wardAI(Creature* creature) : BossAI(creature, DATA_SINDRAGOSA_GAUNTLET)
++            {	
++            }	
++
++            void Reset()	
++            {
++                _Reset();	
++                _isEventInProgressOrDone = false;	
++                _spawnCountToBeSummonedInWave = 0;	
++                _waveNumber = 0;	
++            }
++
++            void DoAction(int32 const action)	
++            {	
++                if (action == ACTION_START_GAUNTLET)	
++                    if (!_isEventInProgressOrDone)
++                        if (!IsAnyPlayerOutOfRange())
++                            DoZoneInCombat(me, 150.0f);
++            }
++
++            void EnterCombat(Unit* /*attacker*/)	
++            {
++                _EnterCombat();
++                _isEventInProgressOrDone = true;
++                _spawnCountToBeSummonedInWave = 32;
++                _waveNumber = 1;
++                DoSummonWave(_waveNumber);
++                events.ScheduleEvent(EVENT_SUB_WAVE_1, 10000);
++                events.ScheduleEvent(EVENT_SUB_WAVE_2, 25000);
++                events.ScheduleEvent(EVENT_UPDATE_CHECK, 5000);
++            }
++
++            void DoSummonWave(uint8 number)
++            {
++                switch (number)	
++                {
++                    case 1:	
++                    case 3:
++                        me->SummonCreature(NPC_NERUBAR_WEBWEAVER, SindragosaGauntletSpawn[1], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000);
++                        me->SummonCreature(NPC_NERUBAR_WEBWEAVER, SindragosaGauntletSpawn[4], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000);	
++                        me->SummonCreature(NPC_NERUBAR_WEBWEAVER, SindragosaGauntletSpawn[7], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000);
++                        me->SummonCreature(NPC_NERUBAR_WEBWEAVER, SindragosaGauntletSpawn[10], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000);
++                        me->SummonCreature(NPC_NERUBAR_CHAMPION, SindragosaGauntletSpawn[2], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000);
++                        me->SummonCreature(NPC_NERUBAR_CHAMPION, SindragosaGauntletSpawn[5], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000);
++                        me->SummonCreature(NPC_NERUBAR_CHAMPION, SindragosaGauntletSpawn[8], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000);
++                        me->SummonCreature(NPC_NERUBAR_CHAMPION, SindragosaGauntletSpawn[11], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000);
++                        break;
++                    case 2:
++                        me->SummonCreature(NPC_FROSTWARDEN_SORCERESS, SindragosaGauntletSpawn[3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000);
++                        me->SummonCreature(NPC_FROSTWARDEN_SORCERESS, SindragosaGauntletSpawn[9], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000);
++                        me->SummonCreature(NPC_FROSTWARDEN_WARRIOR, SindragosaGauntletSpawn[3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000);
++                        me->SummonCreature(NPC_FROSTWARDEN_WARRIOR, SindragosaGauntletSpawn[9], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000);
++                        me->SummonCreature(NPC_FROSTWARDEN_WARRIOR, SindragosaGauntletSpawn[3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000);
++                        me->SummonCreature(NPC_FROSTWARDEN_WARRIOR, SindragosaGauntletSpawn[9], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000);
++                        break;
++                    case EVENT_SUB_WAVE_1:
++                    case EVENT_SUB_WAVE_2:	
++                        for (uint8 i = 0; i < 12; i++)
++                            me->SummonCreature(NPC_NERUBAR_BROODLING, SindragosaGauntletSpawn[i], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000);
++                        break;
++                    default:
++                        break;
++                }
++            }
++
++            bool IsAnyPlayerOutOfRange()	
++            {
++                if (!me->GetMap())
++                    return true;
++
++                Map::PlayerList const& playerList = me->GetMap()->GetPlayers();
++	
++                if (playerList.isEmpty())	
++                    return true;
++
++                for (Map::PlayerList::const_iterator itr = playerList.begin(); itr != playerList.end(); ++itr)	
++                {
++                    if (Player* player = itr->getSource())
++                    {
++                        if (player->isGameMaster())
++                            continue;
++
++                        if (player->isAlive() && me->GetDistance(player) > 125.0f)
++                            return true;
++                    }
++                }
++
++                return false;
++            }
++
++            void JustSummoned(Creature* summon)
++            {
++                summons.Summon(summon);	
++                DoZoneInCombat(summon, 150.0f);	
++            }
++
++            void SummonedCreatureDies(Creature* summon, Unit* /*who*/)
++            {
++                _spawnCountToBeSummonedInWave--;
++                summon->DespawnOrUnsummon(30000);
++            }	
++
++            void SummonedCreatureDespawn(Creature* summon)
++            {
++                // This one should never happen, if summoned creature despawns alive, reset!
++                if (summon->isAlive())
++                {
++                    EnterEvadeMode();	
++                    return;	
++                }	
++
++                summons.Despawn(summon);
++            }	
++	
++            void UpdateAI(uint32 const diff)	
++            {	
++                if (!UpdateVictim() || !_isEventInProgressOrDone)
++                    return;
++
++                events.Update(diff);
++	
++                while (uint32 eventId = events.ExecuteEvent())
++                {
++                    switch (eventId)	
++                    {
++                        case EVENT_SUB_WAVE_1:
++                            DoSummonWave(EVENT_SUB_WAVE_1);	
++                            break;	
++                        case EVENT_SUB_WAVE_2:	
++                            DoSummonWave(EVENT_SUB_WAVE_2);
++                            break;
++                        case EVENT_UPDATE_CHECK:
++                        {
++                            if (_spawnCountToBeSummonedInWave <= 5)
++                            {
++                                if (summons.size() < _spawnCountToBeSummonedInWave)
++                                    _spawnCountToBeSummonedInWave = summons.size();
++
++                                if (!_spawnCountToBeSummonedInWave)
++                                {
++                                    switch (_waveNumber)	
++                                    {
++                                        case 1:	
++                                            _spawnCountToBeSummonedInWave += 30;	
++                                            break;	
++                                        case 2:
++                                            _spawnCountToBeSummonedInWave += 32;
++                                            break;	
++                                        case 3:
++                                            me->Kill(me);
++                                            return;	
++                                    }
++	
++                                    _waveNumber++;
++                                    DoSummonWave(_waveNumber);
++                                    events.ScheduleEvent(EVENT_SUB_WAVE_1, 10000);
++                                    events.ScheduleEvent(EVENT_SUB_WAVE_2, 25000);
++                                }
++                            }
++
++                            if (IsAnyPlayerOutOfRange())	
++                            {
++                                EnterEvadeMode();
++                                return;
++                            }
++
++                            events.ScheduleEvent(EVENT_UPDATE_CHECK, 5000);
++                            break;	
++                        }	
++                        default:	
++                            break;	
++                    }	
++                }	
++            }	
++	
++        private:	
++            bool _isEventInProgressOrDone;	
++            uint32 _spawnCountToBeSummonedInWave;	
++            uint8 _waveNumber;
++        };	
++	
++        CreatureAI* GetAI(Creature* creature) const	
++        {	
++            return GetIcecrownCitadelAI<npc_sindragosas_wardAI>(creature);	
++        }	
++};	
++
++class at_icc_start_sindragosa_gauntlet : public AreaTriggerScript	
++{	
++    public:	
++        at_icc_start_sindragosa_gauntlet() : AreaTriggerScript("at_icc_start_sindragosa_gauntlet") { }	
++	
++        bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/)	
++        {	
++            if (InstanceScript* instance = player->GetInstanceScript())	
++                if (Creature* ward = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_SINDRAGOSA_GAUNTLET)))	
++                    ward->AI()->DoAction(ACTION_START_GAUNTLET);
++            return true;
++        }
++};
++
+ void AddSC_icecrown_citadel()
+ {
+     new npc_highlord_tirion_fordring_lh();
+@@ -2162,4 +2391,6 @@ void AddSC_icecrown_citadel()
+     new at_icc_shutdown_traps();
+     new at_icc_start_blood_quickening();
+     new at_icc_start_frostwing_gauntlet();
++    new npc_sindragosas_ward();
++    new at_icc_start_sindragosa_gauntlet();
+ }
+diff --git a/src/server/scripts/Northrend/IcecrownCitadel/icecrown_citadel.h b/src/server/scripts/Northrend/IcecrownCitadel/icecrown_citadel.h
+index 31639a6..8e98145 100755
+--- a/src/server/scripts/Northrend/IcecrownCitadel/icecrown_citadel.h
++++ b/src/server/scripts/Northrend/IcecrownCitadel/icecrown_citadel.h
+@@ -24,7 +24,7 @@
+ 
+ #define ICCScriptName "instance_icecrown_citadel"
+ 
+-uint32 const EncounterCount = 13;
++uint32 const EncounterCount = 14;
+ uint32 const WeeklyNPCs = 9;
+ uint32 const MaxHeroicAttempts = 50;
+ 
+@@ -82,35 +82,36 @@ enum DataTypes
+     DATA_VALITHRIA_DREAMWALKER      = 10,
+     DATA_SINDRAGOSA                 = 11,
+     DATA_THE_LICH_KING              = 12,
++    DATA_SINDRAGOSA_GAUNTLET        = 13,
+ 
+     // Additional data
+-    DATA_SAURFANG_EVENT_NPC         = 13,
+-    DATA_BONED_ACHIEVEMENT          = 14,
+-    DATA_OOZE_DANCE_ACHIEVEMENT     = 15,
+-    DATA_PUTRICIDE_TABLE            = 16,
+-    DATA_NAUSEA_ACHIEVEMENT         = 17,
+-    DATA_ORB_WHISPERER_ACHIEVEMENT  = 18,
+-    DATA_PRINCE_KELESETH_GUID       = 19,
+-    DATA_PRINCE_TALDARAM_GUID       = 20,
+-    DATA_PRINCE_VALANAR_GUID        = 21,
+-    DATA_BLOOD_PRINCES_CONTROL      = 22,
+-    DATA_SINDRAGOSA_FROSTWYRMS      = 23,
+-    DATA_SPINESTALKER               = 24,
+-    DATA_RIMEFANG                   = 25,
+-    DATA_COLDFLAME_JETS             = 26,
+-    DATA_TEAM_IN_INSTANCE           = 27,
+-    DATA_BLOOD_QUICKENING_STATE     = 28,
+-    DATA_HEROIC_ATTEMPTS            = 29,
+-    DATA_CROK_SCOURGEBANE           = 30,
+-    DATA_CAPTAIN_ARNATH             = 31,
+-    DATA_CAPTAIN_BRANDON            = 32,
+-    DATA_CAPTAIN_GRONDEL            = 33,
+-    DATA_CAPTAIN_RUPERT             = 34,
+-    DATA_VALITHRIA_TRIGGER          = 35,
+-    DATA_VALITHRIA_LICH_KING        = 36,
+-    DATA_HIGHLORD_TIRION_FORDRING   = 37,
+-    DATA_ARTHAS_PLATFORM            = 38,
+-    DATA_TERENAS_MENETHIL           = 39,
++    DATA_SAURFANG_EVENT_NPC         = 14,
++    DATA_BONED_ACHIEVEMENT          = 15,
++    DATA_OOZE_DANCE_ACHIEVEMENT     = 16,
++    DATA_PUTRICIDE_TABLE            = 17,	
++    DATA_NAUSEA_ACHIEVEMENT         = 18,
++    DATA_ORB_WHISPERER_ACHIEVEMENT  = 19,
++    DATA_PRINCE_KELESETH_GUID       = 20,
++    DATA_PRINCE_TALDARAM_GUID       = 21,
++    DATA_PRINCE_VALANAR_GUID        = 22,
++    DATA_BLOOD_PRINCES_CONTROL      = 23,
++    DATA_SINDRAGOSA_FROSTWYRMS      = 24,
++    DATA_SPINESTALKER               = 25,	
++    DATA_RIMEFANG                   = 26,	
++    DATA_COLDFLAME_JETS             = 27,
++    DATA_TEAM_IN_INSTANCE           = 28,
++    DATA_BLOOD_QUICKENING_STATE     = 29,	
++    DATA_HEROIC_ATTEMPTS            = 30,	
++    DATA_CROK_SCOURGEBANE           = 31,	
++    DATA_CAPTAIN_ARNATH             = 32,	
++    DATA_CAPTAIN_BRANDON            = 33,	
++    DATA_CAPTAIN_GRONDEL            = 34,	
++    DATA_CAPTAIN_RUPERT             = 35,	
++    DATA_VALITHRIA_TRIGGER          = 36,	
++    DATA_VALITHRIA_LICH_KING        = 37,
++    DATA_HIGHLORD_TIRION_FORDRING   = 38,	
++    DATA_ARTHAS_PLATFORM            = 39,
++    DATA_TERENAS_MENETHIL           = 40,
+ };
+ 
+ enum CreaturesIds
+@@ -277,6 +278,14 @@ enum CreaturesIds
+     NPC_SPIRIT_BOMB                             = 39189,
+     NPC_FROSTMOURNE_TRIGGER                     = 38584,
+ 
++    // Sindragosas Ward	
++    NPC_SINDRAGOSAS_WARD                        = 37503,	
++    NPC_NERUBAR_WEBWEAVER                       = 37502,	
++    NPC_NERUBAR_CHAMPION                        = 37501,	
++    NPC_NERUBAR_BROODLING                       = 37232,	
++    NPC_FROSTWARDEN_WARRIOR                     = 37228,	
++    NPC_FROSTWARDEN_SORCERESS                   = 37229,
++
+     // Generic
+     NPC_INVISIBLE_STALKER                       = 30298,
+ };
+diff --git a/src/server/scripts/Northrend/IcecrownCitadel/instance_icecrown_citadel.cpp b/src/server/scripts/Northrend/IcecrownCitadel/instance_icecrown_citadel.cpp
+index 650f426..9f54cfc 100755
+--- a/src/server/scripts/Northrend/IcecrownCitadel/instance_icecrown_citadel.cpp
++++ b/src/server/scripts/Northrend/IcecrownCitadel/instance_icecrown_citadel.cpp
+@@ -60,6 +60,7 @@ enum TimedEvents
+     {GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_02,  DATA_VALITHRIA_DREAMWALKER, DOOR_TYPE_SPAWN_HOLE, BOUNDARY_S   },
+     {GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_03,  DATA_VALITHRIA_DREAMWALKER, DOOR_TYPE_SPAWN_HOLE, BOUNDARY_N   },
+     {GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_04,  DATA_VALITHRIA_DREAMWALKER, DOOR_TYPE_SPAWN_HOLE, BOUNDARY_S   },
++    {GO_SINDRAGOSA_ENTRANCE_DOOR,            DATA_SINDRAGOSA_GAUNTLET,   DOOR_TYPE_PASSAGE,    BOUNDARY_N   },
+     {GO_SINDRAGOSA_ENTRANCE_DOOR,            DATA_SINDRAGOSA,            DOOR_TYPE_ROOM,       BOUNDARY_S   },
+     {GO_SINDRAGOSA_SHORTCUT_ENTRANCE_DOOR,   DATA_SINDRAGOSA,            DOOR_TYPE_PASSAGE,    BOUNDARY_E   },
+     {GO_SINDRAGOSA_SHORTCUT_EXIT_DOOR,       DATA_SINDRAGOSA,            DOOR_TYPE_PASSAGE,    BOUNDARY_NONE},
+@@ -146,6 +147,7 @@ class instance_icecrown_citadel : public InstanceMapScript
+                 ColdflameJetsState = NOT_STARTED;
+                 BloodQuickeningState = NOT_STARTED;
+                 BloodQuickeningMinutes = 0;
++                SindragosasWardGUID = 0;
+             }
+ 
+             void FillInitialWorldStates(WorldPacket& data)
+@@ -296,6 +298,9 @@ class instance_icecrown_citadel : public InstanceMapScript
+                     case NPC_TERENAS_MENETHIL_FROSTMOURNE_H:
+                         TerenasMenethilGUID = creature->GetGUID();
+                         break;
++                    case NPC_SINDRAGOSAS_WARD:	
++                        SindragosasWardGUID = creature->GetGUID();	
++                        break;
+                     case NPC_WICKED_SPIRIT:
+                         // Remove corpse as soon as it dies (and respawn 10 seconds later)
+                         creature->SetCorpseDelay(0);
+@@ -672,7 +677,9 @@ class instance_icecrown_citadel : public InstanceMapScript
+                     case DATA_ARTHAS_PLATFORM:
+                         return ArthasPlatformGUID;
+                     case DATA_TERENAS_MENETHIL:
+-                        return TerenasMenethilGUID;
++                        return TerenasMenethilGUID;	
++                    case DATA_SINDRAGOSA_GAUNTLET:	
++                        return SindragosasWardGUID;
+                     default:
+                         break;
+                 }
+@@ -1309,6 +1316,7 @@ class instance_icecrown_citadel : public InstanceMapScript
+             bool IsOozeDanceEligible;
+             bool IsNauseaEligible;
+             bool IsOrbWhispererEligible;
++            uint64 SindragosasWardGUID;
+         };
+ 
+         InstanceScript* GetInstanceScript(InstanceMap* map) const
+-- 
+1.7.10
+

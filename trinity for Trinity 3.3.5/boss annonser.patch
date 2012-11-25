@@ -1,0 +1,74 @@
+commit c46869c9d8692211ce2122dd58e3958b3519b431 
+Author: kleuser75 <kleuser1@gmail.com> 
+Date:   Sat Aug 4 22:07:44 2012 +0700 
+
+diff --git a/src/server/game/Scripting/ScriptLoader.cpp b/src/server/game/Scripting/ScriptLoader.cpp 
+index e71d688..d7e2f78 100755 
+--- a/src/server/game/Scripting/ScriptLoader.cpp 
++++ b/src/server/game/Scripting/ScriptLoader.cpp 
+@@ -40,6 +40,7 @@ void AddSC_dalaran_squirrel(); 
+  void AddSC_npc_transmogrifier(); 
+  void AddSC_transmogriefer(); 
+  void AddSC_cs_world_chat(); 
++void AddSC_Boss_Announcer(); 
+   
+  // spells 
+  void AddSC_deathknight_spell_scripts(); 
+@@ -1301,6 +1302,7 @@ AddSC_dalaran_squirrel(); 
+  AddSC_npc_transmogrifier(); 
+  AddSC_transmogriefer(); 
+  AddSC_cs_world_chat(); 
++AddSC_Boss_Announcer(); 
+    
+  #endif 
+  } 
+diff --git a/src/server/scripts/Custom/CMakeLists.txt b/src/server/scripts/Custom/CMakeLists.txt 
+index fc9c434..8054a97 100644 
+--- a/src/server/scripts/Custom/CMakeLists.txt 
++++ b/src/server/scripts/Custom/CMakeLists.txt 
+@@ -24,6 +24,7 @@ set(scripts_STAT_SRCS 
+    Custom/transmogrification.cpp 
+    Custom/transmogrification2.cpp 
+    Custom/world_chat.cpp 
++  Custom/announcer_boss.cpp 
+   
+  ) 
+  message("  -> Prepared: Custom") 
+diff --git a/src/server/scripts/Custom/announcer_boss.cpp b/src/server/scripts/Custom/announcer_boss.cpp 
+new file mode 100644 
+index 0000000..6ccd222 
+--- /dev/null 
++++ b/src/server/scripts/Custom/announcer_boss.cpp 
+@@ -0,0 +1,32 @@ 
++#include "ScriptPCH.h" 
++ 
++class Boss_Announcer : public PlayerScript 
++{ 
++public: 
++Boss_Announcer() : PlayerScript ("Boss_Announcer") {} 
++ 
++void OnCreatureKill(Player* player, Creature* boss) 
++{ 
++ 
++if (boss->isWorldBoss()) 
++{ 
++if (player->getGender() == GENDER_MALE) 
++{ 
++char msg[250]; 
++snprintf(msg, 250, "|CFF7BBEF7[Босс Анонсер]|r:|cffff0000 %s |r и его группа убили мирового босса |CFF18BE00[%s]|r !!!",player->GetName(),boss->GetName()); 
++sWorld->SendServerMessage(SERVER_MSG_STRING, msg); 
++} 
++else 
++{ 
++char msg[250]; 
++snprintf(msg, 250, "|CFF7BBEF7[Босс Анонсер]|r:|cffff0000 %s |r и его группа убили мирового босса |CFF18BE00[%s]|r !!!",player->GetName(),boss->GetName()); 
++sWorld->SendServerMessage(SERVER_MSG_STRING, msg); 
++} 
++} 
++} 
++}; 
++ 
++void AddSC_Boss_Announcer() 
++{ 
++new Boss_Announcer; 
++}

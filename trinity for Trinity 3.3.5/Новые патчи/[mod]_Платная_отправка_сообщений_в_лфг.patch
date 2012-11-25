@@ -1,0 +1,92 @@
+﻿diff --git a/sql/updates/UpCore/world/CONFIG_LFG_COST.sql b/sql/updates/UpCore/world/CONFIG_LFG_COST.sql
+new file mode 100644
+
+index 0000000..3618ac1
+
+--- /dev/null
+
++++ b/sql/updates/UpCore/world/CONFIG_LFG_COST.sql
+@@ -0,0 +1,1 @@
++INSERT INTO `trinity_string` (`entry`, `content_loc8`) VALUES ('11002', 'цена отправки сообщения в лфг: 5 серебреных монет');
+
+diff --git a/src/server/game/Miscellaneous/Language.h b/src/server/game/Miscellaneous/Language.h
+index 56b9dfe..480f1c1 100755
+--- a/src/server/game/Miscellaneous/Language.h
++++ b/src/server/game/Miscellaneous/Language.h
+@@ -1047,6 +1047,7 @@ enum TrinityStrings
+     // Use for custom patches             11000-11999
+     LANG_AUTO_BROADCAST                 = 11000,
+     LANG_INVALID_REALMID                = 11001,
++    LANG_NOT_ENOUGHT_MONEY              = 11002,
+ 
+     // NOT RESERVED IDS                   12000-1999999999
+     // `db_script_string` table index     2000000000-2000009999 (MIN_DB_SCRIPT_STRING_ID-MAX_DB_SCRIPT_STRING_ID)
+diff --git a/src/server/game/Server/Protocol/Handlers/ChatHandler.cpp b/src/server/game/Server/Protocol/Handlers/ChatHandler.cpp
+index ebaef36..51f41ad 100755
+--- a/src/server/game/Server/Protocol/Handlers/ChatHandler.cpp
++++ b/src/server/game/Server/Protocol/Handlers/ChatHandler.cpp
+@@ -422,6 +422,23 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
+                 {
+                     sScriptMgr->OnPlayerChat(_player, type, lang, msg, chn);
+ 
++                    if (chn->IsLFG())
++                    {
++                        uint32 lenght = 0;
++                        for (uint32 i=0; i<msg.length(); i++, lenght++)
++                        {
++                            if ((int)msg.c_str() [ i ]  & 128) i++;
++                        }
++                        uint32 cost = lenght * sWorld->getIntConfig(CONFIG_LFG_COST);
++
++                        if (_player->GetMoney() < cost)
++                        {
++                            ChatHandler(this).PSendSysMessage(LANG_NOT_ENOUGHT_MONEY);
++                            break;
++                        }
++                        _player->ModifyMoney(-(int32)cost);
++                    }
++
+                     chn->Say(_player->GetGUID(), msg.c_str(), lang);
+                 }
+             }
+diff --git a/src/server/game/World/World.cpp b/src/server/game/World/World.cpp
+index 7af625f..6e2e80a 100755
+--- a/src/server/game/World/World.cpp
++++ b/src/server/game/World/World.cpp
+@@ -584,6 +584,7 @@ void World::LoadConfigSettings(bool reload)
+     m_int_configs[CONFIG_INTERVAL_SAVE] = sConfig->GetIntDefault("PlayerSaveInterval", 15 * MINUTE * IN_MILLISECONDS);
+     m_int_configs[CONFIG_INTERVAL_DISCONNECT_TOLERANCE] = sConfig->GetIntDefault("DisconnectToleranceInterval", 0);
+     m_bool_configs[CONFIG_STATS_SAVE_ONLY_ON_LOGOUT] = sConfig->GetBoolDefault("PlayerSave.Stats.SaveOnlyOnLogout", true);
++    m_int_configs[CONFIG_LFG_COST] = sConfig->GetIntDefault("LFGMsg.Cost", 0);
+ 
+     m_int_configs[CONFIG_MIN_LEVEL_STAT_SAVE] = sConfig->GetIntDefault("PlayerSave.Stats.MinLevel", 0);
+     if (m_int_configs[CONFIG_MIN_LEVEL_STAT_SAVE] > MAX_LEVEL)
+diff --git a/src/server/game/World/World.h b/src/server/game/World/World.h
+index b793325..4bf684b 100755
+--- a/src/server/game/World/World.h
++++ b/src/server/game/World/World.h
+@@ -261,6 +261,7 @@ enum WorldIntConfigs
+     CONFIG_TICKET_LEVEL_REQ,
+     CONFIG_AUCTION_LEVEL_REQ,
+     CONFIG_MAIL_LEVEL_REQ,
++    CONFIG_LFG_COST,
+     CONFIG_CORPSE_DECAY_NORMAL,
+     CONFIG_CORPSE_DECAY_RARE,
+     CONFIG_CORPSE_DECAY_ELITE,
+diff --git a/src/server/worldserver/worldserver.conf.dist b/src/server/worldserver/worldserver.conf.dist
+index 3109c92..fa4dec4 100644
+--- a/src/server/worldserver/worldserver.conf.dist
++++ b/src/server/worldserver/worldserver.conf.dist
+@@ -2767,5 +2767,12 @@ LevelReq.Auction = 1
+ 
+ LevelReq.Mail = 1
+ 
++№
++#     LFGMsg.Cost
++№        Description: In copper.
++#        Default:     0
++
++LFGMsg.Cost = 0
++
+ #
+ ###################################################################################################

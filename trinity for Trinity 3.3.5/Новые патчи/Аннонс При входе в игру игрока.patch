@@ -1,0 +1,18 @@
+#include "ScriptPCH.h"    
+
+class Announce_OnPlayerLogin : public PlayerScript    
+{    
+public:    
+Announce_OnPlayerLogin() : PlayerScript("Announce_OnPlayerLogin") {}    
+
+void OnLogin(Player * player)    
+{    
+char msg[500];    
+sprintf(msg, "|CFF00FF00»грок |cffffffff%s |CFF00FF00¬ходит в игру!",player->GetName());    
+sWorld->SendWorldText(LANG_SYSTEMMESSAGE, msg);    
+}    
+};     
+void AddSC_OnLogin()    
+{    
+new Announce_OnPlayerLogin;    
+}

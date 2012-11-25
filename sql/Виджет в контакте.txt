@@ -1,0 +1,5 @@
+<layer name="lenta" top="0" right="0"> 
+ <div style="position:absolute; top:0; right:0;"> 
+ <a href="http://vakpp.ru/" title="¬контакте"><img border="0" src="http://ucozua.ru/scripts-2012/1/vkpodpis2.png" align="right"></a> 
+ </div> 
+ </layer>

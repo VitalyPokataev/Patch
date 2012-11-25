@@ -1,0 +1,65 @@
+# HG changeset patch
+# User ANTOMA
+# Date 1307963396 -10800
+# Branch trunk
+# Node ID f46a64485d02881911766930aa5e32c4a39c1420
+# Parent  aad4d2e5b471995a29c1f40091b6a6f0ed2a171d
+Реализация: проверка последовательности боссов (для тест реалма)
+
+diff -r aad4d2e5b471 -r f46a64485d02 src/server/game/World/World.cpp
+--- a/src/server/game/World/World.cpp	Mon Jun 13 01:48:29 2011 +0300
++++ b/src/server/game/World/World.cpp	Mon Jun 13 14:09:56 2011 +0300
+@@ -1225,6 +1225,7 @@
+     m_int_configs[CONFIG_CONFIG_OUTDOORPVP_WINTERGRASP_ANTIFARM_DEF]  = sConfig->GetIntDefault("OutdoorPvP.Wintergrasp.Antifarm.Def", 5);
+     m_int_configs[CONFIG_CONFIG_OUTDOORPVP_WINTERGRASP_MINLEVEL]  = sConfig->GetIntDefault("OutdoorPvP.Wintergrasp.Minlevel", 74);
+     m_int_configs[CONFIG_CONFIG_OUTDOORPVP_WINTERGRASP_MAXPLAYERS]  = sConfig->GetIntDefault("OutdoorPvP.Wintergrasp.MaxPlayers", 40);
++    m_bool_configs[CONFIG_CONFIG_ANTIFARM_ENABLE]  = sConfig->GetBoolDefault("ICC.Antifarm.Enable", false);
+ 
+     m_bool_configs[CONFIG_NO_RESET_TALENT_COST] = sConfig->GetBoolDefault("NoResetTalentsCost", false);
+     m_bool_configs[CONFIG_SHOW_KICK_IN_WORLD] = sConfig->GetBoolDefault("ShowKickInWorld", false);
+diff -r aad4d2e5b471 -r f46a64485d02 src/server/game/World/World.h
+--- a/src/server/game/World/World.h	Mon Jun 13 01:48:29 2011 +0300
++++ b/src/server/game/World/World.h	Mon Jun 13 14:09:56 2011 +0300
+@@ -168,6 +168,7 @@
+     CONFIG_ALLOW_TICKETS,
+     CONFIG_DBC_ENFORCE_ITEM_ATTRIBUTES,
+     CONFIG_PRESERVE_CUSTOM_CHANNELS,
++    CONFIG_CONFIG_ANTIFARM_ENABLE,
+     BOOL_CONFIG_VALUE_COUNT
+ };
+ 
+diff -r aad4d2e5b471 -r f46a64485d02 src/server/scripts/Northrend/IcecrownCitadel/instance_icecrown_citadel.cpp
+--- a/src/server/scripts/Northrend/IcecrownCitadel/instance_icecrown_citadel.cpp	Mon Jun 13 01:48:29 2011 +0300
++++ b/src/server/scripts/Northrend/IcecrownCitadel/instance_icecrown_citadel.cpp	Mon Jun 13 14:09:56 2011 +0300
+@@ -1035,6 +1035,9 @@
+ 
+             bool CheckRequiredBosses(uint32 bossId, Player const* player = NULL) const
+             {
++    if (sWorld->getBoolConfig(CONFIG_CONFIG_ANTIFARM_ENABLE))
++                    return true;
++	else
+                 if (player && player->isGameMaster())
+                     return true;
+ 
+diff -r aad4d2e5b471 -r f46a64485d02 src/server/worldserver/worldserver.conf.dist
+--- a/src/server/worldserver/worldserver.conf.dist	Mon Jun 13 01:48:29 2011 +0300
++++ b/src/server/worldserver/worldserver.conf.dist	Mon Jun 13 14:09:56 2011 +0300
+@@ -260,6 +260,10 @@
+ #        Default: 0 (Disabled)
+ #                 1 (Enable)
+ #
++#    ICC.Antifarm.Enable
++#        on\off check in ICC boss
++#        Default: 0 (Disabled)
++#                 1 (Enable)
+ ###############################################################################
+ 
+ UseProcessors = 0
+@@ -294,6 +298,7 @@
+ MapUpdate.Threads = 1
+ CleanCharacterDB = 0
+ DuelResetCooldown = 1
++ICC.Antifarm.Enable = 1
+ 
+ ##############################################################################
+ #    PersistentCharacterCleanFlags

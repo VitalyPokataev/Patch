@@ -1,0 +1,1401 @@
+diff --git a/sql/Azshara.sql b/sql/Azshara.sql
+new file mode 100644
+index 0000000..b4353fd
+--- /dev/null
++++ b/sql/Azshara.sql
+@@ -0,0 +1,293 @@
++SET NAMES 'utf8';
++
++-- OutdoorPvP Zone: Azhara Crater - Dota
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) 
++VALUES (500100, 0, 0, 0, 0, 0, 14884, 0, 0, 0, 'Alliance Elder', 'Tower', '', 0, 83, 83, 1, 84, 84, 0, '1', '1.14286', 1, 3, 5000, 9000, 3, 49000, 2, 2000, 2000, 1, 4, 2, 0, 0, 0, 0, 0, 5000, 9000, 49000, 7, 4204, 0, 0, 0, 75, 75, 75, 75, 75, 75, 47253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 7, 160, 80, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  2147483647, 276, 'npc_control_tower', 12340);
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) 
++VALUES (500101, 0, 0, 0, 0, 0, 14884, 0, 0, 0, 'Alliance Elder', 'Tower', '', 0, 83, 83, 1, 84, 84, 0, '1', '1.14286', 1, 3, 5000, 9000, 3, 49000, 2, 2000, 2000, 1, 4, 2, 0, 0, 0, 0, 0, 5000, 9000, 49000, 7, 4204, 0, 0, 0, 75, 75, 75, 75, 75, 75, 47253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 7, 160, 80, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  2147483647, 276, 'npc_control_tower', 12340);
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) 
++VALUES (500102, 0, 0, 0, 0, 0, 14884, 0, 0, 0, 'Alliance Elder', 'Tower', '', 0, 83, 83, 1, 84, 84, 0, '1', '1.14286', 1, 3, 5000, 9000, 3, 49000, 2, 2000, 2000, 1, 4, 2, 0, 0, 0, 0, 0, 5000, 9000, 49000, 7, 4204, 0, 0, 0, 75, 75, 75, 75, 75, 75, 47253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 7, 160, 80, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  2147483647, 276, 'npc_control_tower', 12340);
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) 
++VALUES (500110, 0, 0, 0, 0, 0, 13170, 0, 0, 0, 'Horde Elder', 'Tower', '', 0, 83, 83, 1, 83, 83, 0, '1', '1.14286', 1, 3, 5000, 9000, 3, 49000, 2, 2000, 2000, 1, 4, 2, 0, 0, 0, 0, 0, 5000, 9000, 49000, 7, 4204, 0, 0, 0, 75, 75, 75, 75, 75, 75, 47253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 7, 160, 80, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  2147483647, 276, 'npc_control_tower', 12340);
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) 
++VALUES (500111, 0, 0, 0, 0, 0, 13170, 0, 0, 0, 'Horde Elder', 'Tower', '', 0, 83, 83, 1, 83, 83, 0, '1', '1.14286', 1, 3, 5000, 9000, 3, 49000, 2, 2000, 2000, 1, 4, 2, 0, 0, 0, 0, 0, 5000, 9000, 49000, 7, 4204, 0, 0, 0, 75, 75, 75, 75, 75, 75, 47253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 7, 160, 80, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  2147483647, 276, 'npc_control_tower', 12340);
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) 
++VALUES (500112, 0, 0, 0, 0, 0, 13170, 0, 0, 0, 'Horde Elder', 'Tower', '', 0, 83, 83, 1, 83, 83, 0, '1', '1.14286', 1, 3, 5000, 9000, 3, 49000, 2, 2000, 2000, 1, 4, 2, 0, 0, 0, 0, 0, 5000, 9000, 49000, 7, 4204, 0, 0, 0, 75, 75, 75, 75, 75, 75, 47253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 7, 160, 80, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  2147483647, 276, 'npc_control_tower', 12340);
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) 
++VALUES (500109, 0, 0, 0, 0, 0, 29776, 0, 0, 0, 'Lady Banshi', 'Aliance Avanpost Comander', '', 0, 83, 83, 2, 84, 84, 0, 1.8, 1.42857, 1, 3, 468, 702, 0, 176, 40, 2000, 2000, 1, 0, 8, 0, 0, 0, 0, 0, 374, 562, 141, 7, 76, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 730500, 730500, '', 0, 3, 200, 20, 1, 1, 0, 0, 0, 0, 0, 0, 144, 1, 10000, 650854399, 0, 0, 12340);
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) 
++VALUES (500119, 0, 0, 0, 0, 0, 29782, 0, 0, 0, 'Thrall', 'Horde Avanpost Comander', '', 0, 83, 83, 2, 83, 83, 3, 1, 1.14286, 1, 3, 143, 215, 0, 54, 85, 1000, 1000, 2, 4160, 8, 0, 0, 0, 0, 0, 114, 172, 43, 7, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 638000, 638000, '', 0, 3, 200, 30, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 10001, 650854399, 0, 0, 12340);
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) 
++VALUES (500108, 0, 0, 0, 0, 0, 29175, 0, 0, 0, 'Elder Ironbranch', 'Barracks Alliance', '', 0, 83, 83, 2, 84, 84, 0, 1.8, 1.14286, 1, 3, 468, 702, 0, 176, 51.1, 2000, 2000, 1, 2097156, 2, 0, 0, 0, 0, 0, 374, 562, 141, 4, 108, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 200, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2147483647, 276, 'npc_summon_npc', 12340);
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) 
++VALUES (500118, 0, 0, 0, 0, 0, 29175, 0, 0, 0, 'Elder Ironbranch', 'Barracks Horde', '', 0, 83, 83, 2, 83, 83, 0, 1.8, 1.14286, 1, 3, 468, 702, 0, 176, 51.1, 2000, 2000, 1, 2097156, 2, 0, 0, 0, 0, 0, 374, 562, 141, 4, 108, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 200, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2147483647, 276, 'npc_summon_npc', 12340);
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) 
++VALUES (500120, 0, 0, 0, 0, 0, 10906, 0, 0, 0, 'Roshan', '', '', 0, 83, 83, 2, 14, 14, 0, 1, 1.14286, 3, 3, 8000, 12000, 0, 49000, 3, 3000, 3000, 1, 0, 2, 0, 0, 0, 0, 0, 8000, 12000, 49000, 3, 108, 0, 0, 0, 75, 75, 75, 75, 75, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 280, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2147483647, 276, '', 12340);
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) 
++VALUES (500121, 0, 0, 0, 0, 0, 617, 0, 0, 0, 'Murloc', 'Neutral', '', 0, 83, 83, 2, 14, 14, 0, 0.82, 0.85714, 2, 4, 25, 125, 1, 525, 70, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 25, 125, 525, 7, 0, 0, 0, 0, 75, 75, 75, 75, 75, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 10, 1, 1, 0, 1256, 0, 0, 0, 0, 0, 100, 1, 3710, 0, 0, '', 12340);
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) 
++VALUES (500107, 0, 0, 0, 0, 0, 1988, 0, 0, 0, 'Grove Walker', 'Alliance', '', 0, 82, 82, 2, 84, 84, 0, 1, 1.14286, 0.5, 0, 361, 541, 0, 135, 14, 2000, 2000, 2, 32768, 2, 0, 0, 0, 0, 0, 289, 433, 108, 4, 0, 0, 0, 0, 55, 55, 55, 55, 55, 55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 10, 10, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 'npc_creeps', 12340);
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) 
++VALUES (500117, 0, 0, 0, 0, 0, 1988, 0, 0, 0, 'Grove Walker', 'Horde', '', 0, 82, 82, 2, 83, 83, 0, 1, 1.14286, 0.5, 0, 361, 541, 0, 135, 14, 2000, 2000, 2, 32768, 2, 0, 0, 0, 0, 0, 289, 433, 108, 4, 0, 0, 0, 0, 55, 55, 55, 55, 55, 55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 10, 10, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 'npc_creeps', 12340);
++
++DELETE FROM `outdoorpvp_template` WHERE TypeID = '8';
++INSERT INTO `outdoorpvp_template` (`TypeID`, `ScriptName`, `comment`) 
++VALUES (8, 'outdoorpvp_ca', 'Azshara'); 
++
++DELETE FROM `spell_bonus_data` WHERE entry='47253';
++INSERT INTO `spell_bonus_data` VALUES ('47253', '0', '0', '0.36', '0', 'OutdoorPvP_CA_Towers');
++
++DELETE FROM `script_waypoint` WHERE `entry` = '500117';
++INSERT INTO `script_waypoint` VALUES ('500117', '0', '145.267', '1025.85', '295.231', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '1', '142.045', '1018.18', '295.098', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '2', '137.585', '1007.58', '295.16', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '3', '134.815', '998.438', '295.083', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '4', '156.2', '980.119', '294.439', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '5', '160.187', '975.628', '292.373', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '6', '165.506', '971.34', '288.694', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '7', '169.045', '964.345', '283.928', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '8', '177.66', '960.359', '278.747', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '9', '188.333', '955.421', '272.246', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '10', '185.891', '947.107', '268.734', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '11', '181.891', '933.486', '264.915', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '12', '171.37', '906.961', '264.216', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '13', '159.66', '877.296', '267.844', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '14', '144.061', '862.313', '269.9', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '15', '122.051', '843.054', '272.165', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '16', '93.7964', '821.434', '272.028', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '17', '67.4317', '797.454', '268.474', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '18', '45.7407', '779.362', '269.961', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '19', '29.2011', '775.51', '273.106', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '20', '6.20294', '773.107', '277.149', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '21', '-20.7475', '767.951', '280.591', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '22', '-19.2372', '757.356', '281.217', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '23', '-14.652', '742.464', '276.709', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '24', '-7.40829', '714.452', '272.721', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '25', '-0.477896', '689.456', '272.427', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '26', '3.98314', '677.49', '274.696', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '27', '9.43243', '657.469', '272.654', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '28', '14.713', '641.653', '270.398', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '29', '16.4178', '609.988', '269.407', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '30', '17.0481', '579.213', '273.778', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '31', '18.3629', '564.883', '277.279', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '32', '34.0966', '543.633', '281.786', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '33', '47.478', '525.495', '286.57', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '34', '38.5898', '510.145', '292.949', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '35', '30.1806', '496.91', '297.348', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '36', '28.1555', '485.127', '301.002', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '37', '25.5122', '462.933', '305.254', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '38', '24.6299', '440.069', '306.124', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '39', '24.7838', '416.437', '306.042', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '40', '24.9032', '398.097', '304.545', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '41', '31.2412', '385.95', '302.322', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '42', '70.8645', '327.508', '294.138', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '43', '81.8619', '313.787', '291.297', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '44', '99.5445', '310.476', '287.767', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '45', '116.47', '307.306', '283.102', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '46', '131.374', '295.524', '277.539', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '47', '164.769', '290.199', '271.251', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '48', '203.814', '276.359', '262.195', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '49', '221.021', '264.69', '258.541', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '50', '242.154', '244.715', '254.129', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '51', '267.097', '223.637', '248.811', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '52', '281.072', '212.155', '245.818', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '53', '294.789', '189.727', '238.58', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '54', '311.27', '180.823', '234.698', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '55', '323.033', '170.668', '234.927', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '56', '344.065', '155.448', '235.036', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '57', '354.659', '148.89', '238.239', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '58', '370.306', '145.626', '240.839', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '59', '387.29', '134.608', '244.95', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '60', '404.508', '123.439', '248.75', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '61', '433.098', '108.74', '254.348', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '62', '459.512', '80.1403', '257.575', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '63', '494.207', '74.7614', '260.937', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '64', '526.11', '80.1353', '265.306', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '65', '552.616', '79.6298', '269.757', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '66', '571.651', '89.3907', '272.257', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '67', '602.456', '106.096', '277.081', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '68', '660.959', '108.623', '279.223', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '69', '676.512', '107.93', '279.342', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '70', '698.505', '84.9176', '279.491', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '71', '724.42', '71.0189', '281.661', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '72', '762.882', '52.9045', '288.033', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '73', '785.33', '52.6067', '291.425', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '74', '812.913', '55.9217', '295.039', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '75', '836.031', '51.7424', '297.491', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '76', '859.974', '51.9539', '298.896', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '77', '872.812', '62.306', '299.298', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '78', '882.859', '85.1602', '296.653', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '79', '884.941', '109.1', '291.104', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '80', '888.558', '122.423', '287.011', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '81', '897.111', '137.482', '285.355', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '82', '907.098', '158.677', '285.231', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '83', '918.13', '175.801', '288.446', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '84', '924.791', '190.756', '291.572', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '85', '927.393', '238.421', '302.518', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '86', '955.982', '266.617', '312.681', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '87', '974.351', '271.316', '318.679', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '88', '987.486', '275.833', '323.011', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '89', '1004.45', '282.065', '327.468', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '90', '1019.04', '287.425', '331.035', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '91', '1035.04', '293.305', '334.612', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '92', '1051.72', '294.347', '339.561', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '93', '1071.75', '296.56', '339.561', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '94', '1078.04', '285.826', '339.56', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '95', '1087.24', '280.121', '339.559', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500117', '96', '1093.92', '297.664', '338.613', '0', '');
++DELETE FROM `script_waypoint` WHERE `entry` = '500107';
++INSERT INTO `script_waypoint` VALUES ('500107', '113', '43.5527', '1172.79', '367.342', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '112', '62.8301', '1176.56', '368.288', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '111', '63.3245', '1166.46', '368.288', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '110', '56.8771', '1157.73', '368.282', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '109', '69.5359', '1140.82', '368.287', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '108', '73.5078', '1137.15', '367.85', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '107', '74.5526', '1135.76', '367.178', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '106', '91.6735', '1132.28', '366.686', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '105', '98.0543', '1123.57', '362.562', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '104', '100.74', '1119.29', '359.326', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '103', '103.909', '1114.24', '355.555', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '102', '108.822', '1112.78', '351.311', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '101', '115.281', '1111.14', '346.028', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '100', '126.514', '1107.48', '336.666', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '99', '132.057', '1098.84', '329.614', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '98', '144.32', '1099.01', '325.269', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '97', '151.128', '1091.02', '323.47', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '96', '160.016', '1080.58', '322.507', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '95', '164.881', '1070.62', '320.218', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '94', '165.195', '1065.17', '316.7', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '93', '165.758', '1055.4', '309.726', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '92', '161.145', '1044.84', '303.361', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '91', '152.865', '1034.94', '298.27', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '90', '145.267', '1025.85', '295.231', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '89', '142.045', '1018.18', '295.098', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '88', '137.585', '1007.58', '295.16', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '87', '134.815', '998.438', '295.083', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '86', '156.2', '980.119', '294.439', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '85', '160.187', '975.628', '292.373', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '84', '165.506', '971.34', '288.694', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '83', '169.045', '964.345', '283.928', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '82', '177.66', '960.359', '278.747', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '81', '188.333', '955.421', '272.246', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '80', '185.891', '947.107', '268.734', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '79', '181.891', '933.486', '264.915', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '78', '171.37', '906.961', '264.216', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '77', '159.66', '877.296', '267.844', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '76', '144.061', '862.313', '269.9', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '75', '122.051', '843.054', '272.165', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '74', '93.7964', '821.434', '272.028', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '73', '67.4317', '797.454', '268.474', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '72', '45.7407', '779.362', '269.961', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '71', '29.2011', '775.51', '273.106', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '70', '6.20294', '773.107', '277.149', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '69', '-20.7475', '767.951', '280.591', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '68', '-19.2372', '757.356', '281.217', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '67', '-14.652', '742.464', '276.709', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '66', '-7.40829', '714.452', '272.721', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '65', '-0.477896', '689.456', '272.427', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '64', '3.98314', '677.49', '274.696', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '63', '9.43243', '657.469', '272.654', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '62', '14.713', '641.653', '270.398', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '61', '16.4178', '609.988', '269.407', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '60', '17.0481', '579.213', '273.778', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '59', '18.3629', '564.883', '277.279', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '58', '34.0966', '543.633', '281.786', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '57', '47.478', '525.495', '286.57', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '56', '38.5898', '510.145', '292.949', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '55', '30.1806', '496.91', '297.348', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '54', '28.1555', '485.127', '301.002', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '53', '25.5122', '462.933', '305.254', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '52', '24.6299', '440.069', '306.124', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '51', '24.7838', '416.437', '306.042', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '50', '24.9032', '398.097', '304.545', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '49', '70.8645', '327.508', '294.138', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '48', '81.8619', '313.787', '291.297', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '47', '99.5445', '310.476', '287.767', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '46', '116.47', '307.306', '283.102', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '45', '131.374', '295.524', '277.539', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '44', '164.769', '290.199', '271.251', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '43', '203.814', '276.359', '262.195', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '42', '221.021', '264.69', '258.541', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '41', '242.154', '244.715', '254.129', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '40', '267.097', '223.637', '248.811', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '39', '281.072', '212.155', '245.818', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '38', '294.789', '189.727', '238.58', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '37', '311.27', '180.823', '234.698', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '36', '323.033', '170.668', '234.927', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '35', '344.065', '155.448', '235.036', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '34', '354.659', '148.89', '238.239', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '33', '370.306', '145.626', '240.839', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '32', '387.29', '134.608', '244.95', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '31', '404.508', '123.439', '248.75', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '30', '433.098', '108.74', '254.348', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '29', '459.512', '80.1403', '257.575', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '28', '494.207', '74.7614', '260.937', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '27', '526.11', '80.1353', '265.306', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '26', '552.616', '79.6298', '269.757', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '25', '571.651', '89.3907', '272.257', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '24', '602.456', '106.096', '277.081', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '23', '660.959', '108.623', '279.223', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '22', '676.512', '107.93', '279.342', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '21', '698.505', '84.9176', '279.491', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '20', '724.42', '71.0189', '281.661', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '19', '762.882', '52.9045', '288.033', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '18', '785.33', '52.6067', '291.425', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '17', '812.913', '55.9217', '295.039', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '16', '836.031', '51.7424', '297.491', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '15', '859.974', '51.9539', '298.896', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '14', '872.812', '62.306', '299.298', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '13', '882.859', '85.1602', '296.653', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '12', '884.941', '109.1', '291.104', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '11', '888.558', '122.423', '287.011', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '10', '897.111', '137.482', '285.355', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '9', '907.098', '158.677', '285.231', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '8', '918.13', '175.801', '288.446', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '7', '924.791', '190.756', '291.572', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '6', '927.393', '238.421', '302.518', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '5', '955.982', '266.617', '312.681', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '4', '974.351', '271.316', '318.679', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '3', '987.486', '275.833', '323.011', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '2', '1004.45', '282.065', '327.468', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '1', '1019.04', '287.425', '331.035', '0', '');
++INSERT INTO `script_waypoint` VALUES ('500107', '0', '1019.04', '287.425', '331.035', '36000', '');
++
++DELETE FROM `trinity_string` WHERE ((entry > '11999') and (entry < '12008'));
++INSERT INTO `trinity_string` VALUES (12000, 'The Alliance lost the first Tower!','','','','','','','','Орда уничтожила первую вышку!');
++INSERT INTO `trinity_string` VALUES (12001, 'The Alliance lost the second Tower!','','','','','','','','Орда уничтожила вторую вышку!');
++INSERT INTO `trinity_string` VALUES (12002, 'The Alliance lost the third Tower!','','','','','','','','Орда уничтожила третью вышку!');
++INSERT INTO `trinity_string` VALUES (12003, 'The Horde lost the first Tower!','','','','','','','','Альянс уничтожил первую вышку!');
++INSERT INTO `trinity_string` VALUES (12004, 'The Alliance lost the second Tower!','','','','','','','','Альянс уничтожил вторую вышку!');
++INSERT INTO `trinity_string` VALUES (12005, 'The Alliance lost the third Tower!','','','','','','','','Альянс уничтожил третью вышку!');
++INSERT INTO `trinity_string` VALUES (12006, 'The Alliance killed neutral BOSS!','','','','','','','','Альянс уничтожил нейтрального босса!');
++INSERT INTO `trinity_string` VALUES (12007, 'The Horde killed neutral BOSS!','','','','','','','','Орда уничтожила нейтрального босса!');
++
++DELETE FROM `locales_creature` WHERE ((entry > '500099') and (entry < '500126'));
++INSERT INTO `locales_creature` VALUES ('500100', '', '', '', '', '', '', '', 'Древо Альянса', null, null, null, null, null, null, null, 'Башня');
++INSERT INTO `locales_creature` VALUES ('500101', '', '', '', '', '', '', '', 'Древо Альянса', null, null, null, null, null, null, null, 'Башня');
++INSERT INTO `locales_creature` VALUES ('500102', '', '', '', '', '', '', '', 'Древо Альянса', null, null, null, null, null, null, null, 'Башня');
++INSERT INTO `locales_creature` VALUES ('500110', '', '', '', '', '', '', '', 'Древо Орды', null, null, null, null, null, null, null, 'Башня');
++INSERT INTO `locales_creature` VALUES ('500111', '', '', '', '', '', '', '', 'Древо Орды', null, null, null, null, null, null, null, 'Башня');
++INSERT INTO `locales_creature` VALUES ('500112', '', '', '', '', '', '', '', 'Древо Орды', null, null, null, null, null, null, null, 'Башня');
++INSERT INTO `locales_creature` VALUES ('500108', '', '', '', '', '', '', '', 'Старое Древо', null, null, null, null, null, null, null, 'Барраки Альянса');
++INSERT INTO `locales_creature` VALUES ('500118', '', '', '', '', '', '', '', 'Старое Древо', null, null, null, null, null, null, null, 'Барраки Орды');
++INSERT INTO `locales_creature` VALUES ('500120', '', '', '', '', '', '', '', 'Рошан', null, null, null, null, null, null, null, 'Dota AllStars');
++INSERT INTO `locales_creature` VALUES ('500107', '', '', '', '', '', '', '', 'Крип', null, null, null, null, null, null, null, 'Альянс');
++INSERT INTO `locales_creature` VALUES ('500117', '', '', '', '', '', '', '', 'Крип', null, null, null, null, null, null, null, 'Орда');
++INSERT INTO `locales_creature` VALUES ('500109', '', '', '', '', '', '', '', 'Сайрен Усмерительница', null, null, null, null, null, null, null, 'Управляющая Аванпостом Альянса');
++INSERT INTO `locales_creature` VALUES ('500119', '', '', '', '', '', '', '', 'Дейсон Кровавый', null, null, null, null, null, null, null, 'Управляющий Аванпостом Орды');
++
++DELETE FROM `creature_equip_template` WHERE `entry` IN (10000,10001);
++INSERT INTO `creature_equip_template` VALUES 
++(10000,47266,47266,0),
++(10001,19362,28825,0);
++
++-- Поле битв Кратер Азшары
++DELETE FROM `creature_template` WHERE `entry` IN (500005,5000006);
++INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`) VALUES 
++(500005, 0, 0, 0, 0, 0, 20807, 0, 20807, 0, 'OutdoorPvP: Azhara Crater', 'Wow Fun', '', 0, 80, 80, 0, 35, 35, 1, 1, 1, 50, 150, 0, 1000, 100, 2000, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 10, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 'npc_tp_ca');
++INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`) VALUES 
++(500006, 0, 0, 0, 0, 0, 20807, 0, 20807, 0, 'OutdoorPvP: Capital', 'Battle End', '', 0, 80, 80, 0, 35, 35, 1, 1, 1, 50, 150, 0, 1000, 100, 2000, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 10, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 'npc_tp_capital');
++DELETE FROM `locales_creature` WHERE `entry` IN (500005,500006);
++INSERT INTO `locales_creature` (`entry`, `name_loc8`) VALUES 
++(500006, 'Окончить бой'),
++(500005, 'Поле Битвы: Кратер Азшары');
+diff --git a/src/server/game/Miscellaneous/Language.h b/src/server/game/Miscellaneous/Language.h
+index a766108..0cdcd78 100755
+--- a/src/server/game/Miscellaneous/Language.h
++++ b/src/server/game/Miscellaneous/Language.h
+@@ -1070,6 +1070,16 @@ enum TrinityStrings
+     // Use for custom patches             11000-11999
+     LANG_AUTO_BROADCAST                 = 11000,
+     LANG_INVALID_REALMID                = 11001,
++	
++	// AzharaCrater OutdoorPvP
++    LANG_OPVP_CA_LOOSE_TOWER_A_A        = 12000,
++    LANG_OPVP_CA_LOOSE_TOWER_B_A        = 12001,
++    LANG_OPVP_CA_LOOSE_TOWER_C_A        = 12002,
++    LANG_OPVP_CA_LOOSE_TOWER_D_H        = 12003,
++    LANG_OPVP_CA_LOOSE_TOWER_E_H        = 12004,
++    LANG_OPVP_CA_LOOSE_TOWER_F_H        = 12005,
++    LANG_OPVP_CA_KILLED_N_BOSS_A        = 12006,
++    LANG_OPVP_CA_KILLED_N_BOSS_H        = 12007,
+ 
+     // NOT RESERVED IDS                   12000-1999999999
+     // `db_script_string` table index     2000000000-2000009999 (MIN_DB_SCRIPT_STRING_ID-MAX_DB_SCRIPT_STRING_ID)
+diff --git a/src/server/game/OutdoorPvP/OutdoorPvP.h b/src/server/game/OutdoorPvP/OutdoorPvP.h
+index 6ca1dbe..4aea126 100755
+--- a/src/server/game/OutdoorPvP/OutdoorPvP.h
++++ b/src/server/game/OutdoorPvP/OutdoorPvP.h
+@@ -32,10 +32,11 @@ enum OutdoorPvPTypes
+     OUTDOOR_PVP_ZM = 4,
+     OUTDOOR_PVP_SI = 5,
+     OUTDOOR_PVP_EP = 6,
+-    OUTDOOR_PVP_GH = 7
++    OUTDOOR_PVP_GH = 7,
++	OUTDOOR_PVP_CA = 8
+ };
+ 
+-#define MAX_OUTDOORPVP_TYPES 8
++#define MAX_OUTDOORPVP_TYPES 9
+ 
+ enum ObjectiveStates
+ {
+diff --git a/src/server/game/Scripting/ScriptLoader.cpp b/src/server/game/Scripting/ScriptLoader.cpp
+index 82c0b3e..422074a 100755
+--- a/src/server/game/Scripting/ScriptLoader.cpp
++++ b/src/server/game/Scripting/ScriptLoader.cpp
+@@ -529,6 +529,7 @@ void AddSC_icecrown();
+ void AddSC_sholazar_basin();
+ void AddSC_storm_peaks();
+ void AddSC_wintergrasp();
++void AddSC_outdoorpvp_ca();
+ void AddSC_zuldrak();
+ void AddSC_crystalsong_forest();
+ void AddSC_isle_of_conquest();
+@@ -1268,6 +1269,7 @@ void AddOutdoorPvPScripts()
+     AddSC_outdoorpvp_tf();
+     AddSC_outdoorpvp_zm();
+     AddSC_outdoorpvp_gh();
++	AddSC_outdoorpvp_ca();
+ #endif
+ }
+ 
+diff --git a/src/server/game/Spells/SpellEffects.cpp b/src/server/game/Spells/SpellEffects.cpp
+index 58cbc31..06315ef 100755
+--- a/src/server/game/Spells/SpellEffects.cpp
++++ b/src/server/game/Spells/SpellEffects.cpp
+@@ -276,6 +276,9 @@ void Spell::EffectInstaKill(SpellEffIndex /*effIndex*/)
+ 
+     if (!unitTarget || !unitTarget->isAlive())
+         return;
++		
++	if (m_spellInfo->Id == 47253)
++        return;
+ 
+     // Demonic Sacrifice
+     if (m_spellInfo->Id == 18788 && unitTarget->GetTypeId() == TYPEID_UNIT)
+diff --git a/src/server/scripts/OutdoorPvP/CMakeLists.txt b/src/server/scripts/OutdoorPvP/CMakeLists.txt
+index 1b35198..00ee987 100644
+--- a/src/server/scripts/OutdoorPvP/CMakeLists.txt
++++ b/src/server/scripts/OutdoorPvP/CMakeLists.txt
+@@ -24,6 +24,8 @@ set(scripts_STAT_SRCS
+   OutdoorPvP/OutdoorPvPZM.h
+   OutdoorPvP/OutdoorPvPNA.h
+   OutdoorPvP/OutdoorPvPGH.h
++  OutdoorPvP/OutdoorPvPCA.cpp
++  OutdoorPvP/OutdoorPvPCA.h
+ )
+ 
+ message("  -> Prepared: Outdoor PVP Zones")
+diff --git a/src/server/scripts/OutdoorPvP/OutdoorPvPCA.cpp b/src/server/scripts/OutdoorPvP/OutdoorPvPCA.cpp
+new file mode 100644
+index 0000000..0b1162d
+--- /dev/null
++++ b/src/server/scripts/OutdoorPvP/OutdoorPvPCA.cpp
+@@ -0,0 +1,834 @@
++/*
++ * 
++ */
++
++#include "OutdoorPvPCA.h"
++#include "Player.h"
++#include "ObjectMgr.h"
++#include "OutdoorPvPMgr.h"
++#include "WorldPacket.h"
++#include "Language.h"
++#include "World.h"
++#include "ScriptPCH.h"
++#include "ScriptedEscortAI.h"
++
++const uint32 CA_LANG_LOOSE_TOWER[CA_TOWER_NUM] = 
++{
++	LANG_OPVP_CA_LOOSE_TOWER_A_A,
++	LANG_OPVP_CA_LOOSE_TOWER_B_A,
++	LANG_OPVP_CA_LOOSE_TOWER_C_A,
++	LANG_OPVP_CA_LOOSE_TOWER_D_H,
++	LANG_OPVP_CA_LOOSE_TOWER_E_H,
++	LANG_OPVP_CA_LOOSE_TOWER_F_H
++};
++
++const uint32 CA_LANG_KILLED_N_BOSS[CA_BOSSES_NUM] = 
++{
++	LANG_OPVP_CA_KILLED_N_BOSS_A,
++	LANG_OPVP_CA_KILLED_N_BOSS_H
++};
++
++OutdoorPvPCA::OutdoorPvPCA()
++{
++    m_TypeId = OUTDOOR_PVP_CA;
++}
++
++bool OutdoorPvPCA::SetupOutdoorPvP()
++{
++   RegisterZone(CA_OUTDOORPVP_ZONE);
++	AddTowersToCA();
++	AddCreepsSummonNpcToCA();
++	AddNeutrallBossToCA();
++	AddNeutrallCreepsToCA();
++	AddCreatureTeleporter();
++	AddBossesToCA();
++	AddObjectBuffs();
++	for (CreatureSet::iterator itr = m_creature.begin(); itr != m_creature.end(); ++itr)
++	{
++		UpdateCreatureInfo(*itr);
++	};
++	return true;
++}
++
++void OutdoorPvPCA::AddTowersToCA()
++{
++	for (int i = 0; i < CA_TOWER_NUM; ++i)
++	{
++		AddCreature(i,creatures[i].entry,creatures[i].teamval,creatures[i].map,creatures[i].x,creatures[i].y,creatures[i].z,creatures[i].o,1000000);
++		check_towers[i] = 0;
++	}
++}
++
++void OutdoorPvPCA::AddObjectBuffs()
++{
++	for (int i = 0; i < CA_OBJ_NUM; ++i)
++	{
++		AddObject(i,objects[i].entry,objects[i].map,objects[i].x,objects[i].y,objects[i].z,objects[i].o,objects[i].rot0,objects[i].rot1,objects[i].rot2,objects[i].rot3);
++	}
++}
++
++void OutdoorPvPCA::AddBossesToCA()
++{
++	for (int i = CA_TOWER_NUM; i < (CA_TOWER_NUM+CA_BOSSES_NUM); ++i)
++	{
++		AddCreature(i,creatures[i].entry,creatures[i].teamval,creatures[i].map,creatures[i].x,creatures[i].y,creatures[i].z,creatures[i].o,1000000);
++	}
++}
++
++void OutdoorPvPCA::AddCreepsSummonNpcToCA()
++{
++	for (int i = (CA_TOWER_NUM+CA_BOSSES_NUM); i < (CA_TOWER_NUM+CA_BOSSES_NUM+CA_SUMMON_NPC_NUM); ++i)
++	{
++		AddCreature(i,creatures[i].entry,creatures[i].teamval,creatures[i].map,creatures[i].x,creatures[i].y,creatures[i].z,creatures[i].o,1000000);
++	}
++}
++
++void OutdoorPvPCA::AddNeutrallBossToCA()
++{
++	for (int i = (CA_TOWER_NUM+CA_BOSSES_NUM+CA_SUMMON_NPC_NUM); i < (CA_TOWER_NUM+CA_BOSSES_NUM+CA_SUMMON_NPC_NUM+CA_NEUTRALL_BOSS_NUM); ++i)
++	{
++		AddCreature(i,creatures[i].entry,creatures[i].teamval,creatures[i].map,creatures[i].x,creatures[i].y,creatures[i].z,creatures[i].o,1000000);
++	}
++}
++
++void OutdoorPvPCA::AddNeutrallCreepsToCA()
++{
++	for (int i = (CA_TOWER_NUM+CA_BOSSES_NUM+CA_SUMMON_NPC_NUM+CA_NEUTRALL_BOSS_NUM); i < (CA_TOWER_NUM+CA_BOSSES_NUM+CA_SUMMON_NPC_NUM+CA_NEUTRALL_BOSS_NUM+CA_NEUTRALL_CREEP_NUM); ++i)
++	{
++		AddCreature(i,creatures[i].entry,creatures[i].teamval,creatures[i].map,creatures[i].x,creatures[i].y,creatures[i].z,creatures[i].o,1000000);
++	}
++}
++
++void OutdoorPvPCA::AddCreatureTeleporter()
++{
++	AddCreature(CREATURE_OTHER, 500006, 0, 37, 66.929f, 906.698f, 343.026f, 2.244f, 1000000);
++	AddCreature(CREATURE_OTHER, 500006, 0, 37, 1215.098f, 249.887f, 355.152f, 5.710f, 1000000);
++}
++
++void OutdoorPvPCA::TeleportPlayersOnCA(TeamId team)
++{
++	for (PlayerSet::iterator itr = m_players[team].begin(); itr != m_players[team].end(); ++itr)
++	{
++		if ((*itr)->isDead())
++			(*itr)->ResurrectPlayer(100,false);
++		(*itr)->TeleportTo(SPAWN[(*itr)->GetTeamId()].map,SPAWN[(*itr)->GetTeamId()].x,SPAWN[(*itr)->GetTeamId()].y,SPAWN[(*itr)->GetTeamId()].z,SPAWN[(*itr)->GetTeamId()].o,0);
++	}
++}
++
++OutdoorPvPCACreType OutdoorPvPCA::GetCreatureType(uint32 entry) const
++{
++    switch(entry)
++    {
++		case 500100:
++		case 500101:
++		case 500102:
++		case 500110:
++		case 500111:
++		case 500112:
++            return CREATURE_TOWER;
++       case 500109:
++		case 500119:
++            return CREATURE_BOSS;
++		case 500107:
++		case 500117:
++			return CREATURE_CREEPS;
++       default:
++            return CREATURE_OTHER;
++    }
++}
++
++void OutdoorPvPCA::OnCreatureCreate(Creature *creature)
++{
++    uint32 entry = creature->GetEntry();
++    switch(GetCreatureType(entry))
++    {
++		case CREATURE_TOWER:
++		case CREATURE_BOSS:
++		case CREATURE_OTHER:
++		case CREATURE_CREEPS:
++		{
++			UpdateCreatureInfo(creature);
++			m_creature.insert(creature);
++			break;
++		}
++	}
++}
++
++void OutdoorPvPCA::OnCreatureRemove(Creature *creature)
++{
++   uint32 entry = creature->GetEntry();
++	switch(GetCreatureType(entry))
++    {
++		case CREATURE_TOWER:
++		case CREATURE_BOSS:
++		case CREATURE_OTHER:
++		case CREATURE_CREEPS:
++		{
++			m_creature.erase(creature);
++			break;
++		}
++	}
++}
++
++bool OutdoorPvPCA::UpdateCreatureInfo(Creature *creature)
++{
++    if (!creature)
++        return false;
++    uint32 entry = creature->GetEntry();
++
++    switch(GetCreatureType(entry))
++    {
++		case CREATURE_BOSS:
++       case CREATURE_TOWER:
++		case CREATURE_OTHER:
++		case CREATURE_CREEPS:
++			if (!creature->isAlive())
++			{
++				creature->Respawn(true);
++				creature->SetVisible(true);
++			}
++           return false;
++       default:
++           return false;
++    }
++}
++
++void OutdoorPvPCA::RespawnAllCreaturesOnCA()
++{
++	for (CreatureSet::iterator itr = m_creature.begin(); itr != m_creature.end(); ++itr)
++		if(((*itr)->GetEntry() == 500107) || ((*itr)->GetEntry() == 500117))
++			(*itr)->DespawnOrUnsummon(true);
++		else
++			(*itr)->Respawn(true);
++}
++
++void OutdoorPvPCA::CheckNPC()
++{
++	for (CreatureSet::iterator itr = m_creature.begin(); itr != m_creature.end(); ++itr)
++	{
++		if((*itr)->isDead())
++		{
++			for(int i = 0; i < CA_TOWER_NUM; ++i)
++			{
++				if((*itr)->GetEntry() == CA_NPC[i].entry && check_towers[i] == 0)
++				{
++					check_towers[i] = 1;
++					sWorld->SendZoneText(CA_OUTDOORPVP_ZONE,sObjectMgr->GetTrinityStringForDBCLocale(CA_LANG_LOOSE_TOWER[i]));
++					break;
++				}
++			}
++			if((*itr)->GetEntry() == CA_NPC[6].entry)
++			{
++				Rewards(TEAM_HORDE);
++				RestartCA();
++			}
++			if((*itr)->GetEntry() == CA_NPC[7].entry)
++			{
++				Rewards(TEAM_ALLIANCE);
++				RestartCA();
++			}
++		}
++	}
++}
++
++void OutdoorPvPCA::RestartCA()
++{
++	TeleportPlayersOnCA(TEAM_HORDE);
++	TeleportPlayersOnCA(TEAM_ALLIANCE);
++	for (int i = 0; i < CA_TOWER_NUM; ++i)
++	{
++		check_towers[i] = 0;
++	}
++	RespawnAllCreaturesOnCA();
++}
++void OutdoorPvPCA::HandleKill(Player* killer, Unit* killed)
++{
++	uint32 entry = killed->GetEntry();		
++	for (int i = (CA_TOWER_NUM+CA_SUMMON_NPC_NUM+CA_BOSSES_NUM); i < (CA_NEUTRALL_BOSS_NUM+CA_TOWER_NUM+CA_SUMMON_NPC_NUM+CA_BOSSES_NUM); ++i)
++	{
++		if (entry == CA_NPC[i].entry)
++		{
++			sWorld->SendZoneText(CA_OUTDOORPVP_ZONE,sObjectMgr->GetTrinityStringForDBCLocale(CA_LANG_KILLED_N_BOSS[killer->GetTeamId()]));
++			killer->CastSpell(killer,SPELL_KILL_BOSS_NEUTRAL,true);
++			TeamCastSpell(killer->GetTeamId(),SPELL_KILL_BOSS_NEUTRAL_ALL);
++			break;
++		}
++	}
++	for (int i = (CA_TOWER_NUM+CA_SUMMON_NPC_NUM+CA_BOSSES_NUM+CA_NEUTRALL_BOSS_NUM); i < (CA_NEUTRALL_BOSS_NUM+CA_TOWER_NUM+CA_SUMMON_NPC_NUM+CA_BOSSES_NUM+CA_NEUTRALL_CREEP_NUM); ++i)
++	{
++		if (entry == CA_NPC[i].entry)
++		{
++			killer->CastSpell(killer,SPELL_KILL_CREEP_NEUTRAL,true);
++			break;
++		}
++	}
++}
++void OutdoorPvPCA::UpdateTenacityStack()
++{
++    TeamId team = TEAM_NEUTRAL;
++    uint32 allianceNum = 0;
++    uint32 hordeNum = 0;
++    int32 newStack = 0;
++
++    for (PlayerSet::iterator itr = m_players[TEAM_ALLIANCE].begin(); itr != m_players[TEAM_ALLIANCE].end(); ++itr)
++        if ((*itr)->getLevel() > 79)
++            ++allianceNum;
++
++    for (PlayerSet::iterator itr = m_players[TEAM_HORDE].begin(); itr != m_players[TEAM_HORDE].end(); ++itr)
++        if ((*itr)->getLevel() > 79)
++            ++hordeNum;
++
++    if (allianceNum && hordeNum)
++    {
++        if (allianceNum < hordeNum)
++            newStack = int32((float(hordeNum) / float(allianceNum) - 1)*4); // positive, should cast on alliance
++        else if (allianceNum > hordeNum)
++            newStack = int32((1 - float(allianceNum) / float(hordeNum))*4); // negative, should cast on horde
++    }
++
++    if (newStack == m_tenacityStack)
++        return;
++
++    if (m_tenacityStack > 0 && newStack <= 0) // old buff was on alliance
++        team = TEAM_ALLIANCE;
++    else if (m_tenacityStack < 0 && newStack >= 0) // old buff was on horde
++        team = TEAM_HORDE;
++
++    m_tenacityStack = newStack;
++
++    // Remove old buff
++    if (team != TEAM_NEUTRAL)
++    {
++        for (PlayerSet::const_iterator itr = m_players[team].begin(); itr != m_players[team].end(); ++itr)
++            if ((*itr)->getLevel() > 79)
++                (*itr)->RemoveAurasDueToSpell(SPELL_TENACITY);
++
++        for (CreatureSet::const_iterator itr = m_vehicles[team].begin(); itr != m_vehicles[team].end(); ++itr)
++            (*itr)->RemoveAurasDueToSpell(SPELL_TENACITY_VEHICLE);
++    }
++
++    // Apply new buff
++    if (newStack)
++    {
++        team = newStack > 0 ? TEAM_ALLIANCE : TEAM_HORDE;
++        if (newStack < 0)
++            newStack = -newStack;
++        if (newStack > 20)
++            newStack = 20;
++
++        for (PlayerSet::const_iterator itr = m_players[team].begin(); itr != m_players[team].end(); ++itr)
++            if ((*itr)->getLevel() > 79)
++                (*itr)->SetAuraStack(SPELL_TENACITY, (*itr), newStack);
++
++        for (CreatureSet::const_iterator itr = m_vehicles[team].begin(); itr != m_vehicles[team].end(); ++itr)
++            (*itr)->SetAuraStack(SPELL_TENACITY_VEHICLE, (*itr), newStack);
++    }
++}
++
++void OutdoorPvPCA::HandlePlayerEnterZone(Player * plr, uint32 zone)
++{
++ 	 const creature_type* creatures = CA_NPC;
++    if (plr->GetTeam() == ALLIANCE)
++    {	
++		int i = 0;
++		while (i < (CA_TOWER_NUM/2))
++		{
++			if (check_towers[i] == 0)
++				plr->CastSpell(plr,Buff[i],true);
++			++i;
++		}
++    }
++    else
++    {
++		int i = (CA_TOWER_NUM/2);
++		while (i < CA_TOWER_NUM)
++		{
++			if (check_towers[i] == 0)
++				plr->CastSpell(plr,Buff[i],true);
++			++i;
++		}
++    }
++
++    OutdoorPvP::HandlePlayerEnterZone(plr,zone);
++	 UpdateTenacityStack();
++}
++
++void OutdoorPvPCA::HandlePlayerLeaveZone(Player * plr, uint32 zone)
++{
++    if (plr->GetTeam() == ALLIANCE)
++    {
++		for (int i = 0; i < (CA_TOWER_NUM/2); ++i)
++			plr->RemoveAurasDueToSpell(Buff[i]);
++    }
++    else
++    {
++		for (int i = 0; i < (CA_TOWER_NUM/2); ++i)
++			plr->RemoveAurasDueToSpell(Buff[i]);
++    }
++	 plr->RemoveAurasDueToSpell(SPELL_TENACITY);
++	 OutdoorPvP::HandlePlayerLeaveZone(plr, zone);
++	 UpdateTenacityStack();
++}
++
++void OutdoorPvPCA::HandleKillImpl(Player *plr, Unit * killed)
++{
++    if (killed->GetTypeId() == TYPEID_PLAYER && plr->GetTeam() != killed->ToPlayer()->GetTeam())
++		plr->AddItem(KILLREWARD,1);
++}
++
++void OutdoorPvPCA::Rewards(TeamId team)
++{
++	for (PlayerSet::iterator itr = m_players[team].begin(); itr != m_players[team].end(); ++itr)
++	{
++		(*itr)->AddItem(WINREWARD,10);
++	}
++}
++
++void OutdoorPvPCA::ResurrectSystem(TeamId team)
++{
++	for (PlayerSet::iterator itr = m_players[team].begin(); itr != m_players[team].end(); ++itr)
++	{
++		if ((*itr)->isDead())
++		{
++			(*itr)->TeleportTo(SPAWN[(*itr)->GetTeamId()].map,SPAWN[(*itr)->GetTeamId()].x,SPAWN[(*itr)->GetTeamId()].y,SPAWN[(*itr)->GetTeamId()].z,SPAWN[(*itr)->GetTeamId()].o,0);
++			(*itr)->ResurrectPlayer(100,false);
++		}
++	}
++}
++
++void OutdoorPvPCA::AddCre(uint32 type, uint32 guid, uint32 entry)
++{
++    if (!entry)
++    {
++        const CreatureData *data = sObjectMgr->GetCreatureData(guid);
++        if (!data)
++            return;
++        entry = data->id;
++    }
++    m_Creatures[type] = MAKE_NEW_GUID(guid, entry, HIGHGUID_UNIT);
++    m_CreatureTypes[m_Creatures[type]] = type;
++}
++
++bool OutdoorPvPCA::AddCreature(uint32 type, uint32 entry, uint32 team, uint32 map, float x, float y, float z, float o, uint32 spawntimedelay)
++{
++    if (uint32 guid = sObjectMgr->AddCreData(entry, team, map, x, y, z, o, spawntimedelay))
++    {
++        AddCre(type, guid, entry);
++        return true;
++    }
++
++    return false;
++}
++
++bool OutdoorPvPCA::DelCreature(uint32 type)
++{
++    if (!m_Creatures[type])
++    {
++        return false;
++    }
++
++    Creature *cr = HashMapHolder<Creature>::Find(m_Creatures[type]);
++    if (!cr)
++    {
++        // can happen when closing the core
++        m_Creatures[type] = 0;
++        return false;
++    }
++    uint32 guid = cr->GetDBTableGUIDLow();
++    // Don't save respawn time
++    cr->SetRespawnTime(0);
++    cr->RemoveCorpse();
++    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CREATURE_RESPAWN_BY_GUID);
++    stmt->setUInt32(0, guid);
++    CharacterDatabase.Execute(stmt);
++
++    cr->AddObjectToRemoveList();
++    sObjectMgr->DeleteCreatureData(guid);
++    m_CreatureTypes[m_Creatures[type]] = 0;
++    m_Creatures[type] = 0;
++    return true;
++}
++
++bool OutdoorPvPCA::AddObject(uint32 type, uint32 entry, uint32 map, float x, float y, float z, float o, float rotation0, float rotation1, float rotation2, float rotation3)
++{
++    if (uint32 guid = sObjectMgr->AddGOData(entry, map, x, y, z, o, 0, rotation0, rotation1, rotation2, rotation3))
++    {
++        AddGO(type, guid, entry);
++        return true;
++    }
++    return false;
++}
++
++void OutdoorPvPCA::AddGO(uint32 type, uint32 guid, uint32 entry)
++{
++    if (!entry)
++    {
++        const GameObjectData *data = sObjectMgr->GetGOData(guid);
++        if (!data)
++            return;
++        entry = data->id;
++    }
++    m_Objects[type] = MAKE_NEW_GUID(guid, entry, HIGHGUID_GAMEOBJECT);
++    m_ObjectTypes[m_Objects[type]]=type;
++}
++
++bool OutdoorPvPCA::DelObject(uint32 type)
++{
++    if (!m_Objects[type])
++        return false;
++
++    GameObject *obj = HashMapHolder<GameObject>::Find(m_Objects[type]);
++    if (!obj)
++    {
++        m_Objects[type] = 0;
++        return false;
++    }
++    uint32 guid = obj->GetDBTableGUIDLow();
++    obj->SetRespawnTime(0);                                 // not save respawn time
++    obj->Delete();
++    sObjectMgr->DeleteGOData(guid);
++    m_ObjectTypes[m_Objects[type]] = 0;
++    m_Objects[type] = 0;
++    return true;
++}
++
++bool OutdoorPvPCA::Update(uint32 diff)
++{
++    bool changed = OutdoorPvP::Update(diff);
++    if (!changed) 
++	 {
++		int i = 0;
++		while (i < CA_TOWER_NUM)
++		{
++			if (i < (CA_TOWER_NUM/2))
++				if (check_towers[i] == 0)
++				{
++					for (PlayerSet::iterator itr = m_players[TEAM_ALLIANCE].begin(); itr != m_players[TEAM_ALLIANCE].end(); ++itr)
++					{
++						if(!(*itr)->HasAura(Buff[i]))
++							(*itr)->CastSpell(*itr, Buff[i], true);
++					}
++				}
++				else
++				{
++					for (PlayerSet::iterator itr = m_players[TEAM_ALLIANCE].begin(); itr != m_players[TEAM_ALLIANCE].end(); ++itr)
++						(*itr)->RemoveAura(Buff[i]);
++				}
++			else
++				if (check_towers[i] == 0)
++				{
++					for (PlayerSet::iterator itr = m_players[TEAM_HORDE].begin(); itr != m_players[TEAM_HORDE].end(); ++itr)
++					{
++						if(!(*itr)->HasAura(Buff[i]))
++							(*itr)->CastSpell(*itr, Buff[i], true);
++					}
++				}
++				else
++					for (PlayerSet::iterator itr = m_players[TEAM_HORDE].begin(); itr != m_players[TEAM_HORDE].end(); ++itr)
++						(*itr)->RemoveAura(Buff[i]);
++			++i;
++		}
++		for(int i = 0; i < (CA_TOWER_NUM/2 - 1); ++i)
++		{
++			if(check_towers[i] == 0)
++			{
++				for (CreatureSet::iterator itr = m_creature.begin(); itr != m_creature.end(); ++itr)
++				{
++					if((*itr)->GetEntry() == CA_NPC[(i+1)].entry)
++						(*itr)->SetFullHealth();
++				}
++			}
++		}
++		for(int i = (CA_TOWER_NUM/2); i < (CA_TOWER_NUM - 1); ++i)
++		{
++			if(check_towers[i] == 0)
++			{
++				for (CreatureSet::iterator itr = m_creature.begin(); itr != m_creature.end(); ++itr)
++				{
++					if((*itr)->GetEntry() == CA_NPC[(i+1)].entry)
++						(*itr)->SetFullHealth();
++				}
++			}
++		}
++		if(check_towers[2] == 0)
++		{
++			for (CreatureSet::iterator itr = m_creature.begin(); itr != m_creature.end(); ++itr)
++			{
++				if((*itr)->GetEntry() == CA_NPC[6].entry)
++					(*itr)->SetFullHealth();
++				if((*itr)->GetEntry() == CA_NPC[8].entry)
++					(*itr)->SetFullHealth();
++			}
++		}
++		if(check_towers[5] == 0)
++		{
++			for (CreatureSet::iterator itr = m_creature.begin(); itr != m_creature.end(); ++itr)
++			{
++				if((*itr)->GetEntry() == CA_NPC[7].entry)
++					(*itr)->SetFullHealth();
++				if((*itr)->GetEntry() == CA_NPC[9].entry)
++					(*itr)->SetFullHealth();
++			}
++		}
++		ResurrectSystem(TEAM_HORDE);
++		ResurrectSystem(TEAM_ALLIANCE);
++		CheckNPC();
++	}
++   return changed;
++}
++
++class OutdoorPvP_crater : public OutdoorPvPScript
++{
++    public:
++
++        OutdoorPvP_crater ()
++            : OutdoorPvPScript("outdoorpvp_ca")
++        {
++        }
++
++        OutdoorPvP* GetOutdoorPvP() const
++        {
++            return new OutdoorPvPCA();
++        }
++};
++
++class npc_control_tower : public CreatureScript
++{
++public:
++    npc_control_tower() : CreatureScript("npc_control_tower") { }
++
++    struct npc_control_towerAI : CasterAI
++    {
++        npc_control_towerAI(Creature* c) : CasterAI(c) {}
++
++        void InitializeAI()
++        {
++           CasterAI::InitializeAI();
++           std::list<Unit*> targets;
++           Trinity::AnyUnfriendlyUnitInObjectRangeCheck u_check(me, me, 55);
++           Trinity::UnitListSearcher<Trinity::AnyUnfriendlyUnitInObjectRangeCheck> searcher(me, targets, u_check);
++           me->VisitNearbyObject(55, searcher);
++			me->m_CombatDistance = 55;
++			me->m_SightDistance = 55;
++			me->ApplySpellImmune(0, IMMUNITY_ID, SPELL_DMG, true);
++			me->CastSpell(me,SPELL_BUFF_TOWER,true);
++           for (std::list<Unit*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
++			{
++				//(*iter)->IsAlwaysDetectableFor(me);
++				//(*iter)->IsAlwaysVisibleFor(me);
++				me->Attack((*iter), false);
++				break;
++           }
++        }
++
++        void UpdateAI(const uint32 diff)
++        {
++            CasterAI::UpdateAI(diff);
++        }
++    };
++
++    CreatureAI *GetAI(Creature* creature) const
++    {
++        return new npc_control_towerAI(creature);
++    }
++};
++
++class npc_summon_npc : public CreatureScript
++{
++public:
++    npc_summon_npc() : CreatureScript("npc_summon_npc") { }
++
++    struct npc_summon_npcAI : CasterAI
++    {
++       npc_summon_npcAI(Creature* c) : CasterAI(c) {}
++
++		uint32 m_uiTimer;
++
++       void InitializeAI()
++       {
++       	CasterAI::InitializeAI();
++			me->ApplySpellImmune(0, IMMUNITY_ID, SPELL_DMG, true);
++			me->setActive(true);
++		}
++
++		void Reset()
++		{
++			m_uiTimer = 60000;
++		}
++
++       void UpdateAI(const uint32 diff)
++       {
++			CasterAI::UpdateAI(diff);
++			if (m_uiTimer <= diff)
++			{
++				m_uiTimer = 60000;
++				if(me->GetEntry() == 500118)
++				{
++						me->SummonCreature(500117, me->GetPositionX()+2.0f, me->GetPositionY()+7.0f, me->GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_DESPAWN, 1000);
++						me->SummonCreature(500117, me->GetPositionX()+6.0f, me->GetPositionY()+12.0f, me->GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_DESPAWN, 1000);
++						me->SummonCreature(500117, me->GetPositionX()-2.0f, me->GetPositionY()+2.0f, me->GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_DESPAWN, 1000);
++						me->SummonCreature(500117, me->GetPositionX()-6.0f, me->GetPositionY()-3.0f, me->GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_DESPAWN, 1000);				
++				}
++				if(me->GetEntry() == 500108)
++				{
++						me->SummonCreature(500107, me->GetPositionX()+2.0f, me->GetPositionY(), me->GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_DESPAWN, 1000);
++						me->SummonCreature(500107, me->GetPositionX()+6.0f, me->GetPositionY(), me->GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_DESPAWN, 1000);
++						me->SummonCreature(500107, me->GetPositionX()-2.0f, me->GetPositionY(), me->GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_DESPAWN, 1000);
++						me->SummonCreature(500107, me->GetPositionX()-6.0f, me->GetPositionY(), me->GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_DESPAWN, 1000);
++				}
++			}
++			else
++				m_uiTimer -= diff;
++       }
++    };
++
++    CreatureAI *GetAI(Creature* creature) const
++    {
++        return new npc_summon_npcAI(creature);
++    }
++};
++
++class npc_creeps : public CreatureScript
++{
++    public:
++
++        npc_creeps()
++            : CreatureScript("npc_creeps")
++        {
++        }
++
++        struct npc_creepsAI : public npc_escortAI
++        {
++            npc_creepsAI(Creature* creature) : npc_escortAI(creature) { }
++
++            void WaypointReached(uint32 uiWP)
++            {
++                switch (uiWP)
++                {
++                    case 1:
++                        break;
++                }
++            }
++
++            void Reset()
++            {
++				me->setActive(true);
++				SetDespawnAtFar(false);
++				npc_creepsAI* pEscortAI = CAST_AI(npc_creeps::npc_creepsAI, me->AI());
++				if (pEscortAI)
++					pEscortAI->Start(true,true);
++            }
++
++            void UpdateAI(const uint32 uiDiff)
++            {
++                npc_escortAI::UpdateAI(uiDiff);
++            }
++        };
++
++        CreatureAI* GetAI(Creature* creature) const
++        {
++            return new npc_creepsAI(creature);
++        }
++};
++
++#define GOSSIP_ITEM_1  "Отправится на Поле битвы: Кратер Азшары"
++#define SPELL_VISUAL_TELEPORT 35517
++
++class npc_tp_ca : public CreatureScript
++{
++public:
++    npc_tp_ca() : CreatureScript("npc_tp_ca") { }
++
++	void Teleport(Player * const player, const uint16 &map, const float &X, const float &Y, const float &Z, const float &orient)
++    {
++        player->CastSpell(player, SPELL_VISUAL_TELEPORT, true);
++        player->TeleportTo(map, X, Y, Z, orient);
++    }
++
++    bool OnGossipHello(Player *player, Creature *creature)
++    {
++        player->ADD_GOSSIP_ITEM(0, GOSSIP_ITEM_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
++        player->SEND_GOSSIP_MENU(3961,creature->GetGUID());
++        return true;
++    }
++
++	bool OnGossipSelect(Player *player, Creature *creature, uint32 sender, uint32 action)
++    {
++		switch (action)
++		{
++		case GOSSIP_ACTION_INFO_DEF + 1:
++			if (player->getLevel() < 80)
++			{
++				creature->MonsterTextEmote("Для Отправления вы должны быть 80-ого уровня!", player->GetGUID(), true);
++			    player->CLOSE_GOSSIP_MENU();
++			    return false;
++		    }
++			
++			if (player->GetHonorPoints() < 300)
++			{
++				creature->MonsterTextEmote("Для Отправления вам потребуется 300 Очков Чести!", player->GetGUID(), true);
++			    player->CLOSE_GOSSIP_MENU();
++			    return false;
++			}
++			
++			if (player->GetTeamId() == TEAM_ALLIANCE)
++			{
++				Teleport(player, 37,1245.12f,248.638f,355.214f,3.1f);
++				player->ModifyHonorPoints(-300);
++			}
++			else 
++			{
++				Teleport(player, 37,39.38f,916.849f,339.394f,5.93f);
++				player->ModifyHonorPoints(-300);
++			}
++			break;
++		}
++		return true;
++	}
++};
++
++
++#define GOSSIP_ITEM_2  "Окончить бой и отправиться в столицу"
++
++class npc_tp_capital : public CreatureScript
++{
++public:
++    npc_tp_capital() : CreatureScript("npc_tp_capital") { }
++
++	void Teleport(Player * const player, const uint16 &map, const float &X, const float &Y, const float &Z, const float &orient)
++    {
++        player->CastSpell(player, SPELL_VISUAL_TELEPORT, true);
++        player->TeleportTo(map, X, Y, Z, orient);
++    }
++
++    bool OnGossipHello(Player *player, Creature *creature)
++    {
++        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, GOSSIP_ITEM_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
++        player->SEND_GOSSIP_MENU(3962,creature->GetGUID());
++        return true;
++    }
++
++	bool OnGossipSelect(Player *player, Creature *creature, uint32 sender, uint32 action)
++    {
++		switch (action)
++		{
++		case GOSSIP_ACTION_INFO_DEF + 1:
++			if (player->GetTeamId() == TEAM_ALLIANCE)
++				Teleport(player, 0, -8830.62f, 622.80f, 93.85f, 3.9f);
++			else
++				Teleport(player, 1, 1629.35f, -4373.42f, 31.26f, 3.5f);
++			break;
++		}
++		return true;
++	}
++};
++
++void AddSC_outdoorpvp_ca()
++{
++   new OutdoorPvP_crater();
++	new npc_control_tower;
++	new npc_summon_npc;
++	new npc_creeps;
++	new npc_tp_ca;
++	new npc_tp_capital;
++}
+diff --git a/src/server/scripts/OutdoorPvP/OutdoorPvPCA.h b/src/server/scripts/OutdoorPvP/OutdoorPvPCA.h
+new file mode 100644
+index 0000000..3403db0
+--- /dev/null
++++ b/src/server/scripts/OutdoorPvP/OutdoorPvPCA.h
+@@ -0,0 +1,165 @@
++п»ї/*
++ * Copyright (C) 2012 DreamCore <https://bitbucket.org/Neket007/dream-core>
++ */
++
++#ifndef OUTDOOR_PVP_CA_
++#define OUTDOOR_PVP_CA_
++
++#include "OutdoorPvP.h"
++#include "DBCStructure.h"
++
++const uint32 CA_OUTDOORPVP_ZONE =  268;
++
++enum OutdoorPvPCAMisc
++{
++	CA_TOWER_NUM = 6,
++	CA_SUMMON_NPC_NUM = 2,
++	CA_BOSSES_NUM = 2,
++	CA_NEUTRALL_BOSS_NUM = 1,
++	CA_NEUTRALL_CREEP_NUM = 8,
++    CA_CREATURE_TELEPORT = 2,
++	CA_OBJ_NUM = 5
++};
++
++enum OutdoorPvPCACreType
++{
++	CREATURE_TOWER,
++	CREATURE_BOSS,
++	CREATURE_CREEPS,
++	CREATURE_OTHER
++};
++
++const creature_type CA_NPC[19] =
++{
++	{500100,469,37,385.971f,123.039f,247.01f,2.27449f},		//towers Alliance
++	{500101,469,37,884.624f,53.9453f,300.495f,3.10701f},
++	{500102,469,37,1007.17f,299.301f,329.513f,5.29827f},
++	{500110,67,37,217.999f,285.239f,265.702f,4.83881f},		//towers Horde
++	{500111,67,37,40.6596f,594.728f,270.034f,2.91223f},
++	{500112,67,37,111.332f,989.631f,296.663f,0.37932f},
++	{500109,469,37,1094.846f,297.789f,338.614f,3.253f},		//boss Alliance
++	{500119,67,37,43.672f,1172.592f,367.344f,5.265f},		//boss Horde
++	{500108,469,37,1020.697f,268.367f,331.41f,2.1f},		//npc summon Alliance
++	{500118,67,37,131.839f,1034.631f,297.041f,4.964f},		//npc summon Horde
++	{500120,0,37,-24.903f,-32.703f,267.315f,0.263f},		//neutral_bosses
++	{500121,0,37,208.666f,34.061f,236.902f,2.882f},			//neutral_creeps
++	{500121,0,37,181.969f,-0.469f,237.440f,2.073f},
++	{500121,0,37,113.592f,154.821f,238.062f,4.457f},
++	{500121,0,37,157.889f,161.115f,239.206f,5.152f},
++	{500121,0,37,313.909f,525.031f,286.610f,1.67f},
++	{500121,0,37,331.830f,528.019f,288.615f,2.92f},
++	{500121,0,37,736.405f,345.555f,279.597f,6.15f},
++	{500121,0,37,739.333f,334.857f,276.275f,0.64f}
++};
++
++const go_type CA_OBJ[CA_OBJ_NUM] =
++{
++	{179905,37,24.1198f,454.163f,325.424f,0,0,0,0,0},
++	{179905,37,662.314f,107.142f,298.563f,0,0,0,0,0},
++	{179871,37,850.858f,338.06f,269.57f,0,0,0,0,0},
++	{179904,37,152.334f,68.736f,230.783f,0,0,0,0,0},
++	{179871,37,282.153f,772.27f,263.774f,0,0,0,0,0}
++};
++
++const creature_type* creatures = CA_NPC;
++const go_type* objects = CA_OBJ;
++
++const uint32 Buff[6] =
++{
++	41630,//1
++	71188,//2
++	71193,//3
++	41630,//1
++	71188,//2
++	71193,//3 maybe 71195
++};
++
++struct teleporter_type
++{
++    uint32 map;
++    float x;
++    float y;
++    float z;
++    float o;
++};
++
++const teleporter_type SPAWN[2] = 
++{
++	//alliance
++	{37,1245.12f,248.638f,355.214f,3.1f},
++	//horde
++	{37,39.38f,916.849f,339.394f,5.93f}
++};
++
++enum OutdoorPvPCASpells
++{
++   KILLREWARD = 49426,
++	WINREWARD = 37829,
++	SPELL_TENACITY = 58549,
++	SPELL_TENACITY_VEHICLE = 59911,
++	SPELL_KILL_BOSS_NEUTRAL = 41924,
++	SPELL_KILL_CREEP_NEUTRAL = 57060,
++	SPELL_KILL_BOSS_NEUTRAL_ALL = 71463,
++	SPELL_DMG = 47253, //47253 59742
++	SPELL_BUFF_TOWER = 68652
++};
++
++class OutdoorPvPCA;
++
++class OutdoorPvPCA : public OutdoorPvP
++{
++    public:
++
++		OutdoorPvPCA();
++       bool SetupOutdoorPvP();
++		bool Update(uint32 diff);
++       void HandlePlayerEnterZone(Player * plr, uint32 zone);
++       void HandlePlayerLeaveZone(Player * plr, uint32 zone);
++		void HandleKillImpl(Player * plr, Unit * killed);
++		void HandleKill(Player* killer, Unit* killed);
++		void Rewards(TeamId team);
++		void CheckNPC();
++		void OnCreatureCreate(Creature *creature);
++		void OnCreatureRemove(Creature *creature);
++
++	protected:
++
++		void RestartCA();
++		void UpdateTenacityStack();
++		void ResurrectSystem(TeamId team);
++		void TeleportPlayersOnCA(TeamId team);
++		void RespawnAllCreaturesOnCA();
++
++		void AddTowersToCA();
++		void AddBossesToCA();
++		void AddCreepsSummonNpcToCA();
++		void AddNeutrallBossToCA();
++		void AddNeutrallCreepsToCA();
++		void AddCreatureTeleporter();
++		void AddCreatureTeleport();
++		void AddObjectBuffs();
++
++		OutdoorPvPCACreType GetCreatureType(uint32 entry) const;
++		void AddCre(uint32 type, uint32 guid, uint32 entry);
++		bool AddCreature(uint32 type, uint32 entry, uint32 team, uint32 map, float x, float y, float z, float o, uint32 spawntimedelay);
++		bool DelCreature(uint32 type);
++		void AddGO(uint32 type, uint32 guid, uint32 entry);
++		bool AddObject(uint32 type, uint32 entry, uint32 map, float x, float y, float z, float o, float rotation0, float rotation1, float rotation2, float rotation3);
++		bool DelObject(uint32 type);
++		bool UpdateCreatureInfo(Creature *creature);
++
++		typedef std::set<Creature*> CreatureSet;
++		CreatureSet m_creature;
++		CreatureSet m_vehicles[2];
++
++    private:
++
++		int32 m_tenacityStack;	
++		uint32 check_towers[CA_TOWER_NUM];
++       std::map<uint32, uint64> m_Objects;
++       std::map<uint32, uint64> m_Creatures;
++       std::map<uint64, uint32> m_ObjectTypes;
++       std::map<uint64, uint32> m_CreatureTypes;
++};
++
++#endif
+
+
+
+
+rc/server/scripts/OutdoorPvP/OutdoorPvPCA.cpp

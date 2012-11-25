@@ -1,0 +1,127 @@
+From 873c01a1fe2929e4437cd50f59abaee72f80e133 Mon Sep 17 00:00:00 2001
+From: LordPsyan <uppp@juno.com>
+Date: Tue, 8 Feb 2011 02:56:45 -0500
+Subject: [PATCH] 11185-Gamble
+
+---
+ src/server/game/Chat/Chat.cpp            |    3 +
+ src/server/game/Chat/Chat.h              |    3 +
+ src/server/game/Chat/Commands/Level0.cpp |   74 ++++++++++++++++++++++++++++++
+ 3 files changed, 80 insertions(+), 0 deletions(-)
+
+diff --git a/src/server/game/Chat/Chat.cpp b/src/server/game/Chat/Chat.cpp
+index fedf1c3..407fb9d 100755
+--- a/src/server/game/Chat/Chat.cpp
++++ b/src/server/game/Chat/Chat.cpp
+@@ -427,6 +427,9 @@ ChatCommand * ChatHandler::getCommandTable()
+         { "flusharenapoints",SEC_ADMINISTRATOR, false, OldHandler<&ChatHandler::HandleFlushArenaPointsCommand>,    "", NULL },
+         { "repairitems",    SEC_GAMEMASTER,     true,  OldHandler<&ChatHandler::HandleRepairitemsCommand>,         "", NULL },
+         { "waterwalk",      SEC_GAMEMASTER,     false, OldHandler<&ChatHandler::HandleWaterwalkCommand>,           "", NULL },
++		//Allows your players to gamble for fun and prizes
++        { "gamble",         SEC_PLAYER,         false, OldHandler<&ChatHandler::HandleGambleCommand>,              "", NULL },
++        { "roulette",       SEC_PLAYER,         false, OldHandler<&ChatHandler::HandleRouletteCommand>,            "", NULL },
+ 
+         { "freeze",         SEC_MODERATOR,  false, OldHandler<&ChatHandler::HandleFreezeCommand>,              "", NULL },
+         { "unfreeze",       SEC_MODERATOR,  false, OldHandler<&ChatHandler::HandleUnFreezeCommand>,            "", NULL },
+diff --git a/src/server/game/Chat/Chat.h b/src/server/game/Chat/Chat.h
+index 486987d..f864d05 100755
+--- a/src/server/game/Chat/Chat.h
++++ b/src/server/game/Chat/Chat.h
+@@ -272,6 +272,9 @@ class ChatHandler
+         bool HandleFreezeCommand(const char *args);
+         bool HandleUnFreezeCommand(const char *args);
+         bool HandleListFreezeCommand(const char* args);
++		//Gamble
++		bool HandleRouletteCommand(const char* args);
++		bool HandleGambleCommand(const char* args);
+ 
+         bool HandleCooldownCommand(const char* args);
+         bool HandleUnLearnCommand(const char* args);
+diff --git a/src/server/game/Chat/Commands/Level0.cpp b/src/server/game/Chat/Commands/Level0.cpp
+index 5deed67..56d7342 100755
+--- a/src/server/game/Chat/Commands/Level0.cpp
++++ b/src/server/game/Chat/Commands/Level0.cpp
+@@ -81,6 +81,80 @@ bool ChatHandler::HandleStartCommand(const char* /*args*/)
+     chr->CastSpell(chr, 7355, false);
+     return true;
+ }
++//Allows your players to gamble for fun and prizes
++bool ChatHandler::HandleGambleCommand(const char* args)
++{
++    Player *chr = m_session->GetPlayer();
++
++    char* px = strtok((char*)args, " ");
++
++    if (!px)
++        return false;
++
++    uint32 money = (uint32)atoi(px);
++
++    if (chr->GetMoney() < money)
++    {
++        SendSysMessage("You can not bet with money you do not have!");
++        return true;
++    }
++
++    else
++    {
++        if (money>0)
++        {
++             if (rand()%100 < 50)
++             {
++                  chr->ModifyMoney(money*2);
++                  SendSysMessage("You have won and doubled your bet");
++             }
++             else
++             {
++                  chr->ModifyMoney(-int(money));
++                  SendSysMessage("You have lost");
++             }
++        }
++    }
++
++    return true;
++}
++
++bool ChatHandler::HandleRouletteCommand(const char* args)
++{
++    Player *chr = m_session->GetPlayer();
++
++    char* px = strtok((char*)args, " ");
++
++    if (!px)
++        return false;
++
++    uint32 money = (uint32)atoi(px);
++
++    if (chr->GetMoney() < money)
++    {
++        SendSysMessage("You can not bet with money you do not have!");
++        return true;
++    }
++
++    else
++    {
++        if (money>0)
++        {
++             if (rand()%36 < 1)
++             {
++                  chr->ModifyMoney(money*36);
++                  SendSysMessage("You have won 36 times your bet, congratulations!");
++             }
++             else
++             {
++                  chr->ModifyMoney(-int(money));
++                  SendSysMessage("You have lost");
++             }
++        }
++    }
++
++     return true;
++ }
+ 
+ bool ChatHandler::HandleServerInfoCommand(const char* /*args*/)
+ {
+-- 
+1.7.2.3
+

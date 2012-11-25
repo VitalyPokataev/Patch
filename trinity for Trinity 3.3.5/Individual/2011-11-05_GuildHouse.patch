@@ -1,0 +1,469 @@
+From e95387f829977bf3600fbd542006581dd1eff118 Mon Sep 17 00:00:00 2001
+From: LordPsyan <uppp@juno.com>
+Date: Sat, 5 Nov 2011 16:03:53 -0500
+Subject: [PATCH] 2011-11-05_GuildHouse
+
+---
+ sql/All/world_creature_template.sql        |    5 +
+ sql/All/world_guildhouses.sql              |   54 +++++
+ src/server/game/Scripting/ScriptLoader.cpp |    5 +-
+ src/server/scripts/Custom/CMakeLists.txt   |    1 +
+ src/server/scripts/Custom/guildmaster.cpp  |  339 ++++++++++++++++++++++++++++
+ 5 files changed, 403 insertions(+), 1 deletions(-)
+ create mode 100644 sql/All/world_creature_template.sql
+ create mode 100644 sql/All/world_guildhouses.sql
+ create mode 100644 src/server/scripts/Custom/guildmaster.cpp
+
+diff --git a/sql/All/world_creature_template.sql b/sql/All/world_creature_template.sql
+new file mode 100644
+index 0000000..765b402
+--- /dev/null
++++ b/sql/All/world_creature_template.sql
+@@ -0,0 +1,5 @@
++/**
++* Records Guildhouse Keeper
++*/
++DELETE FROM creature_template WHERE `entry`=13;
++INSERT INTO `creature_template` VALUES ('13', '0', '0', '0', '0', '0', '26789', '0', '0', '0', 'Beltez', 'Guildhouse Keeper', '', '0', '80', '80', '0', '35', '35', '1', '1.48', '1.14286', '0.75', '0', '181', '189', '0', '158', '1', '1400', '1900', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '100', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '3', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', 'guildmaster', '0');
+diff --git a/sql/All/world_guildhouses.sql b/sql/All/world_guildhouses.sql
+new file mode 100644
+index 0000000..1c5a5d5
+--- /dev/null
++++ b/sql/All/world_guildhouses.sql
+@@ -0,0 +1,54 @@
++-- ----------------------------
++-- Table structure for guildhouses
++-- ----------------------------
++CREATE TABLE `guildhouses` (
++  `id` int(8) unsigned NOT NULL auto_increment,
++  `guildId` bigint(20) NOT NULL default '0',
++  `x` double NOT NULL,
++  `y` double NOT NULL,
++  `z` double NOT NULL,
++  `map` int(11) NOT NULL,
++  `comment` varchar(255) NOT NULL default '',
++  PRIMARY KEY  (`id`)
++) ENGINE=MyISAM AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
++
++-- ----------------------------
++-- Records
++-- ----------------------------
++INSERT INTO `guildhouses` VALUES ('1', '0', '16222', '16266', '14.2', '1', 'GM Island');
++INSERT INTO `guildhouses` VALUES ('2', '0', '-10711', '2483', '8', '1', 'Tauren village at Veiled Sea (Silithus)');
++INSERT INTO `guildhouses` VALUES ('3', '0', '-8323', '-343', '146', '0', 'Fishing outside an Northshire Abbey (Elwynn Forest');
++INSERT INTO `guildhouses` VALUES ('4', '0', '7368', '-1560', '163', '1', 'Troll Village in mountains (Darkshore)');
++INSERT INTO `guildhouses` VALUES ('5', '0', '-4151', '-1400', '198', '0', 'Dwarven village outside Ironforge (Wetlands)');
++INSERT INTO `guildhouses` VALUES ('6', '0', '-1840', '-4233', '2.14', '0', 'Dwarven village (Arathi Highlands, Forbidding Sea)');
++INSERT INTO `guildhouses` VALUES ('8', '0', '-723', '-1076', '179', '1', 'Tauren camp (Mulgore, Red Rock)');
++INSERT INTO `guildhouses` VALUES ('9', '0', '-206', '1666', '80', '0', 'Shadowfang Keep an outside instance (Silverpine Forest)');
++INSERT INTO `guildhouses` VALUES ('10', '0', '-6374', '1262', '7', '0', 'Harbor house outside Stormwind (Elwynn Forest)');
++INSERT INTO `guildhouses` VALUES ('11', '0', '-8640', '580', '96', '0', 'Empty jail between canals (Stormwind) DELETE');
++INSERT INTO `guildhouses` VALUES ('12', '0', '-4844', '-1066', '502', '0', 'Old Ironforge');
++INSERT INTO `guildhouses` VALUES ('13', '0', '-4863', '-1658', '503.5', '0', 'Ironforge Airport');
++INSERT INTO `guildhouses` VALUES ('14', '0', '1146', '-165', '313', '37', 'Azshara Crater instance (Alliance entrance)');
++INSERT INTO `guildhouses` VALUES ('15', '0', '-123', '858', '298', '37', 'Azshara Crater instance (Horde entrance)');
++INSERT INTO `guildhouses` VALUES ('16', '0', '4303', '-2760', '16.8', '0', 'Quel\'Thalas Tower');
++INSERT INTO `guildhouses` VALUES ('17', '0', '-6161', '-790', '423', '0', 'Crashed gnome airplane (between Dun Morogh and Searing Gorge)');
++INSERT INTO `guildhouses` VALUES ('18', '0', '-11790', '-1640', '54.7', '0', 'Zul\'Gurub an outside instance (Stranglethorn Vale)');
++INSERT INTO `guildhouses` VALUES ('19', '0', '-11805', '-4754', '6', '1', 'Goblin village (Tanaris, South Seas)');
++INSERT INTO `guildhouses` VALUES ('20', '0', '-9296', '670', '132', '0', 'Villains camp outside an Stormwind (Elwynn Forest)');
++INSERT INTO `guildhouses` VALUES ('21', '0', '3414', '-3380', '142.2', '0', 'Stratholm an outside instance');
++INSERT INTO `guildhouses` VALUES ('22', '0', '4654', '-3772', '944', '1', 'Kalimdor Hyjal (Aka World Tree)');
++INSERT INTO `guildhouses` VALUES ('23', '0', '2176', '-4766', '55', '1', 'The Ring of Valor (Aka. Orgrimmar Arena)');
++INSERT INTO `guildhouses` VALUES ('24', '0', '1951.512085', '1530.475586', '247.288147', '1', 'Stonetalon Logging Camp');
++INSERT INTO `guildhouses` VALUES ('25', '0', '2813.660645', '2248.552979', '215.524643', '1', 'Stonetalon Ruins');
++INSERT INTO `guildhouses` VALUES ('28', '0', '9725.27', '-21.43', '20.03', '1', 'Teldrassil Furbold camp');
++INSERT INTO `guildhouses` VALUES ('29', '0', '-3855', '-3479', '579', '0', 'Wetlands mountain camp');
++INSERT INTO `guildhouses` VALUES ('30', '0', '-5362', '-2540', '485', '0', 'Ortell\'s Hideout');
++INSERT INTO `guildhouses` VALUES ('31', '0', '-12865', '-1396', '115', '0', 'Stranglethorn Secret Cave');
++INSERT INTO `guildhouses` VALUES ('32', '0', '-11073', '-1956', '39', '0', 'Karazhan Smiley');
++INSERT INTO `guildhouses` VALUES ('33', '0', '-11084', '-1801', '53', '0', 'Well of the Forgotten (Aka. Karazhan Crypt or Lower Karazhan)');
++INSERT INTO `guildhouses` VALUES ('34', '0', '1683.235474', '286.458801', '-45.451775', '0', 'Undercity Top Tier');
++INSERT INTO `guildhouses` VALUES ('35', '0', '-8521.3', '599.5', '101.399338', '0', 'Stormwind Cut-Throat Alley');
++INSERT INTO `guildhouses` VALUES ('36', '0', '-5933', '452', '509', '0', 'Forgotten gnome camp');
++INSERT INTO `guildhouses` VALUES ('37', '0', '-920.231323', '7096.489258', '170.35289', '530', 'Outland Nagrand : Newton\'s Remains');
++INSERT INTO `guildhouses` VALUES ('38', '0', '-2140.501953', '9142.6875', '137.041855', '530', 'Outland Nagrand : Tomb');
++INSERT INTO `guildhouses` VALUES ('39', '0', '-483.401794', '7461.944824', '186.120987', '530', 'Outland Nagrand: Challe\'s Home for Little Tykes');
++INSERT INTO `guildhouses` VALUES ('40', '0', '2387.753906', '3191.757324', '152.669388', '530', 'Outland Netherstorm: Nova\'s Shrine');
+diff --git a/src/server/game/Scripting/ScriptLoader.cpp b/src/server/game/Scripting/ScriptLoader.cpp
+index 26d7034..2f10b9d 100755
+--- a/src/server/game/Scripting/ScriptLoader.cpp
++++ b/src/server/game/Scripting/ScriptLoader.cpp
+@@ -75,6 +75,8 @@ void AddSC_npc_innkeeper();
+ void AddSC_npcs_special();
+ void AddSC_npc_taxi();
+ void AddSC_achievement_scripts();
++//guildhouse
++void AddSC_guildmaster();
+ 
+ //eastern kingdoms
+ void AddSC_alterac_valley();                 //Alterac Valley
+@@ -1233,6 +1235,7 @@ void AddCustomScripts()
+ {
+ #ifdef SCRIPTS
+     /* This is where custom scripts should be added. */
+-
++    //guildhouse
++    AddSC_guildmaster();
+ #endif
+ }
+diff --git a/src/server/scripts/Custom/CMakeLists.txt b/src/server/scripts/Custom/CMakeLists.txt
+index 1570ca1..28155eb 100644
+--- a/src/server/scripts/Custom/CMakeLists.txt
++++ b/src/server/scripts/Custom/CMakeLists.txt
+@@ -10,6 +10,7 @@
+ 
+ set(scripts_STAT_SRCS
+   ${scripts_STAT_SRCS}
++  Custom/guildmaster.cpp
+ )
+ 
+ message("  -> Prepared: Custom")
+diff --git a/src/server/scripts/Custom/guildmaster.cpp b/src/server/scripts/Custom/guildmaster.cpp
+new file mode 100644
+index 0000000..38c3b7a
+--- /dev/null
++++ b/src/server/scripts/Custom/guildmaster.cpp
+@@ -0,0 +1,339 @@
++#include "ScriptPCH.h"
++
++//extern DatabaseMysql SD2Database;
++
++extern WorldDatabaseWorkerPool WorldDatabase;
++
++#define MSG_GOSSIP_TELE          "Teleport to GuildHouse"
++#define MSG_GOSSIP_BUY           "Buy GuildHouse (1000 gold)"
++#define MSG_GOSSIP_SELL          "Sell GuildHouse (500 gold)"
++#define MSG_GOSSIP_NEXTPAGE      "Next -->"
++#define MSG_INCOMBAT             "You are in combat and cannot be teleported to your GuildHouse."
++#define MSG_NOGUILDHOUSE         "Your guild currently does not own a GuildHouse."
++#define MSG_NOFREEGH             "Unfortunately, all GuildHouses are in use."
++#define MSG_ALREADYHAVEGH        "Sorry, but you already own a GuildHouse (%s)."
++#define MSG_NOTENOUGHMONEY       "You do not have the %u gold required to purchase a GuildHouse."
++#define MSG_GHOCCUPIED           "This GuildHouse is unavailable for purchase as it is currently in use."
++#define MSG_CONGRATULATIONS      "Congratulations! You have successfully purchased a GuildHouse."
++#define MSG_SOLD                 "You have sold your GuildHouse and have received %u gold."
++#define MSG_NOTINGUILD           "You need to be in a guild before you can use a GuildHouse."
++
++#define CODE_SELL "SELL"
++#define MSG_CODEBOX_SELL "Type \"" CODE_SELL "\" into the field to confirm that you want to sell your GuildHouse."
++
++#define OFFSET_GH_ID_TO_ACTION 1500
++#define OFFSET_SHOWBUY_FROM 10000
++
++#define ACTION_TELE 1001
++#define ACTION_SHOW_BUYLIST 1002 //deprecated. Use (OFFSET_SHOWBUY_FROM + 0) instead
++#define ACTION_SELL_GUILDHOUSE 1003
++
++#define ICON_GOSSIP_BALOON 0
++#define ICON_GOSSIP_WING 2
++#define ICON_GOSSIP_BOOK 3
++#define ICON_GOSSIP_WHEEL1 4
++#define ICON_GOSSIP_WHEEL2 5
++#define ICON_GOSSIP_GOLD 6
++#define ICON_GOSSIP_BALOONDOTS 7
++#define ICON_GOSSIP_TABARD 8
++#define ICON_GOSSIP_XSWORDS 9
++
++#define COST_GH_BUY 10000000 //1000 g.
++#define COST_GH_SELL 5000000 //500 g.
++
++#define GOSSIP_COUNT_MAX 10
++
++bool isPlayerGuildLeader(Player *player)
++{
++ return (player->GetRank() == 0) && (player->GetGuildId() != 0);
++}
++
++bool getGuildHouseCoords(uint32 guildId, float &x, float &y, float &z, uint32 &map)
++{
++ if (guildId == 0)
++ {
++ //if player has no guild
++ return false;
++ }
++
++ QueryResult result;
++ result = WorldDatabase.PQuery("SELECT `x`, `y`, `z`, `map` FROM `guildhouses` WHERE `guildId` = %u", guildId);
++ if (result)
++ {
++ Field *fields = result->Fetch();
++ x = fields[0].GetFloat();
++ y = fields[1].GetFloat();
++ z = fields[2].GetFloat();
++ map = fields[3].GetUInt32();
++ return true;
++ }
++
++ return false;
++}
++
++void teleportPlayerToGuildHouse(Player *player, Creature *_creature)
++{
++ if (player->GetGuildId() == 0)
++ {
++ //if player has no guild
++ _creature->MonsterWhisper(MSG_NOTINGUILD, player->GetGUID());
++ return;
++ }
++
++ if (!player->getAttackers().empty())
++ {
++ //if player in combat
++ _creature->MonsterSay(MSG_INCOMBAT, LANG_UNIVERSAL, player->GetGUID());
++ return;
++ }
++
++ float x, y, z;
++ uint32 map;
++
++ if (getGuildHouseCoords(player->GetGuildId(), x, y, z, map))
++ {
++ //teleport player to the specified location
++ player->TeleportTo(map, x, y, z, 0.0f);
++ }
++ else
++ _creature->MonsterWhisper(MSG_NOGUILDHOUSE, player->GetGUID());
++}
++
++bool showBuyList(Player *player, Creature *_creature, uint32 showFromId = 0)
++{
++ //show not occupied guildhouses
++
++ QueryResult result;
++ result = WorldDatabase.PQuery("SELECT `id`, `comment` FROM `guildhouses` WHERE `guildId` = 0 AND `id` > %u ORDER BY `id` ASC LIMIT %u",
++ showFromId, GOSSIP_COUNT_MAX);
++
++ if (result)
++ {
++ uint32 guildhouseId = 0;
++ std::string comment = "";
++ do
++ {
++ Field *fields = result->Fetch();
++ guildhouseId = fields[0].GetInt32();
++ comment = fields[1].GetString();
++
++ //send comment as a gossip item
++ //transmit guildhouseId in Action variable
++ player->ADD_GOSSIP_ITEM(ICON_GOSSIP_TABARD, comment, GOSSIP_SENDER_MAIN,
++ guildhouseId + OFFSET_GH_ID_TO_ACTION);
++ }
++ while (result->NextRow());
++
++ if (result->GetRowCount() == GOSSIP_COUNT_MAX)
++ {
++ //assume that we have additional page
++ //add link to next GOSSIP_COUNT_MAX items
++ player->ADD_GOSSIP_ITEM(ICON_GOSSIP_BALOONDOTS, MSG_GOSSIP_NEXTPAGE, GOSSIP_SENDER_MAIN,
++ guildhouseId + OFFSET_SHOWBUY_FROM);
++ }
++
++ player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _creature->GetGUID());
++
++ return true;
++ }
++ else
++ {
++ if (showFromId = 0)
++ {
++ //all guildhouses are occupied
++ _creature->MonsterWhisper(MSG_NOFREEGH, player->GetGUID());
++ player->CLOSE_GOSSIP_MENU();
++ }
++ else
++ {
++ //this condition occurs when COUNT(guildhouses) % GOSSIP_COUNT_MAX == 0
++ //just show GHs from beginning
++ showBuyList(player, _creature, 0);
++ }
++ }
++
++ return false;
++}
++
++bool isPlayerHasGuildhouse(Player *player, Creature *_creature, bool whisper = false)
++{
++ QueryResult result;
++ result = WorldDatabase.PQuery("SELECT `comment` FROM `guildhouses` WHERE `guildId` = %u",
++ player->GetGuildId());
++
++ if (result)
++ {
++ if (whisper)
++ {
++ //whisper to player "already have etc..."
++ Field *fields = result->Fetch();
++ char msg[100];
++ sprintf(msg, MSG_ALREADYHAVEGH, fields[0].GetString());
++ _creature->MonsterWhisper(msg, player->GetGUID());
++ }
++
++ return true;
++ }
++
++ return false;
++}
++
++void buyGuildhouse(Player *player, Creature *_creature, uint32 guildhouseId)
++{
++ if (player->GetMoney() < COST_GH_BUY)
++ {
++ //show how much money player need to buy GH (in gold)
++ char msg[100];
++ sprintf(msg, MSG_NOTENOUGHMONEY, COST_GH_BUY / 10000);
++ _creature->MonsterWhisper(msg, player->GetGUID());
++ return;
++ }
++
++ if (isPlayerHasGuildhouse(player, _creature, true))
++ {
++ //player already have GH
++ return;
++ }
++
++ QueryResult result;
++
++ //check if somebody already occupied this GH
++ result = WorldDatabase.PQuery("SELECT `id` FROM `guildhouses` WHERE `id` = %u AND `guildId` <> 0", guildhouseId);
++
++ if (result)
++ {
++ _creature->MonsterWhisper(MSG_GHOCCUPIED, player->GetGUID());
++ return;
++ }
++
++ //update DB
++ result = WorldDatabase.PQuery("UPDATE `guildhouses` SET `guildId` = %u WHERE `id` = %u",
++ player->GetGuildId(), guildhouseId);
++
++ if (result)
++ player->ModifyMoney(-COST_GH_BUY);
++ _creature->MonsterSay(MSG_CONGRATULATIONS, LANG_UNIVERSAL, player->GetGUID());
++}
++
++void sellGuildhouse(Player *player, Creature *_creature)
++{
++ if (isPlayerHasGuildhouse(player, _creature))
++ {
++ QueryResult result;
++ result = WorldDatabase.PQuery("UPDATE `guildhouses` SET `guildId` = 0 WHERE `guildId` = %u",
++ player->GetGuildId());
++
++ if (result)
++ player->ModifyMoney(COST_GH_SELL);
++
++ //display message e.g. "here your money etc."
++ char msg[100];
++ sprintf(msg, MSG_SOLD, COST_GH_SELL / 10000);
++ _creature->MonsterWhisper(msg, player->GetGUID());
++ }
++}
++
++class guildmaster : public CreatureScript
++{
++ public:
++ guildmaster() : CreatureScript("guildmaster") { }
++
++ bool GossipSelectWithCode(Player *player, Creature *_creature, uint32 sender, uint32 action, const char* sCode)
++ {
++ if (sender == GOSSIP_SENDER_MAIN)
++ {
++ if (action == ACTION_SELL_GUILDHOUSE)
++ {
++ int i = -1;
++ try
++ {
++ //compare code
++
++ if (strlen(sCode) + 1 == sizeof CODE_SELL)
++ i = strcmp(CODE_SELL, sCode);
++ }
++
++ catch(char *str) {sLog->outErrorDb(str);
++ }
++
++ if (i == 0)
++ {
++ //right code
++ sellGuildhouse(player, _creature);
++ }
++
++ player->CLOSE_GOSSIP_MENU();
++ return true;
++ }
++ }
++ return false;
++}
++
++ bool OnGossipSelect(Player *player, Creature *_creature, uint32 sender, uint32 action)
++ {
++ player->PlayerTalkClass->ClearMenus();
++ if (sender != GOSSIP_SENDER_MAIN)
++ return false;
++
++ switch (action)
++ {
++ case ACTION_TELE:
++ //teleport player to GH
++ player->CLOSE_GOSSIP_MENU();
++ teleportPlayerToGuildHouse(player, _creature);
++ break;
++ case ACTION_SHOW_BUYLIST:
++ //show list of GHs which currently not occupied
++ showBuyList(player, _creature);
++ break;
++ default:
++ if (action > OFFSET_SHOWBUY_FROM)
++ {
++ showBuyList(player, _creature, action - OFFSET_SHOWBUY_FROM);
++ }
++ else if (action > OFFSET_GH_ID_TO_ACTION)
++ {
++ //player clicked on buy list
++ player->CLOSE_GOSSIP_MENU();
++
++ //get guildhouseId from action
++ //guildhouseId = action - OFFSET_GH_ID_TO_ACTION
++ buyGuildhouse(player, _creature, action - OFFSET_GH_ID_TO_ACTION);
++ }
++ break;
++ }
++
++ return true;
++ }
++
++
++ bool OnGossipHello(Player *player, Creature *_creature)
++ {
++ player->ADD_GOSSIP_ITEM(ICON_GOSSIP_BALOON, MSG_GOSSIP_TELE,
++ GOSSIP_SENDER_MAIN, ACTION_TELE);
++
++ if (isPlayerGuildLeader(player))
++ {
++ if (isPlayerHasGuildhouse(player, _creature))
++ {
++ //and additional for guildhouse owner (Removed :
++ player->PlayerTalkClass->GetGossipMenu().AddMenuItem(ICON_GOSSIP_GOLD, 0, MSG_GOSSIP_SELL, GOSSIP_SENDER_MAIN, ACTION_SELL_GUILDHOUSE, MSG_CODEBOX_SELL, 0, true);
++ }
++ else
++ {
++ //show additional menu for guild leader
++ player->ADD_GOSSIP_ITEM(ICON_GOSSIP_GOLD, MSG_GOSSIP_BUY,
++ GOSSIP_SENDER_MAIN, ACTION_SHOW_BUYLIST);
++ }
++ }
++
++ player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _creature->GetGUID());
++ return true;
++ }
++
++
++};
++void AddSC_guildmaster()
++{
++ new guildmaster();
++}
+-- 
+1.7.2.3
+

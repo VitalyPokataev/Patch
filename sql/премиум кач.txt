@@ -1,0 +1,4 @@
+
+Rate.XP.Kill.Premium    = 500
+Rate.XP.Quest.Premium    = 500
+Rate.XP.Explore.Premium    = 500

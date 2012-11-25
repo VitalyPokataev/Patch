@@ -1,0 +1,1253 @@
+diff -Nuar oregoncore-current/sql/CMakeLists.txt oregoncore-pq/sql/CMakeLists.txt
+--- oregoncore-current/sql/CMakeLists.txt	2011-01-01 10:03:07.000000000 -0500
++++ oregoncore-pq/sql/CMakeLists.txt	2011-01-01 10:22:04.000000000 -0500
+@@ -1,6 +1,7 @@
+ add_subdirectory(updates)
+ add_subdirectory(tools)
+ add_subdirectory(scripts)
++add_subdirectory(oc-patch)
+ 
+ 
+ ########### install files ###############
+diff -Nuar oregoncore-current/sql/oc-patch/CMakeLists.txt oregoncore-pq/sql/oc-patch/CMakeLists.txt
+--- oregoncore-current/sql/oc-patch/CMakeLists.txt	1969-12-31 19:00:00.000000000 -0500
++++ oregoncore-pq/sql/oc-patch/CMakeLists.txt	2011-01-01 10:22:04.000000000 -0500
+@@ -0,0 +1,6 @@
++
++########### install files ###############
++
++FILE(GLOB _SQL *.sql)
++
++install(FILES ${_SQL} DESTINATION share/oregon/sql/oc-patch)
+diff -Nuar oregoncore-current/sql/oc-patch/world-telenpc.sql oregoncore-pq/sql/oc-patch/world-telenpc.sql
+--- oregoncore-current/sql/oc-patch/world-telenpc.sql	1969-12-31 19:00:00.000000000 -0500
++++ oregoncore-pq/sql/oc-patch/world-telenpc.sql	2011-01-01 10:22:04.000000000 -0500
+@@ -0,0 +1,446 @@
++
++--
++-- Dumping data for table `creature_template`
++--
++
++INSERT INTO `creature_template` (`entry`, `heroic_entry`, `modelid_A`, `modelid_A2`, `modelid_H`, `modelid_H2`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `minhealth`, `maxhealth`, `minmana`, `maxmana`, `armor`, `faction_A`, `faction_H`, `npcflag`, `speed`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `baseattacktime`, `rangeattacktime`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `class`, `race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `PetSpellDataId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `RacialLeader`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`) VALUES
++(91010, 0, 2202, 0, 2202, 0, 'Lariani the Enlightened', 'Teleport Master', NULL, 0, 70, 70, 5000, 5000, 0, 0, 2865, 35, 35, 1, 1, 1, 1, 60, 165, 0, 97, 1500, 1500, 0, 0, 0, 0, 0, 0, 0, 50, 100, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 1, 1, 0, 0, 0, 'npc_teleport'),
++(91011, 0, 17278, 0, 17278, 0, 'Cyriani Magus', 'Teleport Master', NULL, 0, 70, 70, 5000, 5000, 0, 0, 2865, 35, 35, 1, 1, 1, 1, 60, 165, 0, 97, 1500, 1500, 0, 0, 0, 0, 0, 0, 0, 50, 100, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 1, 1, 0, 0, 0, 'npc_teleport'),
++(91012, 0, 16855, 0, 16855, 0, 'Delanos the Worthy', 'Teleport Master', NULL, 0, 70, 70, 5000, 5000, 0, 0, 2865, 35, 35, 1, 1, 1, 1, 60, 165, 0, 97, 1500, 1500, 0, 0, 0, 0, 0, 0, 0, 50, 100, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 1, 1, 0, 0, 0, 'npc_teleport');
++
++--
++-- Table structure for table `npc_teleport_association`
++--
++
++CREATE TABLE IF NOT EXISTS `npc_teleport_association` (
++  `cat_id` int(6) unsigned NOT NULL default '0',
++  `display_order` tinyint(4) NOT NULL default '0',
++  `dest_id` int(6) unsigned NOT NULL default '0',
++  PRIMARY KEY  (`cat_id`,`dest_id`)
++) ENGINE=MyISAM DEFAULT CHARSET=utf8;
++
++--
++-- Dumping data for table `npc_teleport_association`
++--
++
++INSERT INTO `npc_teleport_association` (`cat_id`, `display_order`, `dest_id`) VALUES
++(1, 0, 3),
++(1, 0, 4),
++(1, 0, 5),
++(1, 0, 6),
++(2, 0, 1),
++(2, 0, 7),
++(2, 0, 8),
++(2, 0, 9),
++(3, 0, 10),
++(3, 0, 11),
++(3, 0, 12),
++(3, 0, 15),
++(4, 0, 13),
++(4, 0, 14),
++(4, 0, 16),
++(4, 0, 17),
++(5, 0, 18),
++(5, 0, 19),
++(5, 0, 20),
++(5, 0, 21),
++(5, 0, 22),
++(5, 0, 23),
++(5, 0, 24),
++(5, 0, 25),
++(5, 0, 26),
++(5, 0, 27),
++(5, 0, 28),
++(5, 0, 29),
++(5, 0, 30),
++(5, 0, 31),
++(5, 0, 32),
++(5, 0, 33),
++(5, 0, 34),
++(5, 0, 35),
++(5, 0, 36),
++(5, 0, 37),
++(5, 0, 38),
++(5, 0, 39),
++(5, 0, 40),
++(5, 0, 41),
++(5, 0, 42),
++(5, 0, 43),
++(5, 0, 44),
++(5, 0, 45),
++(5, 0, 46),
++(5, 0, 47),
++(5, 0, 48),
++(5, 0, 203),
++(6, 0, 49),
++(6, 0, 50),
++(6, 0, 51),
++(6, 0, 52),
++(6, 0, 53),
++(6, 0, 54),
++(6, 0, 55),
++(6, 0, 56),
++(6, 0, 57),
++(6, 0, 58),
++(6, 0, 59),
++(6, 0, 60),
++(6, 0, 61),
++(6, 0, 62),
++(6, 0, 63),
++(6, 0, 64),
++(6, 0, 65),
++(6, 0, 66),
++(6, 0, 67),
++(6, 0, 68),
++(6, 0, 69),
++(6, 0, 70),
++(6, 0, 71),
++(6, 0, 72),
++(6, 0, 73),
++(6, 0, 74),
++(6, 0, 75),
++(6, 0, 76),
++(6, 0, 204),
++(7, 0, 88),
++(7, 0, 89),
++(7, 0, 90),
++(7, 0, 91),
++(7, 0, 92),
++(7, 0, 93),
++(7, 0, 94),
++(7, 0, 95),
++(7, 0, 96),
++(7, 0, 97),
++(8, 0, 98),
++(8, 0, 99),
++(8, 0, 100),
++(8, 0, 101),
++(8, 0, 102),
++(8, 0, 103),
++(8, 0, 104),
++(8, 0, 105),
++(8, 0, 106),
++(11, 0, 77),
++(11, 0, 78),
++(11, 0, 80),
++(11, 0, 81),
++(11, 0, 82),
++(11, 0, 83),
++(11, 0, 84),
++(11, 0, 85),
++(11, 0, 86),
++(11, 0, 87),
++(11, 0, 107),
++(11, 0, 108),
++(11, 0, 109),
++(11, 0, 110),
++(11, 0, 111),
++(11, 0, 112),
++(11, 0, 113),
++(11, 0, 114),
++(11, 0, 158),
++(11, 0, 159),
++(14, 0, 231),
++(14, 0, 232),
++(14, 0, 233),
++(14, 0, 234),
++(15, 0, 161),
++(15, 0, 162),
++(15, 0, 163),
++(15, 0, 164),
++(15, 0, 165),
++(15, 0, 166),
++(15, 0, 167),
++(15, 0, 168),
++(15, 0, 169),
++(15, 0, 170),
++(15, 0, 171),
++(15, 0, 172),
++(15, 0, 173),
++(15, 0, 174),
++(15, 0, 175),
++(15, 0, 176),
++(15, 0, 177),
++(15, 0, 178),
++(15, 0, 179),
++(15, 0, 180),
++(15, 0, 181),
++(15, 0, 182),
++(15, 0, 183),
++(16, 0, 184),
++(16, 0, 185),
++(16, 0, 186),
++(16, 0, 187),
++(16, 0, 188),
++(16, 0, 189),
++(16, 0, 190),
++(16, 0, 191),
++(16, 0, 192),
++(18, 0, 207),
++(18, 0, 225),
++(19, 0, 206),
++(19, 0, 208),
++(19, 0, 209),
++(19, 0, 210),
++(19, 0, 213),
++(19, 0, 214),
++(19, 0, 215),
++(19, 0, 219),
++(19, 0, 226),
++(19, 0, 227),
++(19, 0, 229),
++(19, 0, 230),
++(20, 0, 205),
++(20, 0, 211),
++(20, 0, 212),
++(20, 0, 216),
++(20, 0, 217),
++(20, 0, 218),
++(20, 0, 221),
++(20, 0, 222),
++(20, 0, 223),
++(20, 0, 224);
++
++--
++-- Table structure for table `npc_teleport_category`
++--
++
++CREATE TABLE IF NOT EXISTS `npc_teleport_category` (
++  `id` int(6) unsigned NOT NULL default '0',
++  `name` varchar(255) NOT NULL default '',
++  `flag` tinyint(3) unsigned NOT NULL default '0',
++  `data0` bigint(20) unsigned NOT NULL default '0',
++  `data1` int(6) unsigned NOT NULL default '0',
++  PRIMARY KEY  (`id`)
++) ENGINE=MyISAM DEFAULT CHARSET=utf8;
++
++--
++-- Dumping data for table `npc_teleport_category`
++--
++
++INSERT INTO `npc_teleport_category` (`id`, `name`, `flag`, `data0`, `data1`) VALUES
++(1, '[Starting Zones]', 0, 1, 0),
++(2, '[Starting Zones]', 0, 2, 0),
++(3, ' - Capitals', 0, 1, 0),
++(4, ' - Capitals', 0, 2, 0),
++(5, 'Cities - Azeroth', 0, 1, 0),
++(6, 'Cities - Azeroth', 0, 2, 0),
++(7, 'Cities - Outland', 0, 1, 0),
++(8, 'Cities - Outland', 0, 2, 0),
++(11, 'Cities - Neutral', 0, 0, 0),
++(14, '[Arenas]', 0, 0, 0),
++(15, '[Instances - Classic]', 0, 0, 0),
++(16, '[Instances - TBC]', 5, 55, 0),
++(18, ' * GM Destinations', 3, 0, 0),
++(19, '[Undeveloped Places]', 2, 1, 0),
++(20, '[Undeveloped Places]', 2, 3, 0);
++
++
++--
++-- Table structure for table `npc_teleport_destination`
++--
++
++CREATE TABLE IF NOT EXISTS `npc_teleport_destination` (
++  `id` int(6) unsigned NOT NULL auto_increment,
++  `name` char(100) NOT NULL default '',
++  `pos_X` float NOT NULL default '0',
++  `pos_Y` float NOT NULL default '0',
++  `pos_Z` float NOT NULL default '0',
++  `map` smallint(5) unsigned NOT NULL default '0',
++  `orientation` float NOT NULL default '0',
++  `level` tinyint(3) unsigned NOT NULL default '0',
++  `cost` int(10) unsigned NOT NULL default '0',
++  `say_on_departure` varchar(80) default NULL,
++  `cast_on_arrival` mediumint(8) unsigned NOT NULL default '0',
++  PRIMARY KEY  (`id`)
++) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=243 ;
++
++--
++-- Dumping data for table `npc_teleport_destination`
++--
++
++INSERT INTO `npc_teleport_destination` (`id`, `name`, `pos_X`, `pos_Y`, `pos_Z`, `map`, `orientation`, `level`, `cost`, `say_on_departure`, `cast_on_arrival`) VALUES
++(1, 'Blood Elf', 10347.2, -6353.87, 32.6684, 530, 0, 1, 0, 'See you soon!', 28750),
++(3, 'Draenei', -3996.05, -13886.3, 92.4881, 530, 0, 1, 0, 'See you soon!', 28750),
++(4, 'Dwarf/Gnome', -6227.05, 342.87, 383.362, 0, 0, 1, 0, 'See you soon!', 28750),
++(5, 'Human', -8920.86, -117.73, 82.3734, 0, 0, 1, 0, 'See you soon!', 28750),
++(6, 'Night Elf', 10327.4, 837.14, 1326.31, 1, 0, 1, 0, 'See you soon!', 28750),
++(7, 'Orc/Troll', -629.91, -4257.52, 38.2704, 1, 0, 1, 0, 'See you soon!', 28750),
++(8, 'Tauren', -2915.8, -249.45, 53.1197, 1, 0, 1, 0, 'See you soon!', 28750),
++(9, 'Undead', 1683.99, 1672.89, 136.456, 0, 0, 1, 0, 'See you soon!', 28750),
++(10, 'Darnassus', 9950.73, 2605.7, 1316.18, 1, 0, 1, 0, 'See you soon!', 28750),
++(11, 'Exodar', -3956.9, -11660.2, -138.75, 530, 0, 1, 0, 'See you soon!', 28750),
++(12, 'Ironforge', -4835.84, -1165.98, 502.201, 0, 0, 1, 0, 'See you soon!', 28750),
++(13, 'Orgrimmar', 1582.05, -4418.27, 8.05, 1, 0, 1, 0, 'See you soon!', 28750),
++(14, 'Silvermoon', 9474.99, -7295.07, 14.31, 530, 0, 1, 0, 'See you soon!', 28750),
++(15, 'Stormwind', -8843.74, 611.06, 92.76, 0, 0, 1, 0, 'See you soon!', 28750),
++(16, 'Thunder Bluff', -1242.29, 71.16, 128.26, 1, 0, 1, 0, 'See you soon!', 28750),
++(17, 'Undercity', 1581.04, 276.09, -43.1027, 0, 0, 1, 0, 'See you soon!', 28750),
++(18, 'Aerie Peak - Hinterlands', 325.36, -2117.39, 121.83, 0, 0, 34, 0, 'See you soon!', 28750),
++(19, 'Astranaar - Ashenvale', 2752.16, -432.65, 111.48, 1, 0, 12, 0, 'See you soon!', 28750),
++(20, 'Auberdine - Darkshore', 6391.65, 530.64, 8.67, 1, 0, 8, 0, 'See you soon!', 28750),
++(21, 'Azure Watch - Azuremyst', -4169.04, -12495.7, 44.2397, 530, 0, 1, 0, 'See you soon!', 28750),
++(22, 'Badlands', -6179.26, -3368.04, 245.82, 0, 0, 28, 0, 'See you soon!', 28750),
++(23, 'Blood Watch - Bloodmyst', -1954.41, -11912, 50.3972, 530, 0, 8, 0, 'See you soon!', 28750),
++(24, 'Chillwind Camp - Western Plaguelands', 937.58, -1419.46, 66.6, 0, 0, 44, 0, 'See you soon!', 28750),
++(25, 'Dark Portal - Blasted Lands', -367.39, 1008.87, 54.17, 530, 0, 55, 0, 'See you soon!', 28750),
++(26, 'Darkshire - Duskwood', -10516.2, -1160.67, 28.0996, 0, 0, 16, 0, 'See you soon!', 28750),
++(27, 'Dolanaar - Teldrassil', 9805.78, 951.39, 1308.78, 1, 0, 1, 0, 'See you soon!', 28750),
++(28, 'Feathermoon - Feralas', -4377.77, 3288.01, 13.55, 1, 0, 34, 0, 'See you soon!', 28750),
++(29, 'Forestsong - Ashenvale', 2961.28, -3216.36, 168.994, 1, 0, 24, 0, 'See you soon!', 28750),
++(30, 'Goldshire - Elwynn', -9467.13, 23.42, 56.33, 0, 0, 1, 0, 'See you soon!', 28750),
++(31, 'Kharanos - Dun Morogh', -5581.96, -527.253, 400.76, 0, 0, 1, 0, 'See you soon!', 28750),
++(32, 'Lakeshire - Redridge', -9216.7, -2152.57, 64.35, 0, 0, 12, 0, 'See you soon!', 28750),
++(33, 'Light''s Hope - Eastern Plaguelands', 2280.1, -5340.32, 89.36, 0, 0, 48, 0, 'See you soon!', 28750),
++(34, 'Menethil Harbor - Wetlands', -3826.67, -832.26, 10.09, 0, 0, 16, 0, 'See you soon!', 28750),
++(35, 'Morgan''s Vigil - Burning Steppes', -8393.65, -2744.31, 189.92, 0, 0, 40, 0, 'See you soon!', 28750),
++(36, 'Nethergarde Keep - Blasted Lands', -11097.1, -3432.11, 64.95, 0, 0, 38, 0, 'See you soon!', 28750),
++(37, 'Nijel''s Point - Desolace', 251.76, 1251.06, 192.15, 1, 0, 24, 0, 'See you soon!', 28750),
++(38, 'Rebel Camp - Stranglethorn', -11312.3, -191.84, 76.23, 0, 0, 22, 0, 'See you soon!', 28750),
++(39, 'Refuge Point - Arathi', -1261.94, -2550.4, 21.7709, 0, 0, 24, 0, 'See you soon!', 28750),
++(40, 'Sentinel Hill - Westfall', -10656.8, 1169.24, 34.46, 0, 0, 8, 0, 'See you soon!', 28750),
++(41, 'Southshore - Hillsbrad', -822.11, -494.07, 16.45, 0, 0, 18, 0, 'See you soon!', 28750),
++(42, 'Stonetalon Peak - Stonetalon', 2735.12, 1511.3, 236.82, 1, 0, 12, 0, 'See you soon!', 28750),
++(43, 'Talonbranch Glade - Felwood', 6204.08, -1951.43, 571.581, 1, 0, 42, 0, 'See you soon!', 28750),
++(44, 'Talrendis - Azshara', 2696.01, -3889.68, 108.55, 1, 0, 40, 0, 'See you soon!', 28750),
++(45, 'Thalanaar - Feralas/Thousand Needles', -4503.25, -778.42, -41.0645, 1, 0, 34, 0, 'See you soon!', 28750),
++(46, 'Thelsamar - Loch Modan', -5380.99, -2974.53, 323.16, 0, 0, 8, 0, 'See you soon!', 28750),
++(47, 'Theramore Isle - Dustwallow', -3856.58, -4557.22, 8.31, 1, 0, 28, 0, 'See you soon!', 28750),
++(48, 'Thorium Point - Searing Gorge', -6570.59, -1179.44, 314.63, 0, 0, 34, 0, 'See you soon!', 28750),
++(49, 'Bloodhoof - Mulgore', -2371.59, -344.945, -8.95687, 1, 0, 1, 0, 'See you soon!', 28750),
++(50, 'Bloodvenom Post - Felwood', 5111.5, -364.84, 358.069, 1, 0, 42, 0, 'See you soon!', 28750),
++(51, 'Brackenwall - Dustwallow', -3179.44, -2914.98, 33.2614, 1, 0, 28, 0, 'See you soon!', 28750),
++(52, 'Brill - Tirisfal Glades', 2268.82, 243.405, 34.2569, 0, 0, 1, 0, 'See you soon!', 28750),
++(53, 'Camp Mojache - Feralas', -4453.08, 244.037, 39.1076, 1, 0, 34, 0, 'See you soon!', 28750),
++(54, 'Camp Taurajo - Barrens', -2366.28, -1990.85, 96.705, 1, 0, 8, 0, 'See you soon!', 28750),
++(55, 'Crossroads - Barrens', -400.21, -2647.88, 96.22, 1, 0, 8, 0, 'See you soon!', 28750),
++(56, 'Dark Portal - Blasted Lands', -139.253, 1016.09, 54.1819, 530, 0, 55, 0, 'See you soon!', 28750),
++(57, 'Fairbreeze - Eversong Woods', 8695.4, -6630.78, 72.7438, 530, 0, 1, 0, 'See you soon!', 28750),
++(58, 'Falconwing - Eversong Woods', 9470.55, -6861.17, 17.4284, 530, 0, 1, 0, 'See you soon!', 28750),
++(59, 'Flamecrest - Burning Steppes', -7488.31, -2171.76, 165.379, 0, 0, 40, 0, 'See you soon!', 28750),
++(60, 'Freewind Post - Thousand Needles', -5476.14, -2463.29, 89.2849, 1, 0, 18, 0, 'See you soon!', 28750),
++(61, 'Grom''Gol - Strangethorn', -12368.1, 152.938, 2.91855, 0, 0, 22, 0, 'See you soon!', 28750),
++(62, 'Hammerfall - Arathi', -918.67, -3537.5, 72.76, 0, 0, 24, 0, 'See you soon!', 28750),
++(63, 'Kargath - Badlands', -6658.08, -2161.55, 245.355, 0, 0, 28, 0, 'See you soon!', 28750),
++(64, 'Light''s Hope - Eastern Plaguelands', 2323.49, -5303.68, 81.9969, 0, 0, 48, 0, 'See you soon!', 28750),
++(65, 'Razor Hill - Durotar', 348.152, -4686.92, 16.4582, 1, 0, 1, 0, 'See you soon!', 28750),
++(66, 'Revantusk - Hinterlands', -619.804, -4580.63, 11.6874, 0, 0, 34, 0, 'See you soon!', 28750),
++(67, 'Sepulcher - Silverpine', 505.633, 1636.29, 125.944, 0, 0, 8, 0, 'See you soon!', 28750),
++(68, 'Shadowprey - Desolace', -1585.29, 3163.02, 47.0976, 1, 0, 24, 0, 'See you soon!', 28750),
++(69, 'Splintertree Post - Ashenvale', 2341.8, -2574.55, 102.77, 1, 0, 12, 0, 'See you soon!', 28750),
++(70, 'Stonard - Swamp Of Sorrows', -10490.1, -3253.94, 21.0298, 0, 0, 28, 0, 'See you soon!', 28750),
++(71, 'Sunrock - Stonetalon', 899.11, 918.168, 106.258, 1, 0, 12, 0, 'See you soon!', 28750),
++(72, 'Tarren Mill - Hillsbrad', -3.44188, -938.574, 57.1637, 0, 0, 16, 0, 'See you soon!', 28750),
++(73, 'Thorium Point - Searing Gorge', -6521.54, -1097.52, 314.9, 0, 0, 34, 0, 'See you soon!', 28750),
++(74, 'Tranquillien - Ghostlands', 7558.95, -6897.39, 96.0274, 530, 0, 8, 0, 'See you soon!', 28750),
++(75, 'Valormok - Azshara', 3629.88, -4414.31, 111.17, 1, 0, 40, 0, 'See you soon!', 28750),
++(76, 'Zoram''Gar Outpost - Ashenvale', 3375.14, 996.61, 5.20047, 1, 0, 16, 0, 'See you soon!', 28750),
++(77, 'Booty Bay - Stranglethorn', -14300, 529.102, 8.6962, 0, 0, 12, 0, 'See you soon!', 28750),
++(78, 'Cenarion Hold - Silithus', -6874.26, 727.023, 45.6627, 1, 0, 50, 0, 'See you soon!', 28750),
++(80, 'Emerald Sanctuary - Felwood', 4011.97, -1297.09, 254.22, 1, 0, 42, 0, 'See you soon!', 28750),
++(81, 'Everlook - Winterspring', 6691.74, -4660.87, 721.7, 1, 0, 45, 0, 'See you soon!', 28750),
++(82, 'Gadgetzan - Tanaris', -7169.46, -3839.9, 8.75, 1, 0, 34, 0, 'See you soon!', 28750),
++(83, 'Hatchet Hills - Ghostlands', 6790.58, -7736.82, 126.108, 530, 0, 40, 0, 'See you soon!', 28750),
++(84, 'Marshal''s Refuge - UnGoro', -6104.02, -1147.66, -186.58, 1, 0, 40, 0, 'See you soon!', 28750),
++(85, 'Mudsprocket - Dustwallow', -4602.22, -3188.82, 34.92, 1, 0, 30, 0, 'See you soon!', 28750),
++(86, 'Night Haven - Moonglade', 7963.07, -2402.56, 488.95, 1, 0, 10, 0, 'See you soon!', 28750),
++(87, 'Ratchet - Barrens', -955.726, -3747.16, 5.47817, 1, 0, 8, 0, 'See you soon!', 28750),
++(88, 'Allerian Stronghold - Terokkar', -2926.33, 4015.55, 0.357476, 530, 0, 55, 0, 'See you soon!', 28750),
++(89, 'Honor Hold - Hellfire', -712.183, 2700.99, 94.4476, 530, 0, 55, 0, 'See you soon!', 28750),
++(90, 'Orebor Harborage - Zangarmarsh', 1044.07, 7361.85, 38.6303, 530, 0, 55, 0, 'See you soon!', 28750),
++(91, 'Sylvanaar - Blades Edge', 2088.02, 6891.66, 183.23, 530, 0, 55, 0, 'See you soon!', 28750),
++(92, 'Telaar - Nagrand', -2689.97, 7290.69, 41.516, 530, 0, 55, 0, 'See you soon!', 28750),
++(93, 'Telredor - Zangarmarsh', 283.684, 6084.02, 131.909, 530, 0, 55, 0, 'See you soon!', 28750),
++(94, 'Temple Of Telhamat - Hellfire', 191.455, 4338.16, 116.392, 530, 0, 55, 0, 'See you soon!', 28750),
++(95, 'Toshleys Station - Blades Edge', 1853.24, 5536.02, 276.959, 530, 0, 55, 0, 'See you soon!', 28750),
++(96, 'Shatter Point - Hellfire', 279.39, 1489.76, -15.4411, 530, 0, 55, 0, 'See you soon!', 28750),
++(97, 'Wildhammer Stronghold - Shadowmoon', -4060.39, 2176.59, 111.224, 530, 0, 55, 0, 'See you soon!', 28750),
++(98, 'Falcon Watch - Hellfire', -587.86, 4096.7, 91.5953, 530, 0, 55, 0, 'See you soon!', 28750),
++(99, 'Garadar - Nagrand', -1223.55, 7139.06, 57.2658, 530, 0, 55, 0, 'See you soon!', 28750),
++(100, 'Moknathal Village - Blades Edge', 2046.76, 4711.5, 149.623, 530, 0, 55, 0, 'See you soon!', 28750),
++(101, 'Shadowmoon Village - Shadowmoon', -2981.92, 2554.54, 77.1203, 530, 0, 55, 0, 'See you soon!', 28750),
++(102, 'Spinebreaker Post - Hellfire', -1324.19, 2356.33, 88.9544, 530, 0, 55, 0, 'See you soon!', 28750),
++(103, 'Stonebreaker Hold - Terokkar', -2624.14, 4440.03, 36.0927, 530, 0, 55, 0, 'See you soon!', 28750),
++(104, 'Swamprat Post - Zangarmarsh', 94.6451, 5200.61, 20.7692, 530, 0, 55, 0, 'See you soon!', 28750),
++(105, 'Thrallmar - Hellfire', 178.939, 2625.26, 87.4472, 530, 0, 55, 0, 'See you soon!', 28750),
++(106, 'Thunderlord Stronghold - Blades Edge', 2400.92, 5975.27, 151.781, 530, 0, 55, 0, 'See you soon!', 28750),
++(107, 'Zabrajin - Zangarmarsh', 239.589, 7906.16, 25.7965, 530, 0, 55, 0, 'See you soon!', 28750),
++(108, 'Altar Of Shatar - Shadowmoon (Aldor)', -3003.91, 861.802, -8.85133, 530, 0, 55, 0, 'See you soon!', 28750),
++(109, 'Area 52 - Netherstorm', 3055.84, 3691.89, 142.772, 530, 0, 55, 0, 'See you soon!', 28750),
++(110, 'Cosmowrench - Netherstorm', 2968.6, 1790.66, 139.121, 530, 0, 55, 0, 'See you soon!', 28750),
++(111, 'Evergrove - Blades Edge', 3015.36, 5446, 146.91, 530, 0, 55, 0, 'See you soon!', 28750),
++(112, 'Sanctum Of The Stars - Shadowmoon (Scryers)', -4085.71, 1120.44, 42.5768, 530, 0, 55, 0, 'See you soon!', 28750),
++(113, 'Shattrath City - Terokkar', -1833.9, 5371.17, -12.428, 530, 0, 20, 0, 'See you soon!', 28750),
++(114, 'Stormspire - Netherstorm', 4148.79, 2969.46, 352.264, 530, 0, 55, 0, 'See you soon!', 28750),
++(161, 'Ahn''Qiraj - Silithus', -8187.04, 1527.94, 4.19598, 1, 0, 55, 0, 'See you soon!', 28750),
++(162, 'Blackfathom Deeps - Ashenvale', 4248.44, 741.7, -25.2795, 1, 0, 19, 0, 'See you soon!', 28750),
++(163, 'Blackrock Mountain', -7581.15, -1130.07, 262.065, 0, 0, 40, 0, 'See you soon!', 28750),
++(164, 'Caverns Of Time - Tanaris', -8186.9, -4693.13, 16.2232, 1, 0, 66, 0, 'See you soon!', 28750),
++(165, 'Deadmines - Westfall', -11208.7, 1671.82, 24.6763, 0, 0, 10, 0, 'See you soon!', 28750),
++(166, 'Dire Maul - Feralas', -3981.73, 799.548, 161.008, 1, 0, 45, 0, 'See you soon!', 28750),
++(167, 'Gnomeregan - Dun Morogh', -5211.6, 597.061, 415.013, 0, 0, 20, 0, 'See you soon!', 28750),
++(168, 'Karazhan - Deadwind Pass', -11130, -2001.75, 48.24, 0, 0, 68, 0, 'See you soon!', 28750),
++(169, 'Maraudon - Desolace', -1414.69, 2809.38, 111.773, 1, 0, 30, 0, 'See you soon!', 28750),
++(170, 'Onyxia''s Lair - Dustwallow', -4730.76, -3740.4, 56.8569, 1, 0, 50, 0, 'See you soon!', 28750),
++(171, 'Ragefire Chasm - Orgrimmar', 1808.74, -4405.43, -18.7873, 1, 0, 8, 0, 'See you soon!', 28750),
++(172, 'Razorfen Downs - Barrens', -4656.07, -2517.31, 81.0134, 1, 0, 25, 0, 'See you soon!', 28750),
++(173, 'Razorfen Kraul - Barrens', -4474.27, -1688.34, 81.3005, 1, 0, 17, 0, 'See you soon!', 28750),
++(174, 'Scarlet Monastery - Tirisfal Glades', 2650.49, -668.272, 111.635, 0, 0, 20, 0, 'See you soon!', 28750),
++(175, 'Scholomance - Western Plaguelands', 1224.29, -2600.69, 87.6623, 0, 0, 45, 0, 'See you soon!', 28750),
++(176, 'Shadowfang Keep - Silverpine', -234.514, 1510.4, 74.8356, 0, 0, 10, 0, 'See you soon!', 28750),
++(177, 'Stockades - Stormwind', -8822.96, 795.366, 97.2204, 0, 0, 15, 0, 'See you soon!', 28750),
++(178, 'Stratholme - Eastern Plaguelands', 3352.92, -3379.03, 144.782, 0, 0, 45, 0, 'See you soon!', 28750),
++(179, 'Sunken Temple - Swamp Of Sorrows', -10480.3, -3816.02, 28.9117, 0, 0, 35, 0, 'See you soon!', 28750),
++(180, 'Uldaman - Badlands', -6112.81, -3296.81, 257.819, 0, 0, 30, 0, 'See you soon!', 28750),
++(181, 'Wailing Caverns - Barrens', -733.378, -2219.62, 17.103, 1, 0, 10, 0, 'See you soon!', 28750),
++(182, 'Zul''Farrak - Tanaris', -6812.32, -2886.15, 8.98442, 1, 0, 35, 0, 'See you soon!', 28750),
++(183, 'Zul''Gurub - Stranglethorn', -11893.1, -847.097, 33.6086, 0, 0, 50, 0, 'See you soon!', 28750),
++(184, 'Auchindoun - Terokkar', -3322.48, 4939.72, -101.222, 530, 0, 55, 0, 'See you soon!', 28750),
++(185, 'Black Temple - Shadowmoon', -3643.11, 311.532, 35.7227, 530, 0, 70, 0, 'See you soon!', 28750),
++(186, 'Coilfang Reservoir - Zangarmarsh', 727.903, 6849.35, -67.2935, 530, 0, 55, 0, 'See you soon!', 28750),
++(187, 'Gruul''s Lair - Blades Edge', 3529.51, 5102.04, 3.27001, 530, 0, 65, 0, 'See you soon!', 28750),
++(188, 'Hellfire Citadel - Hellfire', -339.992, 3037.05, -16.545, 530, 0, 55, 0, 'See you soon!', 28750),
++(189, 'Magisters Terrace - Quel Danas', 12884.8, -7293.86, 64.6754, 530, 0, 68, 0, 'See you soon!', 28750),
++(190, 'Sunwell Plateau - Quel Danas', 12619.4, -6767.57, 15.2699, 530, 0, 70, 0, 'See you soon!', 28750),
++(191, 'Tempest Keep - Netherstorm', 3098.8, 1516.12, 190.301, 530, 0, 70, 0, 'See you soon!', 28750),
++(192, 'Zul''Aman - Ghostlands', 6790.58, -7736.82, 126.108, 530, 0, 68, 0, 'See you soon!', 28750),
++(203, 'Azshara Crater - Alliance', 1115.09, 35.641, 319.66, 37, 0, 1, 0, 'See you soon!', 28750),
++(204, 'Azshara Crater - Horde', 37.8388, 905.824, 339.395, 37, 0, 1, 0, 'See you soon!', 28750),
++(205, 'Designer Island', 16303.5, -16173.5, 40.4344, 451, 0, 1, 0, 'See you soon!', 28750),
++(206, 'Elwynn Falls House', -8265.67, -218.426, 268.194, 0, 0, 1, 0, 'See you soon!', 28750),
++(207, 'GM Island', 16226.2, 16257, 13.2022, 1, 0, 1, 0, 'See you soon!', 28750),
++(208, 'Harbor House', -6371.56, 1249.31, 9.05903, 0, 0, 1, 0, 'See you soon!', 28750),
++(209, 'Hyjal', 4600.31, -3866.36, 944.185, 1, 0, 1, 0, 'See you soon!', 28750),
++(210, 'Ironforge Airport', -4696.91, -1700.22, 503.325, 0, 0, 1, 0, 'See you soon!', 28750),
++(211, 'Karazhan Crypts', -11069, -1795, 53.7249, 0, 0, 1, 0, 'See you soon!', 28750),
++(212, 'Kings Square - Stratholme', 3521.52, -3308.57, 131.456, 0, 0, 1, 0, 'See you soon!', 28750),
++(213, 'Long Wash Ruins', 6251.35, 948.62, 2.1908, 1, 0, 1, 0, 'See you soon!', 28750),
++(214, 'Lower Elwynn Camp', -8621.34, -534.612, 145.921, 0, 0, 1, 0, 'See you soon!', 28750),
++(215, 'Mount Ironforge', -4794.91, -1001.78, 896.206, 0, 0, 1, 0, 'See you soon!', 28750),
++(216, 'North Tanaris Island', -11372.4, -4721.3, 5.64663, 1, 0, 1, 0, 'See you soon!', 28750),
++(217, 'Old Ironforge', -4845, -1082.69, 495.58, 0, 0, 1, 0, 'See you soon!', 28750),
++(218, 'Programmer Island', 16321.5, 16182, 69.4439, 451, 0, 1, 0, 'See you soon!', 28750),
++(219, 'Quel Thalis Tower', 4256.6, -2838.52, 12.2214, 0, 0, 1, 0, 'See you soon!', 28750),
++(221, 'South Tanaris Island', -11852.6, -4757.43, 6.23677, 1, 0, 1, 0, 'See you soon!', 28750),
++(222, 'Stonetalon Lumber Camp', 1871.86, 1382.14, 140.994, 1, 0, 1, 0, 'See you soon!', 28750),
++(223, 'Stormwind Prison', -8644.49, 584.137, 95.6914, 0, 0, 1, 0, 'See you soon!', 28750),
++(224, 'Tanaris Sea Platform', -11647, -4705.32, 23.9449, 1, 0, 1, 0, 'See you soon!', 28750),
++(225, 'The Box', 16230.2, 16403.3, -64.3799, 1, 0, 1, 0, 'See you soon!', 28750),
++(226, 'Thunder Falls - Elwynn', -9296.74, 676.999, 131.824, 0, 0, 1, 0, 'See you soon!', 28750),
++(227, 'Troll Village - ZG', -11790.7, -1528.88, 27.3312, 0, 0, 1, 0, 'See you soon!', 28750),
++(229, 'Upper Elwynn Camp', -8323.69, -346.228, 145.761, 0, 0, 1, 0, 'See you soon!', 28750),
++(230, 'Wetlands Farm', -4112.63, -1074.3, 168.913, 0, 0, 1, 0, 'See you soon!', 28750),
++(231, 'Circle of Blood', 2839.44, 5930.17, 11.1002, 530, 3.16284, 18, 0, 'See you soon!', 28750),
++(232, 'Gurubashi', -13261.3, 168.294, 35.0792, 0, 1.00688, 18, 0, 'See you soon!', 28750),
++(233, 'Ring of Trials', -1999.94, 6581.71, 11.32, 530, 2.3, 18, 0, 'See you soon!', 28750),
++(234, 'The Maul', -3761.49, 1133.43, 132.083, 1, 4.57259, 18, 0, 'See you soon!', 28750),
++(235, 'Alterac Valley', 883.187, -489.375, 96.7618, 30, 3.06932, 18, 0, 'See you soon!', 28750),
++(236, 'Arathi Basin', 1308.68, 1306.03, -9.0107, 529, 3.91285, 18, 0, 'See you soon!', 28750),
++(237, 'Eye of the Storm', 2487.72, 1609.12, 1224.64, 566, 3.35671, 18, 0, 'See you soon!', 28750),
++(238, 'Warsong Gulch', 1525.95, 1481.66, 352.001, 489, 3.20756, 18, 0, 'See you soon!', 28750),
++(239, 'Alterac Valley', -818.155, -623.043, 54.0884, 30, 2.1, 18, 0, 'See you soon!', 28750),
++(240, 'Arathi Basin', 686.053, 683.165, -12.9149, 529, 0.18, 18, 0, 'See you soon!', 28750),
++(241, 'Eye of the Storm', 1843.73, 1529.77, 1224.43, 566, 0.297579, 18, 0, 'See you soon!', 28750),
++(242, 'Warsong Gulch', 930.851, 1431.57, 345.537, 489, 0.015704, 18, 0, 'See you soon!', 28750);
++
++
+diff -Nuar oregoncore-current/src/game/ScriptLoader.cpp oregoncore-pq/src/game/ScriptLoader.cpp
+--- oregoncore-current/src/game/ScriptLoader.cpp	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/ScriptLoader.cpp	2011-01-01 10:22:04.000000000 -0500
+@@ -11,6 +11,11 @@
+ 
+ #ifdef SCRIPTS
+ 
++#include "../scripts/Custom/sc_npc_teleport.h"
++  
++//custom
++void AddSC_npc_teleport();
++
+ //examples
+ //void AddSC_custom_example();
+ //void AddSC_custom_gossip_codebox();
+@@ -379,6 +384,12 @@
+ void AddScripts()
+ {
+ #ifdef SCRIPTS
++
++    //Custom
++    AddSC_npc_teleport();
++    QueryResult_AutoPtr result;
++    LoadNpcTele(result);
++
+ //    AddSC_custom_example();
+ //    AddSC_custom_gossip_codebox();
+ //    AddSC_test();
+diff -Nuar oregoncore-current/src/game/World.cpp oregoncore-pq/src/game/World.cpp
+--- oregoncore-current/src/game/World.cpp	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/World.cpp	2011-01-01 10:22:04.000000000 -0500
+@@ -65,6 +65,7 @@
+ #include "Transports.h"
+ #include "CreatureEventAIMgr.h"
+ #include "ScriptMgr.h"
++#include "ProgressBar.h"
+ 
+ INSTANTIATE_SINGLETON_1(World);
+ 
+diff -Nuar oregoncore-current/src/scripts/Custom/npc_teleport.cpp oregoncore-pq/src/scripts/Custom/npc_teleport.cpp
+--- oregoncore-current/src/scripts/Custom/npc_teleport.cpp	1969-12-31 19:00:00.000000000 -0500
++++ oregoncore-pq/src/scripts/Custom/npc_teleport.cpp	2011-01-01 10:22:04.000000000 -0500
+@@ -0,0 +1,220 @@
++/**
++ * npc_teleport.cpp
++ * Based on code by Wilibald09
++ **/
++
++#include "ScriptPCH.h"
++#include "sc_npc_teleport.h"
++#include <sstream>
++
++
++#define GOSSIP_SHOW_DEST        1000
++#define GOSSIP_TELEPORT         1001
++#define GOSSIP_NEXT_PAGEC       1002
++#define GOSSIP_PREV_PAGEC       1003
++#define GOSSIP_NEXT_PAGED       1004
++#define GOSSIP_PREV_PAGED       1005
++#define GOSSIP_MAIN_MENU        1006
++
++#define SPELL_VISUAL_TELEPORT   35517
++
++#define NB_ITEM_PAGE            10
++#define MSG_CAT                 100000
++#define MSG_DEST                100001
++
++#define NEXT_PAGE               "-> [Next Page]"
++#define PREV_PAGE               "<- [Previous Page]"
++#define MAIN_MENU               "<= [Main Menu]"
++
++
++using namespace nsNpcTel;
++
++
++namespace
++{
++    Page PageC, PageD;
++    Page Cat;
++
++    // Conversion function int->string
++    std::string ConvertStr(const int64 &val)
++    {
++        std::ostringstream ostr;
++        ostr << val;
++        return ostr.str();
++    }
++
++    // Conversion function intMoney->stringMoney
++    std::string ConvertMoney(const uint32 &Money)
++    {
++        std::string Str(ConvertStr(Money));
++        uint32 SizeStr = Str.length();
++
++        if (SizeStr > 4)
++            Str = Str.insert(Str.length()-4, "g");
++        if (SizeStr > 2)
++            Str = Str.insert(Str.length()-2, "s");
++        Str += "c";
++
++        return Str;
++    }
++
++    // Teleport Player
++    void Teleport(Creature * const creature, Player * const player, 
++                  const uint16 &map, const float &X, const float &Y,
++                  const float &Z, const float &orient, 
++                  const uint32 &cast_on_arrival)
++    {
++        player->CastSpell(player, SPELL_VISUAL_TELEPORT, true);
++        player->TeleportTo(map, X, Y, Z, orient);
++        if ( cast_on_arrival > 0 )
++          creature->CastSpell(player, cast_on_arrival, true);
++    }
++
++    // Display categories
++    void AffichCat(Player * const player, Creature * const creature)
++    {
++        if (PageC[player] > 0)
++            player->ADD_GOSSIP_ITEM(7, PREV_PAGE, GOSSIP_PREV_PAGEC, 0);
++
++        VCatDest_t i (PageC[player] * NB_ITEM_PAGE);
++        for ( ; i < TabCatDest.size() && i < (NB_ITEM_PAGE * (PageC[player] + 1)); ++i)
++        {
++            if (TabCatDest[i].IsAllowedToTeleport(player))
++                player->ADD_GOSSIP_ITEM(7, TabCatDest[i].GetName(player->isGameMaster()).c_str(), GOSSIP_SHOW_DEST, i);
++        }
++
++        if (i < TabCatDest.size())
++            player->ADD_GOSSIP_ITEM(7, NEXT_PAGE, GOSSIP_NEXT_PAGEC, 0);
++
++        player->SEND_GOSSIP_MENU(MSG_CAT, creature->GetGUID());
++    }
++
++    // Display destination categories
++    void AffichDest(Player * const player, Creature * const creature)
++    {
++        if (PageD[player] > 0)
++            player->ADD_GOSSIP_ITEM(7, PREV_PAGE, GOSSIP_PREV_PAGED, 0);
++
++        CatDest::VDest_t i (PageD[player] * NB_ITEM_PAGE);
++        for ( ; i < TabCatDest[Cat[player]].size() && i < (NB_ITEM_PAGE * (PageD[player] + 1)); ++i)
++        {
++            player->ADD_GOSSIP_ITEM(5, TabCatDest[Cat[player]].GetDest(i).m_name.c_str(), GOSSIP_TELEPORT, i);
++        }
++
++        if (i < TabCatDest[Cat[player]].size())
++            player->ADD_GOSSIP_ITEM(7, NEXT_PAGE, GOSSIP_NEXT_PAGED, 0);
++
++        if (CatDest::CountOfCategoryAllowedBy(player) > 1)
++            player->ADD_GOSSIP_ITEM(7, MAIN_MENU, GOSSIP_MAIN_MENU, 0);
++
++        player->SEND_GOSSIP_MENU(MSG_DEST, creature->GetGUID());
++    }
++
++    // Verification before teleportation
++    void ActionTeleport(Player * const player, Creature * const creature, const uint32 &id)
++    {
++        Dest dest (TabCatDest[Cat[player]].GetDest(id));
++
++        if (player->getLevel() < dest.m_level && !player->isGameMaster()) 
++        {
++            std::string msg ("You do not meet the level requirement. This destination requires level " + ConvertStr(dest.m_level) + ".");
++            creature->MonsterWhisper(msg.c_str(), player->GetGUID());
++            return;
++        }
++
++        if (player->GetMoney() < dest.m_cost && !player->isGameMaster())
++        {
++            std::string msg ("You do not have enough money. The price for teleportation is " + ConvertMoney(dest.m_cost) + ".");
++            creature->MonsterWhisper(msg.c_str(), player->GetGUID());
++            return;
++        }
++
++        if (!player->isGameMaster() && dest.m_cost)
++            player->ModifyMoney(-1 * dest.m_cost);
++
++        std::string saydepart = dest.m_sayondeparture;
++        creature->MonsterSay( saydepart.c_str(), LANG_UNIVERSAL, NULL );
++
++        Teleport(creature, player, dest.m_map, dest.m_X, dest.m_Y, dest.m_Z, dest.m_orient, dest.m_castonarrival );
++    }
++}
++
++bool GossipHello_npc_teleport(Player *player, Creature *creature)
++{
++    PageC(player) = PageD(player) = Cat(player) = 0;
++
++    if(player->isInCombat())
++    {
++        player->CLOSE_GOSSIP_MENU();
++        creature->MonsterWhisper("You are in combat!", player->GetGUID());
++        return true;
++    }
++    AffichCat(player, creature);
++    return true;
++}
++
++bool GossipSelect_npc_teleport(Player *player, Creature *creature, uint32 sender, uint32 param)
++{
++    switch(sender) 
++    {
++      // Display destinations
++      case GOSSIP_SHOW_DEST:
++        Cat(player) = param;
++        AffichDest(player, creature);
++        break;
++
++      // Previous categories page
++      case GOSSIP_PREV_PAGEC:
++        --PageC(player);
++        AffichCat(player, creature);
++        break;
++
++      // Next page categories
++      case GOSSIP_NEXT_PAGEC:
++        ++PageC(player);
++        AffichCat(player, creature);
++        break;
++
++      // Previous destinations page
++      case GOSSIP_PREV_PAGED:
++        --PageD(player);
++        AffichDest(player, creature);
++        break;
++
++      // Next destination page
++      case GOSSIP_NEXT_PAGED:
++        ++PageD(player);
++        AffichDest(player, creature);
++        break;
++
++      // Display main menu
++      case GOSSIP_MAIN_MENU:
++        GossipHello_npc_teleport(player, creature);
++        break;
++
++      // Teleportation
++      case GOSSIP_TELEPORT:
++        player->CLOSE_GOSSIP_MENU();
++        if(player->HasAura(SPELL_ID_PASSIVE_RESURRECTION_SICKNESS,0)) {
++            creature->CastSpell(player,38588,false); // Healing effect
++            player->RemoveAurasDueToSpell(SPELL_ID_PASSIVE_RESURRECTION_SICKNESS);
++        }
++
++        ActionTeleport(player, creature, param);
++        break;
++    }
++    return true;
++}
++
++
++void AddSC_npc_teleport()
++{
++    Script *newscript;
++
++    newscript = new Script;
++    newscript->Name="npc_teleport";
++    newscript->pGossipHello =  &GossipHello_npc_teleport;
++    newscript->pGossipSelect = &GossipSelect_npc_teleport;
++    newscript->RegisterSelf();
++}
++
+diff -Nuar oregoncore-current/src/scripts/Custom/sc_npc_teleport.cpp oregoncore-pq/src/scripts/Custom/sc_npc_teleport.cpp
+--- oregoncore-current/src/scripts/Custom/sc_npc_teleport.cpp	1969-12-31 19:00:00.000000000 -0500
++++ oregoncore-pq/src/scripts/Custom/sc_npc_teleport.cpp	2011-01-01 10:22:04.000000000 -0500
+@@ -0,0 +1,365 @@
++/**
++ * sc_npc_teleport.cpp
++ * Based on code by Wilibald09
++ **/
++
++#include "ScriptPCH.h"
++#include "sc_npc_teleport.h"
++#include "ProgressBar.h"
++
++#define TELE    nsNpcTel::CatDest
++#define PAGE    nsNpcTel::Page
++#define PAGEI   PAGE::Instance
++
++
++nsNpcTel::VCatDest nsNpcTel::TabCatDest;
++
++
++const uint32 PAGE::operator [] (Player * const player) const
++{
++    for (VInst_t i(0); i < m_TabInstance.size(); ++i)
++    {
++        if (m_TabInstance[i].GetPlayer() == player)
++            return m_TabInstance[i].GetPageId();
++    }
++    return 0;
++}
++
++PAGE::Instance & PAGE::operator () (Player * const player)
++{
++    for (VInst_t i(0); i < m_TabInstance.size(); ++i)
++    {
++        if (m_TabInstance[i].GetPlayer() == player)
++            return m_TabInstance[i];
++    }
++    m_TabInstance.push_back(Instance(player));
++    return m_TabInstance.back();
++}
++
++PAGE::Instance & PAGEI::operator = (const uint32 &id)
++{
++    m_PageId = id;
++    return *this;
++}
++
++PAGE::Instance & PAGEI::operator ++ (void)
++{
++    ++m_PageId;
++    return *this;
++}
++
++PAGE::Instance PAGEI::operator ++ (int32)
++{
++    Instance tmp (*this);
++    ++m_PageId;
++    return tmp;
++}
++
++PAGE::Instance & PAGEI::operator -- (void)
++{
++    --m_PageId;
++    return *this;
++}
++
++PAGE::Instance PAGEI::operator -- (int32)
++{
++    Instance tmp (*this);
++    --m_PageId;
++    return tmp;
++}
++
++TELE::CatDest(const uint32 &id, const std::string &name,
++              const Flag &flag, const uint64 &data0, const uint32 &data1)
++    : m_id(id), m_name(name), m_flag(flag), m_data0(data0), m_data1(data1)
++{
++    m_TabDest.clear();
++}
++
++std::string TELE::GetName(const bool IsGM /* = false */) const
++{
++    if (!IsGM || m_flag != FLAG_TEAM)
++        return m_name;
++
++    switch (m_data0)
++    {
++      case TEAM_HORDE:      return std::string(m_name + " (H)");
++      case TEAM_ALLIANCE:   return std::string(m_name + " (A)");
++    }
++    return m_name;
++}
++
++bool TELE::IsAllowedToTeleport(Player * const player) const
++{
++    if (player->isGameMaster())
++    {
++        if (m_flag == FLAG_GMLEVEL)
++            return player->GetSession()->GetSecurity() >= m_data0;
++        return true;
++    }
++
++    switch (m_flag)
++    {
++      case FLAG_TEAM:
++        switch (m_data0)
++        {
++          case TEAM_HORDE:      return player->GetTeam() == HORDE;
++          case TEAM_ALLIANCE:   return player->GetTeam() == ALLIANCE;
++          case TEAM_ALL:        return true;
++        }
++
++      case FLAG_GUILD:
++        return player->GetGuildId() == m_data0;
++
++      case FLAG_GMLEVEL:
++        return player->GetSession()->GetSecurity() >= m_data0;
++
++      case FLAG_ISGM:
++        return player->isGameMaster();
++
++      case FLAG_ACCOUNT:
++        return player->GetSession()->GetAccountId() == m_data0;
++
++      case FLAG_LEVEL:
++        return player->getLevel() >= m_data0;
++
++      case FLAG_ITEM:
++        return player->HasItemCount(m_data0, m_data1, true);
++
++      case FLAG_QUEST:
++        if (m_data1 < MAX_QUEST_STATUS)
++            return player->GetQuestStatus(m_data0) == m_data1;
++        return player->GetQuestRewardStatus(m_data0);
++
++      case FLAG_GENDER:
++        return player->getGender() == m_data0;
++
++      case FLAG_RACE:
++        return player->getRace() == m_data0;
++
++      case FLAG_CLASS:
++        return player->getClass() == m_data0;
++
++      case FLAG_REPUTATION:
++        return player->GetReputationRank(m_data0) >= m_data1;
++
++      case FLAG_PLAYER:
++        return player->GetGUID() == m_data0;
++    }
++
++    error_log("Invalid flag (category: %u). Important problem...", GetCatID());
++    return false;
++}
++
++uint32 TELE::CountOfCategoryAllowedBy(Player * const player)
++{
++    uint32 count (0);
++    for (VCatDest_t i(0); i < TabCatDest.size(); ++i)
++    {   
++        if (TabCatDest[i].IsAllowedToTeleport(player))
++            ++count;
++    }
++    return count;
++}
++
++bool nsNpcTel::IsValidData(const uint32 &cat,   const Flag &flag,
++                           const uint64 &data0, const uint32 &data1)
++{
++    switch(flag)
++    {
++      case FLAG_TEAM:
++        if (data1)
++            error_log("Invalid data1 (category: %u).", cat);
++        if (data0 < MAX_FLAG_TEAM)
++            return true;
++        error_log("Invalid data0 (Team) (category: %u).", cat);
++        return false;
++
++      case FLAG_GUILD:
++        if (data1)
++            error_log("Invalid data1 (category: %u).", cat);
++        if (data0)
++            return true;
++        error_log("Invalid data0 (GuildID) (category: %u).", cat);
++        return false;
++
++      case FLAG_GMLEVEL:
++        if (data1)
++            error_log("Invalid data1 (category: %u).", cat);
++        if (0 < data0 && data0 < 256)
++            return true;
++        error_log("Invalid data0 (GmLevel) (category: %u).", cat);
++        return false;
++
++      case FLAG_ISGM:
++        if (data0)
++            error_log("Invalid data0 (category: %u).", cat);
++        if (data1)
++            error_log("Invalid data1 (category: %u).", cat);
++        return true;
++
++      case FLAG_ACCOUNT:
++        if (data1)
++            error_log("Invalid data1 (category: %u).", cat);
++        if (data0)
++            return true;
++        error_log("Invalid data0 (AccountID) (category: %u).", cat);
++        return false;
++
++      case FLAG_LEVEL:
++        if (data1)
++            error_log("Invalid data1 (category: %u).", cat);
++        if (0 < data0 && data0 < 256)
++            return true;
++        error_log("Invalid data0 (Level) (category: %u).", cat);
++        return false;
++
++      case FLAG_ITEM:
++        if (!data0)
++        {
++            error_log("Invalid data0 (ItemID) (category: %u).", cat);
++            return false;
++        }
++        if (data1)
++            return true;
++        error_log("Invalid data1 (Item Count) (category: %u).", cat);
++        return false;
++
++      case FLAG_QUEST:
++        if (!data0)
++        {
++            error_log("Invalid data0 (QuestID) (category: %u).", cat);
++            return false;
++        }
++        if (data1 < MAX_QUEST_STATUS + 1)
++            return true;
++        error_log("Invalid data1 (Quest Status) (category: %u).", cat);
++        return false;
++
++      case FLAG_GENDER:
++        if (data1)
++            error_log("Invalid data1 (category: %u).", cat);
++        if (data0 < GENDER_NONE)
++            return true;
++        error_log("Invalid data0 (Gender) (category: %u).", cat);
++        return false;
++
++      case FLAG_RACE:
++        if (data1)
++            error_log("Invalid data1 (category: %u).", cat);
++        if (0 < data0 && data0 < MAX_RACES)
++            return true;
++        error_log("Invalid data0 (Race) (category: %u).", cat);
++        return false;
++
++      case FLAG_CLASS:
++        if (data1)
++            error_log("Invalid data1 (category: %u).", cat);
++        if (0 < data0 && data0 < MAX_CLASSES)
++            return true;
++        error_log("Invalid data0 (Class) (category: %u).", cat);
++        return false;
++
++      case FLAG_REPUTATION:
++        if (!data0)
++        {
++            error_log("Invalid data0 (Faction/Reputation) (category: %u).", cat);
++            return false;
++        }
++        if (data1 <= REP_EXALTED)
++            return true;
++        error_log("Invalid data1 (Faction/Reputation) (category: %u).", cat);
++        return false;
++
++      case FLAG_PLAYER:
++        if (data1)
++            error_log("Invalid data1 (category: %u).", cat);
++        if (data0)
++            return true;
++        error_log("Invalid data0 (PlayerGuid) (category: %u).", cat);
++        return false;
++    }
++
++    error_log("Invalid flag (category: %u).", cat);
++    return false;
++}
++
++void LoadNpcTele(QueryResult_AutoPtr result)
++{
++
++    result = WorldDatabase.PQuery(
++    "SELECT C.`flag`, C.`data0`, C.`data1`, A.`cat_id`, C.`name` `namecat`, "
++          " D.`name` `namedest`, D.`pos_X`, D.`pos_Y`, D.`pos_Z`, "
++          " D.`orientation`, D.`map`, D.`level`, D.`cost`, A.`display_order`, "
++          " D.`say_on_departure`, D.`cast_on_arrival` "
++    " FROM `npc_teleport_category` C, `npc_teleport_destination` D, "
++    " `npc_teleport_association` A " 
++    " WHERE C.`id` = A.`cat_id` AND D.`id` = A.`dest_id` "
++    " ORDER BY A.`cat_id`, A.`display_order`, `namedest`");
++
++    nsNpcTel::TabCatDest.clear();
++
++    if (result)
++    {
++        outstring_log( "OSCR: Loading NPC Teleport Data...");
++        barGoLink bar(result->GetRowCount());
++
++        uint32 catid = 0;
++        uint32 nbDest = 0;
++        bool IsValidCat = true;
++        bool FirstTime = true;
++
++        do
++        {
++            bar.step();
++            Field *fields = result->Fetch();
++
++            if (!IsValidCat && catid == fields[3].GetUInt32() && !FirstTime)
++                continue;
++
++            IsValidCat = true;
++            FirstTime = false;
++
++            if (!nsNpcTel::IsValidData(fields[3].GetUInt32(), (nsNpcTel::Flag)fields[0].GetUInt8(),
++               fields[1].GetUInt64(), fields[2].GetUInt32()))
++            {
++                IsValidCat = false;
++                catid = fields[3].GetUInt32();
++                continue;
++            }
++
++            if (catid != fields[3].GetUInt32())
++            {
++                catid = fields[3].GetUInt32();
++                nsNpcTel::CatDest categorie (catid, fields[4].GetCppString(), (nsNpcTel::Flag)fields[0].GetUInt8(),
++                  fields[1].GetUInt64(), fields[2].GetUInt32());
++                nsNpcTel::TabCatDest.push_back(categorie);
++            }
++
++            nsNpcTel::Dest item =
++            {
++                fields[5].GetCppString(),   // Name
++                fields[6].GetFloat(),       // X
++                fields[7].GetFloat(),       // Y
++                fields[8].GetFloat(),       // Z
++                fields[9].GetFloat(),       // Orientation
++                fields[10].GetUInt16(),     // Map
++                fields[11].GetUInt8(),      // Level
++                fields[12].GetUInt32(),     // Cost
++                fields[14].GetCppString(),  // Say on Departure
++                fields[15].GetUInt32(),     // Cast on Arrival     
++            };
++
++            nsNpcTel::TabCatDest.back().AddDest(item);
++            ++nbDest;
++        } while (result->NextRow());
++
++        outstring_log("");
++        outstring_log("OSCR: >> Loaded %u npc_teleport.", nbDest);
++    } else outstring_log("OSCR: WARNING >> Loaded 0 npc_teleport.");
++}
++
++
++#undef TELE
++#undef PAGE
++#undef PAGEI
++
+diff -Nuar oregoncore-current/src/scripts/Custom/sc_npc_teleport.h oregoncore-pq/src/scripts/Custom/sc_npc_teleport.h
+--- oregoncore-current/src/scripts/Custom/sc_npc_teleport.h	1969-12-31 19:00:00.000000000 -0500
++++ oregoncore-pq/src/scripts/Custom/sc_npc_teleport.h	2011-01-01 10:22:04.000000000 -0500
+@@ -0,0 +1,146 @@
++/**
++ * sc_npc_teleport.h
++ * Based on code by Wilibald09
++ **/
++
++#ifndef SC_NPC_TELEPORT_H
++#define SC_NPC_TELEPORT_H
++
++#include <vector>
++
++
++namespace nsNpcTel
++{
++    // Different types of permissions
++    enum Flag
++    {
++        FLAG_TEAM       = 0,
++        FLAG_GUILD      = 1,
++        FLAG_GMLEVEL    = 2,
++        FLAG_ISGM       = 3,
++        FLAG_ACCOUNT    = 4,
++        FLAG_LEVEL      = 5,
++        FLAG_ITEM       = 6,
++        FLAG_QUEST      = 7,
++        FLAG_GENDER     = 8,
++        FLAG_RACE       = 9,
++        FLAG_CLASS      = 10,
++        FLAG_REPUTATION = 11,
++        FLAG_PLAYER     = 12,
++        MAX_FLAG,
++    };
++
++    // Different parameters of FLAG_TEAM
++    enum
++    {
++        TEAM_ALL        = 0,
++        TEAM_ALLIANCE   = 1,
++        TEAM_HORDE      = 2,
++        MAX_FLAG_TEAM,
++    };
++
++    // Structure representing the destinations
++    struct Dest
++    {
++        std::string m_name;
++        float       m_X, m_Y, m_Z, m_orient;
++        uint16      m_map;
++        uint8       m_level;
++        uint32      m_cost;
++        std::string m_sayondeparture;
++        uint32      m_castonarrival;
++    };
++
++    // Class representing the categories of destinations
++    class CatDest
++    {
++      public:
++
++        typedef std::vector<Dest> VDest;
++        typedef VDest::size_type  VDest_t;
++
++        CatDest(const uint32 &id, const std::string &name,
++                const Flag &flag, const uint64 &data0, const uint32 &data1);
++
++        void   AddDest  (const Dest &item)       { m_TabDest.push_back(item); }
++        Dest   GetDest  (const uint32 &id) const { return m_TabDest[id]; }
++        uint32 GetCatID (void)             const { return m_id; }
++        uint32 size     (void)             const { return m_TabDest.size(); }
++
++        std::string GetName(const bool IsGM = false)    const;
++        bool IsAllowedToTeleport(Player * const player) const;
++
++        static uint32 CountOfCategoryAllowedBy(Player * const player);
++
++      private:
++
++        uint32      m_id;
++        std::string m_name;
++        Flag        m_flag;
++        uint64      m_data0;
++        uint32      m_data1;
++        VDest       m_TabDest;
++    };
++
++    // Class page for current player
++    class Page
++    {
++      protected:
++
++        // Class instance for current player
++        class Instance
++        {
++          public:
++
++            Instance(Player * const player, const uint32 &PageId = 0)
++                : m_player(player), m_PageId(PageId) {}
++
++            Instance & operator =  (const uint32 &id);
++            Instance & operator ++ (void);
++            Instance   operator ++ (int32);
++            Instance & operator -- (void);
++            Instance   operator -- (int32);
++
++            uint32   GetPageId(void) const { return m_PageId; }
++            Player * GetPlayer(void) const { return m_player; }
++        
++          private:
++
++            Player *m_player;
++            uint32  m_PageId;
++        };
++
++
++      public:
++
++        typedef std::vector<Instance> VInst;
++        typedef VInst::size_type      VInst_t;
++
++        Page(void) { m_TabInstance.clear(); }
++
++        Instance &   operator () (Player * const player);
++        const uint32 operator [] (Player * const player) const;
++
++
++      private:
++
++        VInst m_TabInstance;
++    };
++
++    typedef std::vector <CatDest> VCatDest;
++    typedef VCatDest::size_type   VCatDest_t;
++
++    // Verification of data integrity
++    bool IsValidData(const uint32 &cat,   const Flag &flag,
++                     const uint64 &data0, const uint32 &data1);
++
++    extern VCatDest TabCatDest;
++}
++
++// Loading contents of database
++void LoadNpcTele(QueryResult_AutoPtr result);
++
++extern DatabaseType WorldDatabase;
++
++#endif
++

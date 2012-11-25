@@ -1,0 +1,11 @@
+Development Notes
+2010-11-19
+
+* Add level restrictions to RentalMountNPC.
+
+* Verify and correct, if needed, skill IDs in ProfessionNPC.
+
+* Modify WorldChat to allow idle char to join chat.
+
+* All scripts - Move as much dialog to db as possible for internationalization.
+

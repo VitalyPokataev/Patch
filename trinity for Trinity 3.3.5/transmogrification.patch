@@ -1,0 +1,476 @@
+/******************************************************/
+/* Description:	Transmogrification                    */
+/*        walkline                                    */
+/* Для подмены положите в первый слот                 */
+/* вашего инвентаря итем, который вы хотите           */
+/* подвергнуть изменениям. Во второй слот             */ 
+/* итем, у которого вы хотели бы                      */
+/* позаимствовать модельку. Ну и воспользуйтесь нпц.  */
+/******************************************************/
+
+
+
+diff --git a/sql/updates/fake_items.sql b/sql/updates/fake_items.sql
+new file mode 100644
+index 0000000..3618ac1
+--- /dev/null
++++ b/sql/updates/fake_items.sql
+@@ -0,0 +1,11 @@
++DROP TABLE IF EXISTS `fake_items`;
++CREATE TABLE `fake_items` (
++  `guid` int(11) NOT NULL,
++  `fakeEntry` int(11) NOT NULL,
++  PRIMARY KEY (`guid`)
++);
++
+diff --git a/sql/updates/fake_items.sql b/sql/updates/fake_items.sql
+new file mode 100644
+index 0000000..7cfd4cc
+--- /dev/null
++++ b/sql/updates/fake_items.sql
+@@ -0,0 +1,3 @@
++DELETE FROM creature_template WHERE entry = '190001'; 
++INSERT INTO creature_template (entry, modelid1, name, subname, IconName, gossip_menu_id, minlevel, maxlevel, Health_mod, Mana_mod, Armor_mod, faction_A, faction_H, npcflag, speed_walk, speed_run, scale, rank, dmg_multiplier, unit_class, unit_flags, type, type_flags, InhabitType, RegenHealth, flags_extra, ScriptName) VALUES 
++('190001', '15998', "Transmogrify Master", "", 'Speak', '50000', 71, 71, 1.56, 1.56, 1.56, 35, 35, 3, 1, 1.14286, 1.25, 1, 1, 1, 2, 7, 138936390, 3, 1, 2, 'npc_transmogrify'); 
++INSERT INTO `gossip_menu` VALUES (51000, 51000);
++INSERT INTO npc_text (ID, text0_0, em0_1) VALUES
++(51000, 'Put in the first slot of bag item, that you want to transmogrify. In the second slot, put item with perfect display.', 0);
++INSERT INTO `gossip_menu` VALUES (51000, 51000);
++INSERT INTO npc_text (ID, text0_0, em0_1) VALUES (51000, 'Put in the first slot of bag item, that you want to transmogrify. In the second slot, put item with perfect display.', 0);
++INSERT INTO locales_npc_text VALUES ('51000', null, null, null, null, null, null, null, 'Положите в первый слот рюкзака предмет, который вы хотите исказить. Во второй слот предмет, модель которого будет использована для трансмогрификации.', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
++
+diff --git a/src/server/game/Entities/Item/Item.cpp b/src/server/game/Entities/Item/Item.cpp
+index 23a3f50..d339a71 100755
+--- a/src/server/game/Entities/Item/Item.cpp
++++ b/src/server/game/Entities/Item/Item.cpp
+@@ -251,6 +251,8 @@ Item::Item()
+     m_refundRecipient = 0;
+     m_paidMoney = 0;
+     m_paidExtendedCost = 0;
++
++    m_fakeDisplayEntry = 0;
+ }
+ 
+ bool Item::Create(uint32 guidlow, uint32 itemid, Player const* owner)
+@@ -468,6 +470,9 @@ bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entr
+     SetUInt32Value(ITEM_FIELD_CREATE_PLAYED_TIME, fields[9].GetUInt32());
+     SetText(fields[10].GetString());
+ 
++    if (uint32 fakeEntry = sObjectMgr->GetFakeItemEntry(guid))
++        SetFakeDisplay(fakeEntry);
++
+     if (need_save)                                           // normal item changed state set not work at loading
+     {
+         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ITEM_INSTANCE_ON_LOAD);
+@@ -484,6 +489,7 @@ bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entr
+ /*static*/
+ void Item::DeleteFromDB(SQLTransaction& trans, uint32 itemGuid)
+ {
++    sObjectMgr->RemoveFakeItem(itemGuid);
+     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ITEM_INSTANCE);
+     stmt->setUInt32(0, itemGuid);
+     trans->Append(stmt);
+@@ -491,6 +497,7 @@ void Item::DeleteFromDB(SQLTransaction& trans, uint32 itemGuid)
+ 
+ void Item::DeleteFromDB(SQLTransaction& trans)
+ {
++    RemoveFakeDisplay();
+     DeleteFromDB(trans, GetGUIDLow());
+ }
+ 
+@@ -1207,3 +1214,50 @@ bool Item::CheckSoulboundTradeExpire()
+ 
+     return false;
+ }
++
++FakeResult Item::SetFakeDisplay(uint32 iEntry)
++{
++    if (!iEntry)
++    {
++        RemoveFakeDisplay();
++        return FAKE_ERR_OK;
++    }
++
++    ItemTemplate const* myTmpl    = GetTemplate();
++    ItemTemplate const* otherTmpl = sObjectMgr->GetItemTemplate(iEntry);
++
++    if (!otherTmpl)
++        return FAKE_ERR_CANT_FIND_ITEM;
++
++    if (myTmpl->InventoryType != otherTmpl->InventoryType)
++        return FAKE_ERR_DIFF_SLOTS;
++
++    if (myTmpl->AllowableClass != otherTmpl->AllowableClass)
++        return FAKE_ERR_DIFF_CLASS;
++
++    if (myTmpl->AllowableRace != otherTmpl->AllowableRace)
++        return FAKE_ERR_DIFF_RACE;
++
++    if (otherTmpl->Quality == ITEM_QUALITY_LEGENDARY || otherTmpl->Quality == ITEM_QUALITY_POOR)
++        return FAKE_ERR_WRONG_QUALITY;
++
++    if (m_fakeDisplayEntry != iEntry)
++    {
++        sObjectMgr->SetFekeItem(GetGUIDLow(), iEntry);
++
++        (!m_fakeDisplayEntry) ? CharacterDatabase.PExecute("INSERT INTO fake_items VALUES (%u, %u)", GetGUIDLow(), iEntry) :
++                                CharacterDatabase.PExecute("UPDATE fake_items SET fakeEntry = %u WHERE guid = %u", iEntry, GetGUIDLow());
++        m_fakeDisplayEntry = iEntry;
++    }
++
++    return FAKE_ERR_OK;
++}
++
++void Item::RemoveFakeDisplay()
++{
++    if (GetFakeDisplayEntry())
++    {
++        m_fakeDisplayEntry = 0;
++        CharacterDatabase.PExecute("DELETE FROM fake_items WHERE guid = %u", GetGUIDLow());
++    }
++}
+diff --git a/src/server/game/Entities/Item/Item.h b/src/server/game/Entities/Item/Item.h
+index 1d5fcae..32f1ef6 100755
+--- a/src/server/game/Entities/Item/Item.h
++++ b/src/server/game/Entities/Item/Item.h
+@@ -152,6 +152,17 @@ enum SellResult
+     SELL_ERR_ONLY_EMPTY_BAG                      = 6        // can only do with empty bags
+ };
+ 
++enum FakeResult
++{
++    FAKE_ERR_CANT_FIND_OWNER,
++    FAKE_ERR_CANT_FIND_ITEM,
++    FAKE_ERR_WRONG_QUALITY,
++    FAKE_ERR_DIFF_SLOTS,
++    FAKE_ERR_DIFF_CLASS,
++    FAKE_ERR_DIFF_RACE,
++    FAKE_ERR_OK
++};
++
+ // -1 from client enchantment slot number
+ enum EnchantmentSlot
+ {
+@@ -340,6 +351,10 @@ class Item : public Object
+         void BuildUpdate(UpdateDataMapType&);
+ 
+         uint32 GetScriptId() const { return GetTemplate()->ScriptId; }
++
++        FakeResult SetFakeDisplay(uint32 iEntry);
++        uint32 GetFakeDisplayEntry() { return m_fakeDisplayEntry; }
++        void RemoveFakeDisplay();
+     private:
+         std::string m_text;
+         uint8 m_slot;
+@@ -352,5 +367,7 @@ class Item : public Object
+         uint32 m_paidMoney;
+         uint32 m_paidExtendedCost;
+         AllowedLooterSet allowedGUIDs;
++
++        uint32 m_fakeDisplayEntry;
+ };
+ #endif
+diff --git a/src/server/game/Entities/Player/Player.cpp b/src/server/game/Entities/Player/Player.cpp
+index dd35dea..fc8e4d0 100755
+--- a/src/server/game/Entities/Player/Player.cpp
++++ b/src/server/game/Entities/Player/Player.cpp
+@@ -12719,7 +12719,7 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
+ {
+     if (pItem)
+     {
+-        SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetEntry());
++        SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), (pItem->GetFakeDisplayEntry()) ? pItem->GetFakeDisplayEntry() : pItem->GetEntry());
+         SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0, pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT));
+         SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 1, pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT));
+     }
+diff --git a/src/server/game/Globals/ObjectMgr.cpp b/src/server/game/Globals/ObjectMgr.cpp
+index df6018f..054c6f0 100755
+--- a/src/server/game/Globals/ObjectMgr.cpp
++++ b/src/server/game/Globals/ObjectMgr.cpp
+@@ -2692,6 +2692,27 @@ ItemTemplate const* ObjectMgr::GetItemTemplate(uint32 entry)
+     return NULL;
+ }
+ 
++uint32 ObjectMgr::GetFakeItemEntry(uint32 itemGuid)
++{
++    FakeItemsContainer::const_iterator itr = _fakeItemsStore.find(itemGuid);
++    if (itr != _fakeItemsStore.end())
++        return itr->second;
++
++    return 0;
++}
++
++void ObjectMgr::SetFekeItem(uint32 itemGuid, uint32 fakeEntry)
++{
++    _fakeItemsStore[itemGuid] = fakeEntry;
++}
++
++void ObjectMgr::RemoveFakeItem(uint32 itemGuid)
++{
++    FakeItemsContainer::iterator itr = _fakeItemsStore.find(itemGuid);
++    if (itr != _fakeItemsStore.end())
++        _fakeItemsStore.erase(itr);
++}
++
+ void ObjectMgr::LoadItemSetNameLocales()
+ {
+     uint32 oldMSTime = getMSTime();
+@@ -2803,6 +2824,32 @@ void ObjectMgr::LoadItemSetNames()
+     sLog->outString();
+ }
+ 
++void ObjectMgr::LoadFakeItems()
++{
++    QueryResult result = CharacterDatabase.Query("SELECT `guid`, `fakeEntry` FROM `fake_items`");
++
++    if (!result)
++    {
++        sLog->outErrorDb(">> Loaded 0 fake items. DB table `fake_items` is empty.");
++        sLog->outString();
++        return;
++    }
++
++    do
++    {
++        Field* fields    = result->Fetch();
++
++        uint32 guid      = fields[0].GetUInt32();
++        uint32 fakeEntry = fields[1].GetUInt32();
++
++        _fakeItemsStore[guid] = fakeEntry;
++    }
++    while (result->NextRow());
++
++    sLog->outString(">> Loaded %u fake items.", _fakeItemsStore.size());
++    sLog->outString();
++}
++
+ void ObjectMgr::LoadVehicleTemplateAccessories()
+ {
+     uint32 oldMSTime = getMSTime();
+diff --git a/src/server/game/Globals/ObjectMgr.h b/src/server/game/Globals/ObjectMgr.h
+index f81e7f1..b8182a8 100755
+--- a/src/server/game/Globals/ObjectMgr.h
++++ b/src/server/game/Globals/ObjectMgr.h
+@@ -402,6 +402,8 @@ typedef UNORDERED_MAP<uint32, PointOfInterestLocale> PointOfInterestLocaleContai
+ typedef std::multimap<uint32, uint32> QuestRelations;
+ typedef std::pair<QuestRelations::const_iterator, QuestRelations::const_iterator> QuestRelationBounds;
+ 
++typedef std::map<uint32, uint32> FakeItemsContainer;
++
+ struct PetLevelInfo
+ {
+     PetLevelInfo() : health(0), mana(0) { for (uint8 i=0; i < MAX_STATS; ++i) stats[i] = 0; }
+@@ -641,6 +643,10 @@ class ObjectMgr
+             return NULL;
+         }
+ 
++        uint32 GetFakeItemEntry(uint32 itemGuid);
++        void SetFekeItem(uint32 itemGuid, uint32 fakeEntry);
++        void RemoveFakeItem(uint32 itemGuid);
++
+         InstanceTemplate const* GetInstanceTemplate(uint32 mapId);
+ 
+         PetLevelInfo const* GetPetLevelInfo(uint32 creature_id, uint8 level) const;
+@@ -865,6 +871,7 @@ class ObjectMgr
+         void LoadItemLocales();
+         void LoadItemSetNames();
+         void LoadItemSetNameLocales();
++        void LoadFakeItems();
+         void LoadQuestLocales();
+         void LoadNpcTextLocales();
+         void LoadPageTextLocales();
+@@ -1301,6 +1308,7 @@ class ObjectMgr
+         ItemTemplateContainer _itemTemplateStore;
+         ItemLocaleContainer _itemLocaleStore;
+         ItemSetNameLocaleContainer _itemSetNameLocaleStore;
++        FakeItemsContainer _fakeItemsStore;
+         QuestLocaleContainer _questLocaleStore;
+         NpcTextLocaleContainer _npcTextLocaleStore;
+         PageTextLocaleContainer _pageTextLocaleStore;
+diff --git a/src/server/game/Scripting/ScriptLoader.cpp b/src/server/game/Scripting/ScriptLoader.cpp
+index e5833c5..fa6a6c9 100755
+--- a/src/server/game/Scripting/ScriptLoader.cpp
++++ b/src/server/game/Scripting/ScriptLoader.cpp
+@@ -38,6 +38,8 @@ void AddSC_ArgentTournament();
+ void AddSC_dalaran_squirrel();
+ // Arena Spectator
+ void AddSC_arena_spectator_script();
++// Transmogrify
++void AddSC_transmogrify_script();
+ 
+ // spells
+ void AddSC_deathknight_spell_scripts();
+@@ -1271,5 +1273,6 @@ void AddCustomScripts()
+     AddSC_ArgentTournament();
+     AddSC_dalaran_squirrel();
+     AddSC_arena_spectator_script();
++    AddSC_transmogrify_script();
+ #endif
+ }
+diff --git a/src/server/game/World/World.cpp b/src/server/game/World/World.cpp
+index bd770bf..dfec836 100755
+--- a/src/server/game/World/World.cpp
++++ b/src/server/game/World/World.cpp
+@@ -1418,6 +1418,9 @@ void World::SetInitialWorldSettings()
+     sLog->outString("Loading Equipment templates...");
+     sObjectMgr->LoadEquipmentTemplates();
+ 
++    sLog->outString("Loading fake items...");
++    sObjectMgr->LoadFakeItems();
++
+     sLog->outString("Loading Creature templates...");
+     sObjectMgr->LoadCreatureTemplates();
+ 
+diff --git a/src/server/scripts/Custom/CMakeLists.txt b/src/server/scripts/Custom/CMakeLists.txt
+index 24477b0..c5dde7b 100644
+--- a/src/server/scripts/Custom/CMakeLists.txt
++++ b/src/server/scripts/Custom/CMakeLists.txt
+@@ -15,6 +15,7 @@ set(scripts_STAT_SRCS
+   Custom/argent_tournament.cpp
+   Custom/dalaran_squirrel.cpp
+   Custom/arena_spectator.cpp
++  Custom/npc_transmogrify.cpp
+ )
+ 
+ message("  -> Prepared: Custom")
+diff --git a/src/server/scripts/Custom/npc_transmogrify.cpp b/src/server/scripts/Custom/npc_transmogrify.cpp
+new file mode 100644
+index 0000000..fa601a8
+--- /dev/null
++++ b/src/server/scripts/Custom/npc_transmogrify.cpp
+@@ -0,0 +1,134 @@
++/*
++ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
++ * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
++ *
++ * This program is free software; you can redistribute it and/or modify it
++ * under the terms of the GNU General Public License as published by the
++ * Free Software Foundation; either version 2 of the License, or (at your
++ * option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
++ * more details.
++ *
++ * You should have received a copy of the GNU General Public License along
++ * with this program. If not, see <http://www.gnu.org/licenses/>.
++ */
++
++/* ScriptData
++Name: Transmogrify Npc
++%Complete: 100
++Category: Custom Script
++EndScriptData */
++
++#include "ScriptPCH.h"
++
++enum TransmogrifyActions {
++    ACTION_TRANSMOGRIFY_ADD_DISPLAY,
++    ACTION_TRANSMOGRIFY_REMOVE_DISPLAY
++};
++
++const uint16 PriceInGold = 1000 * 100 * 100; // 1k golds
++
++class npc_transmogrify : public CreatureScript
++{
++    public:
++        npc_transmogrify() : CreatureScript("npc_transmogrify") { }
++
++        bool OnGossipHello(Player* pPlayer, Creature* pCreature)
++        {
++            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Make exchange!", GOSSIP_SENDER_MAIN, ACTION_TRANSMOGRIFY_ADD_DISPLAY);
++            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Make item clean.", GOSSIP_SENDER_MAIN, ACTION_TRANSMOGRIFY_REMOVE_DISPLAY);
++            pPlayer->SEND_GOSSIP_MENU(51000, pCreature->GetGUID());
++            return true;
++        }
++
++        bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
++        {
++            player->PlayerTalkClass->SendCloseGossip();
++            switch (action)
++            {
++                case ACTION_TRANSMOGRIFY_ADD_DISPLAY:
++                    TransmogrifyItem(player, creature);
++                    break;
++                case ACTION_TRANSMOGRIFY_REMOVE_DISPLAY:
++                    ClearItem(player, creature);
++                    break;
++            }
++            return true;
++        }
++
++        void TransmogrifyItem(Player* player, Creature* creature)
++        {
++            ChatHandler handler(player);
++            Item *trItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, INVENTORY_SLOT_ITEM_START);
++            Item *displayItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, INVENTORY_SLOT_ITEM_START + 1);
++            if (!trItem || !displayItem)
++            {
++                handler.PSendSysMessage("Put item in the first and second slot!");
++                return;
++            }
++
++            if (!player->HasEnoughMoney(PriceInGold))
++            {
++                handler.PSendSysMessage("It costs %u gold!", PriceInGold);
++                return;
++            }
++
++            uint8 result = trItem->SetFakeDisplay(displayItem->GetTemplate()->ItemId);
++            switch (result)
++            {
++                case FAKE_ERR_CANT_FIND_ITEM:
++                    handler.PSendSysMessage("Cant find item!");
++                    break;
++                case FAKE_ERR_WRONG_QUALITY:
++                    handler.PSendSysMessage("Item has wrong quality!");
++                    break;
++                case FAKE_ERR_DIFF_SLOTS:
++                    handler.PSendSysMessage("Items has different types!");
++                    break;
++                case FAKE_ERR_DIFF_CLASS:
++                case FAKE_ERR_DIFF_RACE:
++                    handler.PSendSysMessage("Items require different options!");
++                    break;
++                case FAKE_ERR_OK:
++                {
++                    WorldPacket data;
++                    data << uint8(INVENTORY_SLOT_BAG_0);
++                    data << uint8(trItem->GetSlot());
++                    player->GetSession()->HandleAutoEquipItemOpcode(data);
++
++                    player->ModifyMoney(-1 * PriceInGold);
++                    creature->GetAI()->DoCast(63491);
++
++                    break;
++                }
++            }
++        }
++
++        void ClearItem(Player *player, Creature* creature)
++        {
++            ChatHandler handler(player);
++            Item *trItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, INVENTORY_SLOT_ITEM_START);
++            if (!trItem)
++            {
++                handler.PSendSysMessage("Put item in the first slot!");
++                return;
++            }
++
++            trItem->RemoveFakeDisplay();
++
++            WorldPacket data;
++            data << uint8(INVENTORY_SLOT_BAG_0);
++            data << uint8(trItem->GetSlot());
++            player->GetSession()->HandleAutoEquipItemOpcode(data);
++
++            creature->GetAI()->DoCast(63491);
++        }
++};
++
++void AddSC_transmogrify_script()
++{
++    new npc_transmogrify;
++}

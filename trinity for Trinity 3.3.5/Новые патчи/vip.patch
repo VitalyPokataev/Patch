@@ -1,0 +1,717 @@
+From e722a50c6de3c4bd3c0663630e56af18ad82eb70 Mon Sep 17 00:00:00 2001
+From: Neket007 <neket007wow@gmail.com>
+Date: Sun, 23 Sep 2012 21:59:49 +1000
+Subject: [PATCH] =?UTF-8?q?=D0=94=D0=BE=D0=BF=D0=BE=D0=BB=D0=BD=D0=B8=D1=82=D0?=
+ =?UTF-8?q?=B5=D0=BB=D1=8C=D0=BD=D0=BE:=20=D0=98=D0=BC=D0=BF=D0=BB=D0=B5=D0=BC?=
+ =?UTF-8?q?=D0=B5=D0=BD=D1=82=D0=B0=D1=86=D0=B8=D1=8F=20=D1=81=D0=B8=D1=81=D1?=
+ =?UTF-8?q?=82=D0=B5=D0=BC=D1=8B=20Vip=20=D0=B0=D0=BA=D0=BA=D0=B0=D1=83=D0=BD?=
+ =?UTF-8?q?=D1=82=D0=BE=D0=B2?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ sql/updates/SliceCore/auth.sql                     |    9 +
+ sql/updates/SliceCore/world.sql                    |    7 +
+ src/server/authserver/Server/AuthSocket.cpp        |    3 +
+ src/server/game/Entities/Player/Player.cpp         |   10 +
+ src/server/game/Miscellaneous/Formulas.h           |    4 +-
+ src/server/game/Miscellaneous/Language.h           |    7 +-
+ src/server/game/Reputation/ReputationMgr.cpp       |    4 +
+ src/server/game/Scripting/ScriptLoader.cpp         |    2 +
+ src/server/game/Server/WorldSession.cpp            |    4 +-
+ src/server/game/Server/WorldSession.h              |    5 +-
+ src/server/game/Server/WorldSocket.cpp             |   16 +-
+ src/server/game/World/World.cpp                    |   14 +
+ src/server/game/World/World.h                      |   12 +
+ src/server/scripts/Commands/CMakeLists.txt         |    1 +
+ src/server/scripts/Commands/cs_vip.cpp             |  269 ++++++++++++++++++++
+ .../Database/Implementation/LoginDatabase.cpp      |    1 +
+ .../shared/Database/Implementation/LoginDatabase.h |    1 +
+ src/server/worldserver/worldserver.conf.dist       |   35 +++
+ 18 files changed, 398 insertions(+), 6 deletions(-)
+ create mode 100644 sql/updates/SliceCore/auth.sql
+ create mode 100644 src/server/scripts/Commands/cs_vip.cpp
+
+diff --git a/sql/updates/SliceCore/auth.sql b/sql/updates/SliceCore/auth.sql
+new file mode 100644
+index 0000000..2831386
+--- /dev/null
++++ b/sql/updates/SliceCore/auth.sql
+@@ -0,0 +1,9 @@
++-- Vip Accounts
++CREATE TABLE IF NOT EXISTS `account_premium` (
++  `id` int(11) NOT NULL default '0' COMMENT 'Account id',
++  `setdate` bigint(40) NOT NULL default '0',
++  `unsetdate` bigint(40) NOT NULL default '0',
++  `premium_type` tinyint(4) unsigned NOT NULL default '1',
++  `active` tinyint(4) NOT NULL default '1',
++  PRIMARY KEY  (`id`,`setdate`)
++) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Premium Accounts';
+\ No newline at end of file
+diff --git a/sql/updates/SliceCore/world.sql b/sql/updates/SliceCore/world.sql
+index 935fc46..9de7bf9 100644
+--- a/sql/updates/SliceCore/world.sql
++++ b/sql/updates/SliceCore/world.sql
+@@ -34,3 +34,10 @@ INSERT INTO `creature_template` (`entry`, `modelid1`, `name`, `subname`, `IconNa
+ DELETE FROM `locales_creature` WHERE `entry` = 190000;
+ INSERT INTO `locales_creature` (`entry`, `name_loc8`, `subname_loc8`) VALUES
+ (190000, 'Наблюдатели Арены', 'Используйте Аддон!');
++
++-- Vip Commands
++DELETE FROM `trinity_string` WHERE `entry` IN (11007,11008,11009,11010,11011,11012);
++INSERT INTO `trinity_string`(`entry`,`content_default`, `content_loc8`) VALUES 
++(11009, 'You can\`t do this at the moment.', 'Вы не можете сделать это сейчас.'),
++(11007,'You are not VIP.', 'Вы не владеете правами VIP аккаунта.'),
++(11008,'You are not VIP.', 'Вам недоступна эта VIP команда.');
+diff --git a/src/server/authserver/Server/AuthSocket.cpp b/src/server/authserver/Server/AuthSocket.cpp
+index fc4d4df..89dcaa9 100755
+--- a/src/server/authserver/Server/AuthSocket.cpp
++++ b/src/server/authserver/Server/AuthSocket.cpp
+@@ -357,6 +357,9 @@ bool AuthSocket::_HandleLogonChallenge()
+ 
+     // Verify that this IP is not in the ip_banned table
+     LoginDatabase.Execute(LoginDatabase.GetPreparedStatement(LOGIN_DEL_EXPIRED_IP_BANS));
++    
++    // Vip Account
++    LoginDatabase.Execute(LoginDatabase.GetPreparedStatement(LOGIN_SET_ACCOUNT_PREMIUM));
+ 
+     std::string const& ip_address = socket().getRemoteAddress();
+     PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_IP_BANNED);
+diff --git a/src/server/game/Entities/Player/Player.cpp b/src/server/game/Entities/Player/Player.cpp
+index 2f8569f..5205a6d 100755
+--- a/src/server/game/Entities/Player/Player.cpp
++++ b/src/server/game/Entities/Player/Player.cpp
+@@ -6988,6 +6988,9 @@ void Player::CheckAreaExploreAndOutdoor()
+                 {
+                     XP = uint32(sObjectMgr->GetBaseXP(areaEntry->area_level)*sWorld->getRate(RATE_XP_EXPLORE));
+                 }
++                
++                if(GetSession()->IsPremium())
++                   XP *= sWorld->getRate(RATE_XP_EXPLORE_PREMIUM);
+ 
+                 GiveXP(XP, NULL);
+                 SendExplorationExperience(area, XP);
+@@ -7320,6 +7323,10 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool pvpt
+     }
+ 
+     honor_f *= sWorld->getRate(RATE_HONOR);
++    
++    if(GetSession()->IsPremium())
++	   honor_f *= sWorld->getRate(RATE_HONOR_PREMIUM);
++		
+     // Back to int now
+     honor = int32(honor_f);
+     // honor - for show honor points in log
+@@ -15245,6 +15252,9 @@ void Player::RewardQuest(Quest const* quest, uint32 reward, Object* questGiver,
+     Unit::AuraEffectList const& ModXPPctAuras = GetAuraEffectsByType(SPELL_AURA_MOD_XP_QUEST_PCT);
+     for (Unit::AuraEffectList::const_iterator i = ModXPPctAuras.begin(); i != ModXPPctAuras.end(); ++i)
+         AddPctN(XP, (*i)->GetAmount());
++        
++    if (GetSession()->IsPremium())
++        XP *= sWorld->getRate(RATE_XP_QUEST_PREMIUM);
+ 
+     int32 moneyRew = 0;
+     if (getLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+diff --git a/src/server/game/Miscellaneous/Formulas.h b/src/server/game/Miscellaneous/Formulas.h
+index dac5b1e..e1f7be2 100755
+--- a/src/server/game/Miscellaneous/Formulas.h
++++ b/src/server/game/Miscellaneous/Formulas.h
+@@ -178,7 +178,9 @@
+                         gain *= 2;
+                 }
+ 
+-                gain = uint32(gain * sWorld->getRate(RATE_XP_KILL));
++                float premium_rate = player->GetSession()->IsPremium() ? sWorld->getRate(RATE_XP_KILL_PREMIUM) : 1.0f;
++				
++				return uint32(gain * sWorld->getRate(RATE_XP_KILL) * premium_rate);
+             }
+ 
+             sScriptMgr->OnGainCalculation(gain, player, u);
+diff --git a/src/server/game/Miscellaneous/Language.h b/src/server/game/Miscellaneous/Language.h
+index 5893bbd..f686931 100755
+--- a/src/server/game/Miscellaneous/Language.h
++++ b/src/server/game/Miscellaneous/Language.h
+@@ -1076,7 +1076,12 @@ enum TrinityStrings
+ 
+     // Use for custom patches             11000-11999
+     LANG_AUTO_BROADCAST                 = 11000,
+-    LANG_INVALID_REALMID                = 11001
++    LANG_INVALID_REALMID                = 11001,
++	
++	// Vip Commands
++ 	LANG_PLAYER_NOT_VIP                 = 11007,
++ 	LANG_VIP_COMMAND_DISABLED           = 11008,
++ 	LANG_VIP_ERROR                      = 11009
+ 
+     // NOT RESERVED IDS                   12000-1999999999
+     // `db_script_string` table index     2000000000-2000009999 (MIN_DB_SCRIPT_STRING_ID-MAX_DB_SCRIPT_STRING_ID)
+diff --git a/src/server/game/Reputation/ReputationMgr.cpp b/src/server/game/Reputation/ReputationMgr.cpp
+index 7ef5991..d360610 100755
+--- a/src/server/game/Reputation/ReputationMgr.cpp
++++ b/src/server/game/Reputation/ReputationMgr.cpp
+@@ -362,6 +362,10 @@ bool ReputationMgr::SetOneFactionReputation(FactionEntry const* factionEntry, in
+         {
+             // int32 *= float cause one point loss?
+             standing = int32(floor((float)standing * sWorld->getRate(RATE_REPUTATION_GAIN) + 0.5f));
++            
++            if(_player->GetSession()->IsPremium())
++               standing = int32(floor((float)standing * sWorld->getRate(RATE_REPUTATION_GAIN_PREMIUM) + 0.5f));
++               
+             standing += itr->second.Standing + BaseRep;
+         }
+ 
+diff --git a/src/server/game/Scripting/ScriptLoader.cpp b/src/server/game/Scripting/ScriptLoader.cpp
+index 30618e8..5b6fb94 100755
+--- a/src/server/game/Scripting/ScriptLoader.cpp
++++ b/src/server/game/Scripting/ScriptLoader.cpp
+@@ -75,6 +75,7 @@
+ void AddSC_ticket_commandscript();
+ void AddSC_titles_commandscript();
+ void AddSC_wp_commandscript();
++void AddSC_vip_commandscript();
+ 
+ #ifdef SCRIPTS
+ //world
+@@ -693,6 +694,7 @@ void AddCommandScripts()
+     AddSC_ticket_commandscript();
+     AddSC_titles_commandscript();
+     AddSC_wp_commandscript();
++    AddSC_vip_commandscript();
+ }
+ 
+ void AddWorldScripts()
+diff --git a/src/server/game/Server/WorldSession.cpp b/src/server/game/Server/WorldSession.cpp
+index 6a2c7e6..6b0cf09 100755
+--- a/src/server/game/Server/WorldSession.cpp
++++ b/src/server/game/Server/WorldSession.cpp
+@@ -88,9 +88,9 @@ bool WorldSessionFilter::Process(WorldPacket* packet)
+ }
+ 
+ /// WorldSession constructor
+-WorldSession::WorldSession(uint32 id, WorldSocket* sock, AccountTypes sec, uint8 expansion, time_t mute_time, LocaleConstant locale, uint32 recruiter, bool isARecruiter):
++WorldSession::WorldSession(uint32 id, WorldSocket* sock, AccountTypes sec,  bool ispremium, uint8 expansion, time_t mute_time, LocaleConstant locale, uint32 recruiter, bool isARecruiter):
+ m_muteTime(mute_time), m_timeOutTime(0), _player(NULL), m_Socket(sock),
+-_security(sec), _accountId(id), m_expansion(expansion), _logoutTime(0),
++_security(sec), _ispremium(ispremium), _accountId(id), m_expansion(expansion), _logoutTime(0),
+ m_inQueue(false), m_playerLoading(false), m_playerLogout(false),
+ m_playerRecentlyLogout(false), m_playerSave(false),
+ m_sessionDbcLocale(sWorld->GetAvailableDbcLocale(locale)),
+diff --git a/src/server/game/Server/WorldSession.h b/src/server/game/Server/WorldSession.h
+index bc9e6ac..6b9cfb3 100755
+--- a/src/server/game/Server/WorldSession.h
++++ b/src/server/game/Server/WorldSession.h
+@@ -225,7 +225,7 @@ class CharacterCreateInfo
+ class WorldSession
+ {
+     public:
+-        WorldSession(uint32 id, WorldSocket* sock, AccountTypes sec, uint8 expansion, time_t mute_time, LocaleConstant locale, uint32 recruiter, bool isARecruiter);
++        WorldSession(uint32 id, WorldSocket* sock, AccountTypes sec, bool ispremium, uint8 expansion, time_t mute_time, LocaleConstant locale, uint32 recruiter, bool isARecruiter);
+         ~WorldSession();
+ 
+         bool PlayerLoading() const { return m_playerLoading; }
+@@ -252,6 +252,7 @@ class WorldSession
+         void SendClientCacheVersion(uint32 version);
+ 
+         AccountTypes GetSecurity() const { return _security; }
++        bool IsPremium() const { return _ispremium; }
+         uint32 GetAccountId() const { return _accountId; }
+         Player* GetPlayer() const { return _player; }
+         std::string GetPlayerName(bool simple = true) const;
+@@ -974,6 +975,8 @@ class WorldSession
+         AccountTypes _security;
+         uint32 _accountId;
+         uint8 m_expansion;
++        
++        bool _ispremium;
+ 
+         typedef std::list<AddonInfo> AddonsList;
+ 
+diff --git a/src/server/game/Server/WorldSocket.cpp b/src/server/game/Server/WorldSocket.cpp
+index 92455f8..ebf8947 100755
+--- a/src/server/game/Server/WorldSocket.cpp
++++ b/src/server/game/Server/WorldSocket.cpp
+@@ -740,6 +740,9 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
+     LocaleConstant locale;
+     std::string account;
+     SHA1Hash sha;
++    
++    bool isPremium = false;
++    
+     BigNumber v, s, g, N;
+     WorldPacket packet, SendAddonPacked;
+ 
+@@ -890,6 +893,17 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
+         sLog->outError(LOG_FILTER_NETWORKIO, "WorldSocket::HandleAuthSession: Sent Auth Response (Account banned).");
+         return -1;
+     }
++    
++    QueryResult premresult =
++		LoginDatabase.PQuery ("SELECT 1 "
++                              "FROM account_premium "
++                              "WHERE id = '%u' "
++                              "AND active = 1",
++                              id);
++    if (premresult) // if account premium
++    {
++        isPremium = true;
++    }
+ 
+     // Check locked state for server
+     AccountTypes allowedAccountType = sWorld->GetPlayerSecurityLimit();
+@@ -954,7 +968,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
+     LoginDatabase.Execute(stmt);
+ 
+     // NOTE ATM the socket is single-threaded, have this in mind ...
+-    ACE_NEW_RETURN (m_Session, WorldSession (id, this, AccountTypes(security), expansion, mutetime, locale, recruiter, isRecruiter), -1);
++    ACE_NEW_RETURN (m_Session, WorldSession (id, this, AccountTypes(security), isPremium, expansion, mutetime, locale, recruiter, isRecruiter), -1);
+ 
+     m_Crypt.Init(&k);
+ 
+diff --git a/src/server/game/World/World.cpp b/src/server/game/World/World.cpp
+index ae55c3b..244c65a 100755
+--- a/src/server/game/World/World.cpp
++++ b/src/server/game/World/World.cpp
+@@ -458,8 +458,11 @@ void World::LoadConfigSettings(bool reload)
+     rate_values[RATE_DROP_ITEM_REFERENCED_AMOUNT] = ConfigMgr::GetFloatDefault("Rate.Drop.Item.ReferencedAmount", 1.0f);
+     rate_values[RATE_DROP_MONEY]  = ConfigMgr::GetFloatDefault("Rate.Drop.Money", 1.0f);
+     rate_values[RATE_XP_KILL]     = ConfigMgr::GetFloatDefault("Rate.XP.Kill", 1.0f);
++    rate_values[RATE_XP_KILL_PREMIUM]    = ConfigMgr::GetFloatDefault("Rate.XP.Kill.Premium", 1.0f);
+     rate_values[RATE_XP_QUEST]    = ConfigMgr::GetFloatDefault("Rate.XP.Quest", 1.0f);
++    rate_values[RATE_XP_QUEST_PREMIUM]   = ConfigMgr::GetFloatDefault("Rate.XP.Quest.Premium", 1.0f);
+     rate_values[RATE_XP_EXPLORE]  = ConfigMgr::GetFloatDefault("Rate.XP.Explore", 1.0f);
++    rate_values[RATE_XP_EXPLORE_PREMIUM] = ConfigMgr::GetFloatDefault("Rate.XP.Explore.Premium", 1.0f);
+     rate_values[RATE_REPAIRCOST]  = ConfigMgr::GetFloatDefault("Rate.RepairCost", 1.0f);
+     if (rate_values[RATE_REPAIRCOST] < 0.0f)
+     {
+@@ -467,6 +470,7 @@ void World::LoadConfigSettings(bool reload)
+         rate_values[RATE_REPAIRCOST] = 0.0f;
+     }
+     rate_values[RATE_REPUTATION_GAIN]  = ConfigMgr::GetFloatDefault("Rate.Reputation.Gain", 1.0f);
++    rate_values[RATE_REPUTATION_GAIN_PREMIUM]  = ConfigMgr::GetFloatDefault("Rate.Reputation.Gain.Premium", 1.0f);
+     rate_values[RATE_REPUTATION_LOWLEVEL_KILL]  = ConfigMgr::GetFloatDefault("Rate.Reputation.LowLevel.Kill", 1.0f);
+     rate_values[RATE_REPUTATION_LOWLEVEL_QUEST]  = ConfigMgr::GetFloatDefault("Rate.Reputation.LowLevel.Quest", 1.0f);
+     rate_values[RATE_REPUTATION_RECRUIT_A_FRIEND_BONUS] = ConfigMgr::GetFloatDefault("Rate.Reputation.RecruitAFriendBonus", 0.1f);
+@@ -494,6 +498,7 @@ void World::LoadConfigSettings(bool reload)
+     rate_values[RATE_AUCTION_DEPOSIT] = ConfigMgr::GetFloatDefault("Rate.Auction.Deposit", 1.0f);
+     rate_values[RATE_AUCTION_CUT] = ConfigMgr::GetFloatDefault("Rate.Auction.Cut", 1.0f);
+     rate_values[RATE_HONOR] = ConfigMgr::GetFloatDefault("Rate.Honor", 1.0f);
++    rate_values[RATE_HONOR_PREMIUM] = ConfigMgr::GetFloatDefault("Rate.Honor.Premium", 1.0f);
+     rate_values[RATE_MINING_AMOUNT] = ConfigMgr::GetFloatDefault("Rate.Mining.Amount", 1.0f);
+     rate_values[RATE_MINING_NEXT]   = ConfigMgr::GetFloatDefault("Rate.Mining.Next", 1.0f);
+     rate_values[RATE_INSTANCE_RESET_TIME] = ConfigMgr::GetFloatDefault("Rate.InstanceResetTime", 1.0f);
+@@ -1206,6 +1211,15 @@ void World::LoadConfigSettings(bool reload)
+     // misc
+     m_bool_configs[CONFIG_PDUMP_NO_PATHS] = ConfigMgr::GetBoolDefault("PlayerDump.DisallowPaths", true);
+     m_bool_configs[CONFIG_PDUMP_NO_OVERWRITE] = ConfigMgr::GetBoolDefault("PlayerDump.DisallowOverwrite", true);
++    
++    // Vip Commands
++	m_bool_configs[CONFIG_VIP_DEBUFF_COMMAND] = ConfigMgr::GetBoolDefault("Vip.Debuff.Command", true);
++	m_bool_configs[CONFIG_VIP_BANK_COMMAND] = ConfigMgr::GetBoolDefault("Vip.Bank.Command", true);
++    m_bool_configs[CONFIG_VIP_REPAIR_COMMAND] = ConfigMgr::GetBoolDefault("Vip.Repair.Command", true);
++    m_bool_configs[CONFIG_VIP_RESET_TALENTS_COMMAND] = ConfigMgr::GetBoolDefault("Vip.Reset.Talents.Command", true);
++    m_bool_configs[CONFIG_VIP_TAXI_COMMAND] = ConfigMgr::GetBoolDefault("Vip.Taxi.Command", true);
++    m_bool_configs[CONFIG_VIP_HOME_COMMAND] = ConfigMgr::GetBoolDefault("Vip.Home.Command", true);
++    m_bool_configs[CONFIG_VIP_CAPITAL_COMMAND] = ConfigMgr::GetBoolDefault("Vip.Capital.Command", true);
+ 
+     // call ScriptMgr if we're reloading the configuration
+     m_bool_configs[CONFIG_WINTERGRASP_ENABLE] = ConfigMgr::GetBoolDefault("Wintergrasp.Enable", false);
+diff --git a/src/server/game/World/World.h b/src/server/game/World/World.h
+index 7227ae6..242a80a 100755
+--- a/src/server/game/World/World.h
++++ b/src/server/game/World/World.h
+@@ -169,6 +169,13 @@ enum WorldBoolConfigs
+     CONFIG_DUEL_RESET_ENABLE,
+     CONFIG_ANTI_REKLAMA_ENABLE,
+     CONFIG_CHANNEL_ON_CITY_ONLY_FLAG,
++	CONFIG_VIP_DEBUFF_COMMAND,
++ 	CONFIG_VIP_BANK_COMMAND,
++ 	CONFIG_VIP_REPAIR_COMMAND,
++ 	CONFIG_VIP_RESET_TALENTS_COMMAND,
++ 	CONFIG_VIP_TAXI_COMMAND,
++ 	CONFIG_VIP_HOME_COMMAND,
++ 	CONFIG_VIP_CAPITAL_COMMAND,
+     BOOL_CONFIG_VALUE_COUNT
+ };
+ 
+@@ -355,10 +362,14 @@ enum Rates
+     RATE_DROP_ITEM_REFERENCED_AMOUNT,
+     RATE_DROP_MONEY,
+     RATE_XP_KILL,
++    RATE_XP_KILL_PREMIUM,
+     RATE_XP_QUEST,
++    RATE_XP_QUEST_PREMIUM,
+     RATE_XP_EXPLORE,
++    RATE_XP_EXPLORE_PREMIUM,
+     RATE_REPAIRCOST,
+     RATE_REPUTATION_GAIN,
++    RATE_REPUTATION_GAIN_PREMIUM,
+     RATE_REPUTATION_LOWLEVEL_KILL,
+     RATE_REPUTATION_LOWLEVEL_QUEST,
+     RATE_REPUTATION_RECRUIT_A_FRIEND_BONUS,
+@@ -386,6 +397,7 @@ enum Rates
+     RATE_AUCTION_DEPOSIT,
+     RATE_AUCTION_CUT,
+     RATE_HONOR,
++    RATE_HONOR_PREMIUM,
+     RATE_MINING_AMOUNT,
+     RATE_MINING_NEXT,
+     RATE_TALENT,
+diff --git a/src/server/scripts/Commands/CMakeLists.txt b/src/server/scripts/Commands/CMakeLists.txt
+index 177b3a4..2094a50 100644
+--- a/src/server/scripts/Commands/CMakeLists.txt
++++ b/src/server/scripts/Commands/CMakeLists.txt
+@@ -41,6 +41,7 @@ set(scripts_STAT_SRCS
+   Commands/cs_server.cpp
+   Commands/cs_titles.cpp
+   Commands/cs_wp.cpp
++  Commands/cs_vip.cpp
+ #  Commands/cs_pdump.cpp
+ #  Commands/cs_channel.cpp
+ #  Commands/cs_pet.cpp
+diff --git a/src/server/scripts/Commands/cs_vip.cpp b/src/server/scripts/Commands/cs_vip.cpp
+new file mode 100644
+index 0000000..ec5e5dd
+--- /dev/null
++++ b/src/server/scripts/Commands/cs_vip.cpp
+@@ -0,0 +1,269 @@
++/*
++* Copyright (C) 2012 SliceCore <https://github.com/Neket007/SliceCore>
++*/
++
++#include "ScriptMgr.h"
++#include "Common.h"
++#include "Chat.h"
++#include "Player.h"
++#include "World.h"
++#include "Config.h"
++#include "WorldSession.h"
++#include "Language.h"
++#include "Log.h"
++#include "SpellAuras.h"
++
++
++class vip_commandscript : public CommandScript
++{
++public:
++    vip_commandscript() : CommandScript("vip_commandscript") { }
++
++    ChatCommand* GetCommands() const
++    {
++        static ChatCommand vipCommandTable[] =
++        {
++            { "debuff",         SEC_PLAYER,         false, &HandleVipDebuffCommand,             "", NULL },
++            { "bank",           SEC_PLAYER,         false, &HandleVipBankCommand,               "", NULL },
++            { "repair",         SEC_PLAYER,         false, &HandleVipRepairCommand,             "", NULL },
++            { "resettalents",   SEC_PLAYER,         false, &HandleVipResetTalentsCommand,       "", NULL },
++            { "taxi",           SEC_PLAYER,         false, &HandleVipTaxiCommand,               "", NULL },
++            { "home",           SEC_PLAYER,         false, &HandleVipHomeCommand,               "", NULL },
++            { "capital",        SEC_PLAYER,         false, &HandleVipCapitalCommand,            "", NULL },
++            { NULL,             0,                  false, NULL,                                "", NULL }
++        };
++
++
++        static ChatCommand commandTable[] =
++        {
++            { "vip",            SEC_PLAYER,         false, NULL,                                "", vipCommandTable },
++            { NULL,             0,                  false, NULL,                                "", NULL }
++        };
++        return commandTable;
++    }
++
++	static bool HandleVipDebuffCommand(ChatHandler* handler, const char* /*args*/)
++    {   
++        Player *plr = handler->GetSession()->GetPlayer();
++
++		if (!handler->GetSession()->IsPremium())
++        {
++            handler->SendSysMessage(LANG_PLAYER_NOT_VIP);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        if (!sWorld->getBoolConfig(CONFIG_VIP_DEBUFF_COMMAND))
++        {
++            handler->SendSysMessage(LANG_VIP_COMMAND_DISABLED);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        if(plr->isInCombat() || plr->isInFlight() || plr->GetMap()->IsBattlegroundOrArena() || plr->HasStealthAura() || plr->HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH) || plr->isDead())
++        {
++            handler->SendSysMessage(LANG_VIP_ERROR);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        handler->GetSession()->GetPlayer()->RemoveAurasDueToSpell(15007);
++        handler->GetSession()->GetPlayer()->RemoveAurasDueToSpell(26013);
++
++        return true;
++    }
++	
++	static bool HandleVipBankCommand(ChatHandler* handler, const char* /*args*/)
++    {
++        Player *plr = handler->GetSession()->GetPlayer();
++
++        if (!handler->GetSession()->IsPremium())
++        {
++            handler->SendSysMessage(LANG_PLAYER_NOT_VIP);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++		
++		if (!sWorld->getBoolConfig(CONFIG_VIP_BANK_COMMAND))
++        {
++            handler->SendSysMessage(LANG_VIP_COMMAND_DISABLED);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++ 
++        if (plr->isInCombat() || plr->isInFlight() || plr->GetMap()->IsBattlegroundOrArena() || plr->HasStealthAura() || plr->HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH) || plr->isDead())
++        {
++            handler->SendSysMessage(LANG_VIP_ERROR);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        handler->GetSession()->SendShowBank(handler->GetSession()->GetPlayer()->GetGUID());
++
++        return true;
++    }
++
++    static bool HandleVipRepairCommand(ChatHandler* handler, const char* /*args*/)
++    {
++        Player *plr = handler->GetSession()->GetPlayer();
++
++        if (!handler->GetSession()->IsPremium())
++        {
++            handler->SendSysMessage(LANG_PLAYER_NOT_VIP);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        if (!sWorld->getBoolConfig(CONFIG_VIP_REPAIR_COMMAND))
++        {
++            handler->SendSysMessage(LANG_VIP_COMMAND_DISABLED);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        if (plr->isInCombat() || plr->isInFlight() || plr->GetMap()->IsBattlegroundOrArena() || plr->HasStealthAura() || plr->HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH) || plr->isDead())
++        {
++            handler->SendSysMessage(LANG_VIP_ERROR);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        handler->GetSession()->GetPlayer()->DurabilityRepairAll(false, 0, false);
++
++        handler->PSendSysMessage(LANG_YOUR_ITEMS_REPAIRED, handler->GetNameLink(handler->GetSession()->GetPlayer()).c_str());
++        return true;
++    }
++
++    static bool HandleVipResetTalentsCommand(ChatHandler* handler, const char* /*args*/)
++   {
++        Player *plr = handler->GetSession()->GetPlayer();
++
++        if (!handler->GetSession()->IsPremium())
++        {
++            handler->SendSysMessage(LANG_PLAYER_NOT_VIP);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        if (!sWorld->getBoolConfig(CONFIG_VIP_RESET_TALENTS_COMMAND))
++        {
++            handler->SendSysMessage(LANG_VIP_COMMAND_DISABLED);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        if (plr->isInCombat() || plr->isInFlight() || plr->GetMap()->IsBattlegroundOrArena() || plr->HasStealthAura() || plr->HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH) || plr->isDead())
++        {
++            handler->SendSysMessage(LANG_VIP_ERROR);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        plr->resetTalents(true);
++        plr->SendTalentsInfoData(false);
++		handler->PSendSysMessage(LANG_RESET_TALENTS_ONLINE, handler->GetNameLink(handler->GetSession()->GetPlayer()).c_str());
++        return true;
++    }
++
++    static bool HandleVipTaxiCommand(ChatHandler* handler, const char* /*args*/)
++    {
++        Player *plr = handler->GetSession()->GetPlayer();
++
++        if (!handler->GetSession()->IsPremium())
++        {
++            handler->SendSysMessage(LANG_PLAYER_NOT_VIP);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        if (!sWorld->getBoolConfig(CONFIG_VIP_TAXI_COMMAND))
++        {
++            handler->SendSysMessage(LANG_VIP_COMMAND_DISABLED);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        if (plr->isInCombat() || plr->isInFlight() || plr->GetMap()->IsBattlegroundOrArena() || plr->HasStealthAura() || plr->HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH) || plr->isDead())
++        {
++            handler->SendSysMessage(LANG_VIP_ERROR);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        plr->SetTaxiCheater(true);
++        handler->PSendSysMessage(LANG_YOU_GIVE_TAXIS, handler->GetNameLink(plr).c_str());
++        if (handler->needReportToTarget(plr))
++            ChatHandler(plr).PSendSysMessage(LANG_YOURS_TAXIS_ADDED, handler->GetNameLink().c_str());
++            
++		return true;
++    }
++
++    static bool HandleVipHomeCommand(ChatHandler* handler, const char* /*args*/)
++    {
++        Player *plr = handler->GetSession()->GetPlayer();
++
++        if (!handler->GetSession()->IsPremium())
++        {
++            handler->SendSysMessage(LANG_PLAYER_NOT_VIP);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        if (!sWorld->getBoolConfig(CONFIG_VIP_HOME_COMMAND))
++        {
++            handler->SendSysMessage(LANG_VIP_COMMAND_DISABLED);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        if (plr->isInCombat() || plr->isInFlight() || plr->GetMap()->IsBattlegroundOrArena() || plr->HasStealthAura() || plr->HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH) || plr->isDead())
++        {
++            handler->SendSysMessage(LANG_VIP_ERROR);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        plr->RemoveSpellCooldown(8690,true);
++        plr->CastSpell(plr,8690,false);
++
++        return true;
++    }
++
++    static bool HandleVipCapitalCommand(ChatHandler* handler, const char* /*args*/)
++  {
++        Player *plr = handler->GetSession()->GetPlayer();
++
++        if (!handler->GetSession()->IsPremium())
++        {
++            handler->SendSysMessage(LANG_PLAYER_NOT_VIP);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        if (!sWorld->getBoolConfig(CONFIG_VIP_CAPITAL_COMMAND))
++        {
++            handler->SendSysMessage(LANG_VIP_COMMAND_DISABLED);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        if (plr->isInCombat() || plr->isInFlight() || plr->GetMap()->IsBattlegroundOrArena() || plr->HasStealthAura() || plr->HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH) || plr->isDead())
++        {
++            handler->SendSysMessage(LANG_VIP_ERROR);
++            handler->SetSentErrorMessage(true);
++            return false;
++        }
++
++        if (plr->GetTeam() == HORDE)
++			plr->CastSpell(plr,3567,true);
++        else
++            plr->CastSpell(plr,3561,true);
++		
++		return true;
++    }	   
++};
++
++void AddSC_vip_commandscript()
++{
++    new vip_commandscript();
++}
+\ No newline at end of file
+diff --git a/src/server/shared/Database/Implementation/LoginDatabase.cpp b/src/server/shared/Database/Implementation/LoginDatabase.cpp
+index 31d9f5e..bdb51ca 100755
+--- a/src/server/shared/Database/Implementation/LoginDatabase.cpp
++++ b/src/server/shared/Database/Implementation/LoginDatabase.cpp
+@@ -87,4 +87,5 @@ void LoginDatabaseConnection::DoPrepareStatements()
+     PREPARE_STATEMENT(LOGIN_SEL_ACCOUNT_WHOIS, "SELECT username, email, last_ip FROM account WHERE id = ?", CONNECTION_SYNCH);
+     PREPARE_STATEMENT(LOGIN_SEL_REALMLIST_SECURITY_LEVEL, "SELECT allowedSecurityLevel from realmlist WHERE id = ?", CONNECTION_SYNCH);
+     PREPARE_STATEMENT(LOGIN_DEL_ACCOUNT, "DELETE FROM account WHERE id = ?", CONNECTION_ASYNC);
++    PREPARE_STATEMENT(LOGIN_SET_ACCOUNT_PREMIUM, "UPDATE account_premium SET active = 0 WHERE unsetdate<=UNIX_TIMESTAMP() AND unsetdate<>setdate", CONNECTION_ASYNC);
+ }
+diff --git a/src/server/shared/Database/Implementation/LoginDatabase.h b/src/server/shared/Database/Implementation/LoginDatabase.h
+index b4f6713..d1d63ca 100755
+--- a/src/server/shared/Database/Implementation/LoginDatabase.h
++++ b/src/server/shared/Database/Implementation/LoginDatabase.h
+@@ -107,6 +107,7 @@ enum LoginDatabaseStatements
+     LOGIN_SEL_ACCOUNT_WHOIS,
+     LOGIN_SEL_REALMLIST_SECURITY_LEVEL,
+     LOGIN_DEL_ACCOUNT,
++    LOGIN_SET_ACCOUNT_PREMIUM,
+ 
+     MAX_LOGINDATABASE_STATEMENTS
+ };
+diff --git a/src/server/worldserver/worldserver.conf.dist b/src/server/worldserver/worldserver.conf.dist
+index ea17e60..ff654a1 100644
+--- a/src/server/worldserver/worldserver.conf.dist
++++ b/src/server/worldserver/worldserver.conf.dist
+@@ -2662,6 +2662,41 @@ Duel.Reset.Cooldown.Enable = 1
+ Channel.CityOnlyFlag = 1
+ 
+ #
++# VIP CONFIG
++#
++#    Rate.XP.Kill.Premium
++#    Rate.XP.Quest.Premium
++#    Rate.XP.Explore.Premium
++#    Rate.Honor.Premium
++#    Rate.Reputation.Gain.Premium
++#        Description: Enables rates modifier to VIPs.
++#        Default: 1
++
++Rate.XP.Kill.Premium    = 1
++Rate.XP.Quest.Premium   = 1
++Rate.XP.Explore.Premium = 1
++Rate.Honor.Premium = 1
++Rate.Reputation.Gain.Premium = 1
++
++#    Vip.Debuff.Command = 1
++#    Vip.Bank.Command = 1
++#    Vip.Repair.Command = 1
++#    Vip.Reset.Talents.Command = 1
++#    Vip.Taxi.Command = 1
++#    Vip.Home.Command = 1
++#    Vip.Capital.Command = 1
++#        Description: Here you can enable or disable some VIP commands.
++#        Default: 1
++
++Vip.Debuff.Command = 1
++Vip.Bank.Command = 1
++Vip.Repair.Command = 1
++Vip.Reset.Talents.Command = 1
++Vip.Taxi.Command = 1
++Vip.Home.Command = 1
++Vip.Capital.Command = 1
++
++#
+ ###################################################################################################
+ 
+ ###################################################################################################
+-- 
+1.7.10

@@ -1,0 +1,34 @@
+From 94f1fb334a82721e8444653d323ac76f14f1ed32 Mon Sep 17 00:00:00 2001
+From: LordPsyan <uppp@juno.com>
+Date: Sat, 5 Nov 2011 14:27:24 -0500
+Subject: [PATCH] 2011-11-05_GM-1-Normal
+
+---
+ src/server/scripts/Commands/cs_gm.cpp |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/server/scripts/Commands/cs_gm.cpp b/src/server/scripts/Commands/cs_gm.cpp
+index ab077af..f66f057 100644
+--- a/src/server/scripts/Commands/cs_gm.cpp
++++ b/src/server/scripts/Commands/cs_gm.cpp
+@@ -122,7 +122,7 @@ public:
+         for (HashMapHolder<Player>::MapType::const_iterator itr = m.begin(); itr != m.end(); ++itr)
+         {
+             AccountTypes itrSec = itr->second->GetSession()->GetSecurity();
+-            if ((itr->second->isGameMaster() || (!AccountMgr::IsPlayerAccount(itrSec) && itrSec <= AccountTypes(sWorld->getIntConfig(CONFIG_GM_LEVEL_IN_GM_LIST)))) &&
++            if ((itr->second->isGameMaster() || (!AccountMgr::IsModeratorAccount(itrSec) && itrSec <= AccountTypes(sWorld->getIntConfig(CONFIG_GM_LEVEL_IN_GM_LIST)))) &&
+                 (!handler->GetSession() || itr->second->IsVisibleGloballyFor(handler->GetSession()->GetPlayer())))
+             {
+                 if (first)
+@@ -155,7 +155,7 @@ public:
+     static bool HandleGMListFullCommand(ChatHandler* handler, char const* /*args*/)
+     {
+         ///- Get the accounts with GM Level >0
+-        QueryResult result = LoginDatabase.PQuery("SELECT a.username, aa.gmlevel FROM account a, account_access aa WHERE a.id=aa.id AND aa.gmlevel >= %u", SEC_MODERATOR);
++        QueryResult result = LoginDatabase.PQuery("SELECT a.username, aa.gmlevel FROM account a, account_access aa WHERE a.id=aa.id AND aa.gmlevel > %u", SEC_MODERATOR);
+         if (result)
+         {
+             handler->SendSysMessage(LANG_GMLIST);
+-- 
+1.7.2.3
+

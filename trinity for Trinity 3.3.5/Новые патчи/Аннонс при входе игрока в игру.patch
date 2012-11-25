@@ -1,0 +1,35 @@
+diff --git a/src/server/scripts/Custom/login.cpp b/src/server/scripts/Custom/login.cpp
+new file mode 100644
+index 0000000..30d2931
+--- /dev/null
++++ b/src/server/scripts/Custom/login.cpp
+@@ -0,0 +1,29 @@
++#include "ScriptPCH.h"
++#define CUSTOM_BLUE          "|cff00479E"
++#define CUSTOM_RED            "|cffFF0000"
++#define CUSTOM_LIGHTRED    "|cffD63931"
++#define CUSTOM_WHITE        "|cffffffff"
++
++class announce_login : public PlayerScript
++{
++    public:
++                announce_login() : PlayerScript("announce_login") { }
++        
++                void OnLogin(Player * player, Creature * creature)
++        {
++                        char msg[500];
++                        if(player->GetTeam() == ALLIANCE)
++                        {
++                                sprintf(msg, "[%sATT|r]: %s%s|r ??????????????M??  [%sA|r]", CUSTOM_LIGHTRED, CUSTOM_WHITE, player->GetName(), CUSTOM_BLUE);
++                                sWorld->SendWorldText(LANG_SYSTEMMESSAGE, msg);
++                        }else{
++                                sprintf(msg, "[%sATT|r]: %s%s|r ??????????????M?? [%sH|r]", CUSTOM_LIGHTRED, CUSTOM_WHITE, player->GetName(), CUSTOM_RED);
++                                sWorld->SendWorldText(LANG_SYSTEMMESSAGE, msg);
++                        }
++                }
++};
++ 
++void AddSC_announce_login()
++{
++        new announce_login;
++}

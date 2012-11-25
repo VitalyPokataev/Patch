@@ -1,0 +1,12 @@
+These are patches for various features/modifications that can be applied against TrinityCore.
+
+Most were requested by specific individuals and were simply something fun for me to do or
+a proof of concept. Please don't be surprised if they do not meet the highest of standards!
+
+I have tested each of these for myself, but make no guarantee of their working for you.
+
+All patches are applied against your TrinityCore/src/* path.
+Apply patches with 'patch -p0 -i <patch>'
+
+All SQL statements are structured as <patch_name>.<db_name>.sql
+Apply SQL statements with mysql -u<user> -p<pass> <db_name> < <sql_file>

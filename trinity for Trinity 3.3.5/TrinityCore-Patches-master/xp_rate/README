@@ -1,0 +1,16 @@
+PURPOSE
+  Adds a ".xprate" command available to all characters.
+
+STATUS
+  Working as of: https://github.com/TrinityCore/TrinityCore/commit/5365bd25fae59a6ae225534b779bd6c14779599a
+
+DETAILS
+  Characters use the ".xprate" command to modify the rate at which they gain experience
+  or to disable gaining entirely. Default range is 0 - 5. The selected rate saves to DB
+  on a per-character basis.
+
+INSTALL
+  01 : Apply xp_rate.patch to TrinityCore folder.
+  02 : Import xp_rate.world.sql to TrinityCore `world` database.
+  03 : Import xp_rate.characters.sql to TrinityCore `characters` database.
+  04 : Recompile source and enjoy.

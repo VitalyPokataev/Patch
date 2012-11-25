@@ -1,0 +1,124 @@
+diff --git src/server/game/Entities/Creature/GossipDef.cpp src/server/game/Entities/Creature/GossipDef.cpp
+index a39bd8e..433c590 100755
+--- src/server/game/Entities/Creature/GossipDef.cpp
++++ src/server/game/Entities/Creature/GossipDef.cpp
+@@ -366,7 +366,7 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID,
+         }
+ 
+         data << uint32(quest->GetRewOrReqMoney());
+-        data << uint32(quest->XPValue(_session->GetPlayer()) * sWorld->getRate(RATE_XP_QUEST));
++        data << uint32(quest->XPValue(_session->GetPlayer()) * sWorld->getRate(RATE_XP_QUEST) * (IsEventActive(sWorld->getIntConfig(CONFIG_RATE_XP_WEEKEND_EVID)) ? sWorld->getRate(RATE_XP_WEEKEND) : 1.0f));
+     }
+ 
+     // rewarded honor points. Multiply with 10 to satisfy client
+@@ -598,7 +598,7 @@ void PlayerMenu::SendQuestGiverOfferReward(Quest const* quest, uint64 npcGUID, b
+     }
+ 
+     data << uint32(quest->GetRewOrReqMoney());
+-    data << uint32(quest->XPValue(_session->GetPlayer()) * sWorld->getRate(RATE_XP_QUEST));
++    data << uint32(quest->XPValue(_session->GetPlayer()) * sWorld->getRate(RATE_XP_QUEST) * (IsEventActive(sWorld->getIntConfig(CONFIG_RATE_XP_WEEKEND_EVID)) ? sWorld->getRate(RATE_XP_WEEKEND) : 1.0f));
+ 
+     // rewarded honor points. Multiply with 10 to satisfy client
+     data << 10 * Trinity::Honor::hk_honor_at_level(_session->GetPlayer()->getLevel(), quest->GetRewHonorMultiplier());
+diff --git src/server/game/Entities/Player/Player.cpp src/server/game/Entities/Player/Player.cpp
+index 630551c..ba3249f 100755
+--- src/server/game/Entities/Player/Player.cpp
++++ src/server/game/Entities/Player/Player.cpp
+@@ -6843,7 +6843,7 @@ void Player::CheckAreaExploreAndOutdoor()
+                 {
+                     XP = uint32(sObjectMgr->GetBaseXP(p->area_level)*sWorld->getRate(RATE_XP_EXPLORE));
+                 }
+-
++                XP = uint32(XP * (IsEventActive(sWorld->getIntConfig(CONFIG_RATE_XP_WEEKEND_EVID)) ? sWorld->getRate(RATE_XP_WEEKEND) : 1.0f));
+                 GiveXP(XP, NULL);
+                 SendExplorationExperience(area, XP);
+             }
+@@ -14999,7 +14999,7 @@ void Player::RewardQuest(Quest const* quest, uint32 reward, Object* questGiver,
+     bool rewarded = (m_RewardedQuests.find(quest_id) != m_RewardedQuests.end());
+ 
+     // Not give XP in case already completed once repeatable quest
+-    uint32 XP = rewarded ? 0 : uint32(quest->XPValue(this)*sWorld->getRate(RATE_XP_QUEST));
++    uint32 XP = rewarded ? 0 : uint32(quest->XPValue(this)*sWorld->getRate(RATE_XP_QUEST) * (IsEventActive(sWorld->getIntConfig(CONFIG_RATE_XP_WEEKEND_EVID)) ? sWorld->getRate(RATE_XP_WEEKEND) : 1.0f));
+ 
+     // handle SPELL_AURA_MOD_XP_QUEST_PCT auras
+     Unit::AuraEffectList const& ModXPPctAuras = GetAuraEffectsByType(SPELL_AURA_MOD_XP_QUEST_PCT);
+diff --git src/server/game/Miscellaneous/Formulas.h src/server/game/Miscellaneous/Formulas.h
+index 4faacc1..450cf04 100755
+--- src/server/game/Miscellaneous/Formulas.h
++++ src/server/game/Miscellaneous/Formulas.h
+@@ -19,6 +19,7 @@
+ #ifndef TRINITY_FORMULAS_H
+ #define TRINITY_FORMULAS_H
+ 
++#include "GameEventMgr.h"
+ #include "World.h"
+ #include "SharedDefines.h"
+ #include "ScriptMgr.h"
+@@ -178,7 +179,7 @@ namespace Trinity
+                         gain *= 2;
+                 }
+ 
+-                gain = uint32(gain * sWorld->getRate(RATE_XP_KILL));
++                gain = uint32(gain * sWorld->getRate(RATE_XP_KILL) * (IsEventActive(sWorld->getIntConfig(CONFIG_RATE_XP_WEEKEND_EVID)) ? sWorld->getRate(RATE_XP_WEEKEND) : 1.0f));
+             }
+ 
+             sScriptMgr->OnGainCalculation(gain, player, u);
+diff --git src/server/game/World/World.cpp src/server/game/World/World.cpp
+index 354b36b..5dd066a 100755
+--- src/server/game/World/World.cpp
++++ src/server/game/World/World.cpp
+@@ -460,6 +460,8 @@ void World::LoadConfigSettings(bool reload)
+     rate_values[RATE_XP_KILL]     = ConfigMgr::GetFloatDefault("Rate.XP.Kill", 1.0f);
+     rate_values[RATE_XP_QUEST]    = ConfigMgr::GetFloatDefault("Rate.XP.Quest", 1.0f);
+     rate_values[RATE_XP_EXPLORE]  = ConfigMgr::GetFloatDefault("Rate.XP.Explore", 1.0f);
++    rate_values[RATE_XP_WEEKEND]  = ConfigMgr::GetFloatDefault("Rate.XP.Weekend", 1.5f);
++    m_int_configs[CONFIG_RATE_XP_WEEKEND_EVID] = ConfigMgr::GetIntDefault("Rate.XP.Weekend.EVID", 65);
+     rate_values[RATE_REPAIRCOST]  = ConfigMgr::GetFloatDefault("Rate.RepairCost", 1.0f);
+     if (rate_values[RATE_REPAIRCOST] < 0.0f)
+     {
+diff --git src/server/game/World/World.h src/server/game/World/World.h
+index 18d3200..a5f5a28 100755
+--- src/server/game/World/World.h
++++ src/server/game/World/World.h
+@@ -309,6 +309,7 @@ enum WorldIntConfigs
+     CONFIG_PRESERVE_CUSTOM_CHANNEL_DURATION,
+     CONFIG_PERSISTENT_CHARACTER_CLEAN_FLAGS,
+     CONFIG_MAX_INSTANCES_PER_HOUR,
++    CONFIG_RATE_XP_WEEKEND_EVID,
+     INT_CONFIG_VALUE_COUNT
+ };
+ 
+@@ -378,6 +379,7 @@ enum Rates
+     RATE_DURABILITY_LOSS_ABSORB,
+     RATE_DURABILITY_LOSS_BLOCK,
+     RATE_MOVESPEED,
++    RATE_XP_WEEKEND,
+     MAX_RATES
+ };
+ 
+diff --git src/server/worldserver/worldserver.conf.dist src/server/worldserver/worldserver.conf.dist
+index df46ccc..a4498dc 100644
+--- src/server/worldserver/worldserver.conf.dist
++++ src/server/worldserver/worldserver.conf.dist
+@@ -2058,14 +2058,20 @@ Rate.Drop.Item.ReferencedAmount = 1
+ #    Rate.XP.Kill
+ #    Rate.XP.Quest
+ #    Rate.XP.Explore
+-#        Description: Experience rates.
++#    Rate.XP.Weekend.EVID
++#        Description: Experience rates. Weekend rate actives every Saturday and Sunday.
++#                     Weekend.EVID is the EVENT ID in the `game_events` table to use.
+ #        Default:     1 - (Rate.XP.Kill)
+ #                     1 - (Rate.XP.Quest)
+ #                     1 - (Rate.XP.Explore)
++#                   1.5 - (Rate.XP.Weekend)
++#                    65 - (Rate.XP.Weekend.EVID)
+ 
+ Rate.XP.Kill    = 1
+ Rate.XP.Quest   = 1
+ Rate.XP.Explore = 1
++Rate.XP.Weekend = 1.5
++Rate.XP.Weekend.EVID = 65
+ 
+ #
+ #    Rate.RepairCost

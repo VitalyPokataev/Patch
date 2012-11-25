@@ -1,0 +1,1683 @@
+commit c6ffec62ebb21a270ea5a40974da4b82c9c14528
+Author: Vitasic <vitasic-pokataev@yandex.ru>
+Date:   Wed Aug 1 12:39:26 2012 +0400
+
+    Core/UpCore_ADD_VIP_VENDORS
+
+diff --git a/sql/updates/UpCore/world/vip_vendor.sql b/sql/updates/UpCore/world/vip_vendor.sql
+new file mode 100644
+index 0000000..96c399b
+--- /dev/null
++++ b/sql/updates/UpCore/world/vip_vendor.sql
+@@ -0,0 +1,2 @@
++INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES
++('100012','0','0','0','0','0','28769','0','0','0','ViP ��������','','','0','80','80','0','35','35','129','1','1.14286','1','0','0','0','0','0','1','0','0','1','0','0','0','0','0','0','0','0','0','0','7','4718662','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','','0','3','2','2','1','0','0','0','0','0','0','0','0','1','0','0','0','npc_vip_vendor','1');
+\ No newline at end of file
+diff --git a/sql/updates/UpCore/world/world_npc_arena-honor.sql b/sql/updates/UpCore/world/world_npc_arena-honor.sql
+new file mode 100644
+index 0000000..4f1bfdf
+--- /dev/null
++++ b/sql/updates/UpCore/world/world_npc_arena-honor.sql
+@@ -0,0 +1,2 @@
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES
++('100007', '0', '0', '0', '0', '0', '18', '0', '18', '0', 'npc arena-honor', 'arena-honor master', '', '0', '59', '61', '0', '35', '35', '1', '1.48', '1.14286', '0.0', '0', '655.0', '663.0', '0', '158', '1.0', '1500', '1900', '1', '0', '0', '0', '0', '0', '0', '0', '0.0', '0.0', '100', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '3', '1.0', '1.0', '1.0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', 'arena_honor_change', '1');
+diff --git a/sql/updates/UpCore/world/world_npc_buff.sql b/sql/updates/UpCore/world/world_npc_buff.sql
+new file mode 100644
+index 0000000..3e0b56e
+--- /dev/null
++++ b/sql/updates/UpCore/world/world_npc_buff.sql
+@@ -0,0 +1,2 @@
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES
++('70000', '0', '0', '0', '0', '0', '18', '0', '18', '0', 'LordPsyan', 'Buffs master', '', '0', '59', '61', '0', '35', '35', '1', '1.48', '1.14286', '0.0', '0', '655.0', '663.0', '0', '158', '1.0', '1500', '1900', '1', '0', '0', '0', '0', '0', '0', '0', '0.0', '0.0', '100', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '3', '1.0', '1.0', '1.0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', 'npc_buffer', '1');
+diff --git a/sql/updates/UpCore/world/world_npc_morph.sql b/sql/updates/UpCore/world/world_npc_morph.sql
+new file mode 100644
+index 0000000..32830c6
+--- /dev/null
++++ b/sql/updates/UpCore/world/world_npc_morph.sql
+@@ -0,0 +1,2 @@
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES
++('100004', '0', '0', '0', '0', '0', '18', '0', '18', '0', 'Morph', 'Morph master', '', '0', '59', '61', '0', '35', '35', '1', '1.48', '1.14286', '0.0', '0', '655.0', '663.0', '0', '158', '1.0', '1500', '1900', '1', '0', '0', '0', '0', '0', '0', '0', '0.0', '0.0', '100', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '3', '1.0', '1.0', '1.0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', 'npc_morph', '1');
+diff --git a/sql/updates/UpCore/world/world_npc_other.sql b/sql/updates/UpCore/world/world_npc_other.sql
+new file mode 100644
+index 0000000..87cac0a
+--- /dev/null
++++ b/sql/updates/UpCore/world/world_npc_other.sql
+@@ -0,0 +1,2 @@
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES
++('100006', '0', '0', '0', '0', '0', '18', '0', '18', '0', 'npc_other', 'other master', '', '0', '59', '61', '0', '35', '35', '1', '1.48', '1.14286', '0.0', '0', '655.0', '663.0', '0', '158', '1.0', '1500', '1900', '1', '0', '0', '0', '0', '0', '0', '0', '0.0', '0.0', '100', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '3', '1.0', '1.0', '1.0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', 'npc_other', '1');
+diff --git a/sql/updates/UpCore/world/world_npc_proff.sql b/sql/updates/UpCore/world/world_npc_proff.sql
+new file mode 100644
+index 0000000..8e89c33
+--- /dev/null
++++ b/sql/updates/UpCore/world/world_npc_proff.sql
+@@ -0,0 +1,2 @@
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES
++('70001', '0', '0', '0', '0', '0', '18', '0', '18', '0', 'Cyon', 'Profession master', '', '0', '59', '61', '0', '35', '35', '1', '1.48', '1.14286', '0.0', '0', '655.0', '663.0', '0', '158', '1.0', '1500', '1900', '1', '0', '0', '0', '0', '0', '0', '0', '0.0', '0.0', '100', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '3', '1.0', '1.0', '1.0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', 'npc_proff', '1');
+diff --git a/sql/updates/UpCore/world/world_npc_title.sql b/sql/updates/UpCore/world/world_npc_title.sql
+new file mode 100644
+index 0000000..0e01f6a
+--- /dev/null
++++ b/sql/updates/UpCore/world/world_npc_title.sql
+@@ -0,0 +1,2 @@
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES
++('100005', '0', '0', '0', '0', '0', '18', '0', '18', '0', 'npc title', 'title master', '', '0', '59', '61', '0', '35', '35', '1', '1.48', '1.14286', '0.0', '0', '655.0', '663.0', '0', '158', '1.0', '1500', '1900', '1', '0', '0', '0', '0', '0', '0', '0', '0.0', '0.0', '100', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '3', '1.0', '1.0', '1.0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', 'npc_title', '1');
+diff --git a/src/server/game/Scripting/ScriptLoader.cpp b/src/server/game/Scripting/ScriptLoader.cpp
+index 658145f..14d613a 100755
+--- a/src/server/game/Scripting/ScriptLoader.cpp
++++ b/src/server/game/Scripting/ScriptLoader.cpp
+@@ -39,6 +39,14 @@ void AddSC_npc_mount();
+ void AddSC_ArgentTournament();
+ //Revenge od Dalaran squidrrel
+ void AddSC_dalaran_squirrel();
++// NPC Vip
++void AddSC_npc_vip_vendor();
++void AddSC_npc_buffer();
++void AddSC_npc_proff();
++void AddSC_npc_morph();
++void AddSC_npc_title();
++void AddSC_npc_other();
++void AddSC_arena_honor_change();
+ 
+ // spells
+ void AddSC_deathknight_spell_scripts();
+@@ -1291,11 +1299,19 @@ void AddCustomScripts()
+     //Hunter Pet Vendor
+     AddSC_npc_hunterpetvendor();	
+     // Custom
+-    AddSC_DuelReset();
+-    AddSC_npc_mount();		
++    AddSC_DuelReset();	
+     AddSC_ArgentTournament();
+     AddSC_dalaran_squirrel();
+-    AddSC_DuelReset();
++    AddSC_DuelReset();	
++    // NPC Vip
++    AddSC_arena_honor_change();
++    AddSC_npc_mount();		
++    AddSC_npc_vip_vendor();
++    AddSC_npc_buffer();
++    AddSC_npc_proff();
++    AddSC_npc_morph();
++    AddSC_npc_title();
++    AddSC_npc_other();
+     //guildhouse
+     AddSC_guildmaster();
+ #endif
+diff --git a/src/server/scripts/Custom/CMakeLists.txt b/src/server/scripts/Custom/CMakeLists.txt
+index 6655531..1b21185 100644
+--- a/src/server/scripts/Custom/CMakeLists.txt
++++ b/src/server/scripts/Custom/CMakeLists.txt
+@@ -16,6 +16,14 @@ set(scripts_STAT_SRCS
+   Custom/dalaran_squirrel.cpp
+   Custom/duel_reset.cpp
+   Custom/guildmaster.cpp
++  Custom/npc_vip_vendor.cpp
++  Custom/npc_buff.cpp
++  Custom/npc_proff.cpp
++  Custom/npc_morph.cpp
++  Custom/npc_title.cpp
++  Custom/npc_other.cpp
++  Custom/arena_honor_change.cpp
++
+ )
+ 
+ message("  -> Prepared: Custom")
+diff --git a/src/server/scripts/Custom/arena_honor_change.cpp b/src/server/scripts/Custom/arena_honor_change.cpp
+new file mode 100644
+index 0000000..37df7b6
+--- /dev/null
++++ b/src/server/scripts/Custom/arena_honor_change.cpp
+@@ -0,0 +1,126 @@
++/*Автор: Семак 
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES
++('100007', '0', '0', '0', '0', '0', '18', '0', '18', '0', 'npc arena-honor', 'arena-honor master', '', '0', '59', '61', '0', '35', '35', '1', '1.48', '1.14286', '0.0', '0', '655.0', '663.0', '0', '158', '1.0', '1500', '1900', '1', '0', '0', '0', '0', '0', '0', '0', '0.0', '0.0', '100', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '3', '1.0', '1.0', '1.0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', 'arena_honor_change', '1');
++*/ 
++class arena_honor_change : public CreatureScript
++{
++    public:
++        arena_honor_change() : CreatureScript("arena_honor_change") { }
++        
++    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
++    {
++		char wh[255];
++        char wh2[255];
++        pPlayer->PlayerTalkClass->GetGossipMenu().ClearMenu();
++        if (!pPlayer->GetSession()->IsPremium() && !pPlayer->isGameMaster())
++		{
++			pPlayer->CLOSE_GOSSIP_MENU();
++			pCreature->MonsterTextEmote("Вы не являетесь Випом", 0, true);
++			return true;
++		}
++            sprintf(wh, "Обменять Очки хонора %i на Очки арены %i", sWorld->getIntConfig(CONFIG_HONOR_CHANGE),sWorld->getIntConfig(CONFIG_ARENA_CHANGE));
++            sprintf(wh2, "Обменять Очки арены %i на Очки чести %i", sWorld->getIntConfig(CONFIG_ARENA_CHANGE),sWorld->getIntConfig(CONFIG_HONOR_CHANGE));
++            pPlayer->ADD_GOSSIP_ITEM( 10, wh, GOSSIP_SENDER_MAIN, 1);
++            pPlayer->ADD_GOSSIP_ITEM( 10, wh2, GOSSIP_SENDER_MAIN, 3);
++            
++        pPlayer->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, pCreature->GetGUID());
++        return true;
++    }
++
++    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
++    {
++        switch(action)
++        {
++            case 1:
++            {
++                player->PlayerTalkClass->GetGossipMenu().ClearMenu();
++                player->ADD_GOSSIP_ITEM( 10, "Да", GOSSIP_SENDER_MAIN, 2);
++                player->ADD_GOSSIP_ITEM( 10, "Нет", GOSSIP_SENDER_MAIN, 4);
++                player->ADD_GOSSIP_ITEM( 10, "Вернуться в главное меню", GOSSIP_SENDER_MAIN, 5); 
++                player->SEND_GOSSIP_MENU(1500017, creature->GetGUID()); 
++                break;
++            }
++            case 2:
++            {
++                player->PlayerTalkClass->GetGossipMenu().ClearMenu();
++                if(player->GetHonorPoints()>=sWorld->getIntConfig(CONFIG_HONOR_CHANGE))
++                {
++                    player->ModifyHonorPoints(-sWorld->getIntConfig(CONFIG_HONOR_CHANGE));
++                    player->ModifyArenaPoints(sWorld->getIntConfig(CONFIG_ARENA_CHANGE));
++                    creature->MonsterTextEmote("Обмен очков чести на очки арены закончен успешно !Diyvol-Server!.", LANG_UNIVERSAL, NULL);
++                    player->ADD_GOSSIP_ITEM( 10, "Вернуться в главное меню", GOSSIP_SENDER_MAIN, 5);
++                    player->ADD_GOSSIP_ITEM( 10, "Закрыть меню", GOSSIP_SENDER_MAIN, 4);
++                    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
++                }
++                else
++                {
++                    player->ADD_GOSSIP_ITEM( 10, "Вернуться в главное меню", GOSSIP_SENDER_MAIN, 5);
++                    player->ADD_GOSSIP_ITEM( 10, "Закрыть меню", GOSSIP_SENDER_MAIN, 4);        
++                    player->SEND_GOSSIP_MENU(1500019, creature->GetGUID());
++                }
++                break;
++            }
++            case 3:
++            {
++                player->PlayerTalkClass->GetGossipMenu().ClearMenu();
++                player->ADD_GOSSIP_ITEM( 10, "Да", GOSSIP_SENDER_MAIN, 6);
++                player->ADD_GOSSIP_ITEM( 10, "Нет", GOSSIP_SENDER_MAIN, 4);
++                player->ADD_GOSSIP_ITEM( 10, "Вернуться в главное меню", GOSSIP_SENDER_MAIN, 5); 
++                player->SEND_GOSSIP_MENU(1500017, creature->GetGUID()); 
++                break;
++            }
++            case 6:
++            {
++                player->PlayerTalkClass->GetGossipMenu().ClearMenu();
++                if (player->GetArenaPoints()>=sWorld->getIntConfig(CONFIG_ARENA_CHANGE))
++                {
++                    player->ModifyArenaPoints(-sWorld->getIntConfig(CONFIG_ARENA_CHANGE));
++                    player->ModifyHonorPoints(sWorld->getIntConfig(CONFIG_HONOR_CHANGE));
++                    creature->MonsterSay("Обмен очков арены на очки чесни закончен успешно!Diyvol-Server!.", LANG_UNIVERSAL, NULL);
++                    player->ADD_GOSSIP_ITEM( 10, "Вернуться в главное меню", GOSSIP_SENDER_MAIN, 5);
++                    player->ADD_GOSSIP_ITEM( 10, "Закрыть меню", GOSSIP_SENDER_MAIN, 4);
++                    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
++                    break;
++                }
++                else
++                {
++                    player->ADD_GOSSIP_ITEM( 10, "Вернуться в главное меню", GOSSIP_SENDER_MAIN, 5);
++                    player->ADD_GOSSIP_ITEM( 10, "Закрыть меню", GOSSIP_SENDER_MAIN, 4); 
++                    player->SEND_GOSSIP_MENU(1500021, creature->GetGUID());
++                    break;
++                }
++                break;
++            }
++            case 4:
++            {
++                player->CLOSE_GOSSIP_MENU(); break;
++            }
++            case 5:
++            {
++				char wh[255];
++                char wh2[255];
++				sprintf(wh, "Обменять Очки хонора %i на Очки арены %i", sWorld->getIntConfig(CONFIG_HONOR_CHANGE),sWorld->getIntConfig(CONFIG_ARENA_CHANGE));
++                sprintf(wh2, "Обменять Очки арены %i на Очки чести %i", sWorld->getIntConfig(CONFIG_ARENA_CHANGE),sWorld->getIntConfig(CONFIG_HONOR_CHANGE));
++                player->PlayerTalkClass->GetGossipMenu().ClearMenu();
++                player->ADD_GOSSIP_ITEM( 10, wh, GOSSIP_SENDER_MAIN, 1);
++                player->ADD_GOSSIP_ITEM( 10, wh2, GOSSIP_SENDER_MAIN, 2);
++                player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
++                return true;
++            }
++        }
++        return true;
++    }
++    
++    bool GossipSelect_arena_honor_change(Player *player, Creature *_Creature, uint32 sender, uint32 action )
++    {
++        if (sender == GOSSIP_SENDER_MAIN)
++        OnGossipSelect(player, _Creature, 0, action);
++
++        return true;
++    }
++};
++
++void AddSC_arena_honor_change()
++{
++    new arena_honor_change;
++}
+\ No newline at end of file
+diff --git a/src/server/scripts/Custom/npc_buff.cpp b/src/server/scripts/Custom/npc_buff.cpp
+new file mode 100644
+index 0000000..cf0bc48
+--- /dev/null
++++ b/src/server/scripts/Custom/npc_buff.cpp
+@@ -0,0 +1,239 @@
++/*
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES
++('70000', '0', '0', '0', '0', '0', '18', '0', '18', '0', 'LordPsyan', 'Buffs master', '', '0', '59', '61', '0', '35', '35', '1', '1.48', '1.14286', '0.0', '0', '655.0', '663.0', '0', '158', '1.0', '1500', '1900', '1', '0', '0', '0', '0', '0', '0', '0', '0.0', '0.0', '100', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '3', '1.0', '1.0', '1.0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', 'npc_buffer', '1');
++*/
++
++#include "ScriptPCH.h"
++#include "ScriptMgr.h"
++
++#define MSG_GOSSIP_TEXT_GETTING_STARTED	"Приветствуем вас на сервере Freedom-WoW!"
++
++#define MSG_ERR_HONOR "У вас не достаточно хонора для совершения покупки!"
++#define MSG_ERR_INCOMBAT "Вы находитесь в бою. Чтобы использовать данного Npc выйдите из него."
++
++#define MSG_GOSSIP_TEXT_BUFF_POWER_WORD "[Бафнуть] Слово силы: Стойкость"
++#define MSG_GOSSIP_TEXT_BUFF_BLESSING_OF_KINGS "[Бафнуть] Благословение Королей"
++#define MSG_GOSSIP_TEXT_BUFF_MARK_OF_THE_WILD "[Бафнуть] Знак дикой природы"
++#define MSG_GOSSIP_TEXT_BUFF_ARCANE_BRILLIANCE "[Бафнуть] Чародейская гениальность Даларана"
++#define MSG_GOSSIP_TEXT_BUFF_BLESSING_OF_MIGHT "[Бафнуть] Великое Благословение могущества"
++#define MSG_GOSSIP_TEXT_BUFF_BLESSING_OF_WISDOM "[Бафнуть] Благословение мудрости"
++#define MSG_GOSSIP_TEXT_BUFF_THORNS "[Бафнуть] Шипы"
++#define MSG_GOSSIP_TEXT_BUFF_DIVINE_SPIRIT "[Бафнуть] Божественный дух"
++#define MSG_GOSSIP_TEXT_BUFF_SHADOW_PROTECTION "[Бафнуть] Защита от темной магии"
++#define MSG_GOSSIP_TEXT_BUFF_STAMINA "[Бафнуть] Выносливость"
++
++#define MSG_GOSSIP_TEXT_SUPPER_BUFF_BERSERK "[Бафнуть] Берсерк. Стоимость 1 миллион хонора."
++#define MSG_GOSSIP_TEXT_SUPPER_BUFF_AEGIS_OF_RAGNAROS "[Бафнуть] Эгида Рагнароса. Стоимость 1 миллион хонора."
++#define MSG_GOSSIP_TEXT_SUPPER_BUFF_AEGIS_OF_NELTHARION "[Бафнуть] Защита Нелтариона. Стоимость 100 тысяч хонора"
++#define MSG_GOSSIP_TEXT_SUPPER_BUFF_BLESSING_ADALS "[Бафнуть] Благословение А'далла. Стоимость 100 тысяч хонора."
++#define MSG_GOSSIP_TEXT_SUPPER_BUFF_CRIT_SPELLS "[Бафнуть] Критическое срабатывание. Стоимость 100 тысяч хонора."
++#define MSG_GOSSIP_TEXT_SUPPER_BUFF_BLESSING_PINCHI "[Бафнуть] Благословение мистера Пинчи. Стоимость 100 тысяч хонора."
++#define MSG_GOSSIP_TEXT_SUPPER_BUFF_TRANSPARENCY "[Бафнуть] Прозрачность. Стоимость 100 тысяч хонора."
++
++#define MSG_GOSSIP_TEXT_BUFF_MENU "[Меню Баффов] ->"
++#define MSG_GOSSIP_TEXT_SUPER_MENU "[Меню особых бафов] ->"
++#define MSG_GOSSIP_TEXT_MAIN_MENU "<- [Вернутся в Главное меню]"
++
++#define CONST_HONOR_1 1000000
++#define CONST_HONOR_2 100000
++
++
++class npc_buffer : public CreatureScript
++{
++    public: 
++    npc_buffer() : CreatureScript("npc_buffer") { }
++
++
++	bool OnGossipHello(Player *player, Creature *creature)
++		{ 
++	    player->PlayerTalkClass->ClearMenus();
++        creature->MonsterWhisper(MSG_GOSSIP_TEXT_GETTING_STARTED, player->GetGUID());
++        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, MSG_GOSSIP_TEXT_BUFF_MENU, GOSSIP_SENDER_MAIN, 2);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, MSG_GOSSIP_TEXT_SUPER_MENU, GOSSIP_SENDER_MAIN, 13);
++        player->SEND_GOSSIP_MENU (DEFAULT_GOSSIP_MESSAGE,creature->GetGUID()); 
++        return true;
++	}
++             
++	bool OnGossipSelect(Player *player, Creature *creature, uint32 sender, uint32 action )
++		{
++		  if (!player->getAttackers().empty())
++	{
++		creature->MonsterWhisper(MSG_ERR_INCOMBAT, player->GetGUID());
++		player->CLOSE_GOSSIP_MENU();
++        return false;
++		  }
++    switch (action)
++	{
++	case 2:
++        player->PlayerTalkClass->ClearMenus();
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_BUFF_POWER_WORD, GOSSIP_SENDER_MAIN, 3);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_BUFF_BLESSING_OF_KINGS, GOSSIP_SENDER_MAIN, 4);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_BUFF_MARK_OF_THE_WILD, GOSSIP_SENDER_MAIN, 5);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_BUFF_ARCANE_BRILLIANCE, GOSSIP_SENDER_MAIN, 6);
++        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_BUFF_BLESSING_OF_MIGHT, GOSSIP_SENDER_MAIN, 7);
++        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_BUFF_BLESSING_OF_WISDOM, GOSSIP_SENDER_MAIN, 8);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_BUFF_THORNS, GOSSIP_SENDER_MAIN, 9);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_BUFF_DIVINE_SPIRIT, GOSSIP_SENDER_MAIN, 10);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_BUFF_SHADOW_PROTECTION, GOSSIP_SENDER_MAIN, 11);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_BUFF_STAMINA, GOSSIP_SENDER_MAIN, 12);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, MSG_GOSSIP_TEXT_MAIN_MENU, GOSSIP_SENDER_MAIN, 21);
++	    player->SEND_GOSSIP_MENU (DEFAULT_GOSSIP_MESSAGE,creature->GetGUID());
++		break;
++	case 3:
++		// Наложение стойкости (Исправлено)
++	    player->CastSpell(player, 69377, true);
++		player->CLOSE_GOSSIP_MENU();
++	    break;
++    case 4:
++		 // Наложение Благословение Королей (Исправлено)
++		player->CastSpell(player, 56525, true);
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 5:
++		 // Наложение Знак дикой природы
++		player->CastSpell(player, 1126, true);
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 6:
++		 // Наложение Чародейской гениальности Даларана (Исправлено)
++		player->CastSpell(player, 61316, true);
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 7:
++         // Наложение Благословение могущества (Исправлено)
++		player->CastSpell(player, 29381, true);
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 8:
++		 // Наложение Благословение мудрости (Исправлено)
++		player->CastSpell(player, 56521, true);
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 9:
++		 // Наложение Шипов (Исправлено)
++		player->CastSpell(player, 66068, true);
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 10:
++		 // Наложение Божественный духа (Исправлено)
++		player->CastSpell(player, 48074, true);
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 11:
++		 // Наложение Защиты от темной магии (Исправлено)
++		player->CastSpell(player, 48170, true);
++	    player->CLOSE_GOSSIP_MENU();
++		break;
++	case 12:
++		player->CastSpell(player, 48102, true);
++		player->CLOSE_GOSSIP_MENU();
++		break;
++    case 13:
++		player->PlayerTalkClass->ClearMenus();
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, MSG_GOSSIP_TEXT_SUPPER_BUFF_BERSERK, GOSSIP_SENDER_MAIN, 14);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, MSG_GOSSIP_TEXT_SUPPER_BUFF_AEGIS_OF_RAGNAROS, GOSSIP_SENDER_MAIN, 15);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, MSG_GOSSIP_TEXT_SUPPER_BUFF_AEGIS_OF_NELTHARION, GOSSIP_SENDER_MAIN, 16);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, MSG_GOSSIP_TEXT_SUPPER_BUFF_BLESSING_ADALS, GOSSIP_SENDER_MAIN, 17);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, MSG_GOSSIP_TEXT_SUPPER_BUFF_CRIT_SPELLS, GOSSIP_SENDER_MAIN, 18);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, MSG_GOSSIP_TEXT_SUPPER_BUFF_BLESSING_PINCHI, GOSSIP_SENDER_MAIN, 19);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, MSG_GOSSIP_TEXT_SUPPER_BUFF_TRANSPARENCY, GOSSIP_SENDER_MAIN, 20);
++        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, MSG_GOSSIP_TEXT_MAIN_MENU, GOSSIP_SENDER_MAIN, 21);
++		player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE,creature->GetGUID()); 
++        break;
++	case 14:
++	if (player->GetHonorPoints() < CONST_HONOR_1)
++	    {
++		creature->MonsterWhisper(MSG_ERR_HONOR, player->GetGUID());
++		player->CLOSE_GOSSIP_MENU();
++	}else{
++		// Наложение берсерка и отнятие 1 ляма хонора (Доработано)
++		player->CastSpell(player, 41924, true);
++		player->ModifyHonorPoints(-CONST_HONOR_1);
++        player->CLOSE_GOSSIP_MENU();
++	}
++				break;
++	case 15:
++    if (player->GetHonorPoints() < CONST_HONOR_2)
++	    {
++		creature->MonsterWhisper(MSG_ERR_HONOR, player->GetGUID());
++		player->CLOSE_GOSSIP_MENU();
++	}else{
++		// Наложение Эгиды Рагнароса(Доработано)
++		player->CastSpell(player, 20620, true);
++		player->ModifyHonorPoints(-CONST_HONOR_2);
++        player->CLOSE_GOSSIP_MENU();
++	}
++				break;
++	case 16:
++    if (player->GetHonorPoints() < CONST_HONOR_2)
++	    {
++		creature->MonsterWhisper(MSG_ERR_HONOR, player->GetGUID());
++		player->CLOSE_GOSSIP_MENU();
++	}else{
++		// Наложение Защита Нелтариона(Доработано)
++		player->CastSpell(player, 51512, true);
++		player->ModifyHonorPoints(-CONST_HONOR_2);
++        player->CLOSE_GOSSIP_MENU();
++	}
++				break;
++	case 17:
++	if (player->GetHonorPoints() < CONST_HONOR_2)
++		{
++		creature->MonsterWhisper(MSG_ERR_HONOR, player->GetGUID());
++		player->CLOSE_GOSSIP_MENU();
++	}else{
++		// Наложение Благословение А'дала
++		player->CastSpell(player, 35076, true);
++		player->ModifyHonorPoints(-CONST_HONOR_2);
++        player->CLOSE_GOSSIP_MENU();
++	}
++				break;
++	case 18:
++	if (player->GetHonorPoints() < CONST_HONOR_2)
++		{
++		creature->MonsterWhisper(MSG_ERR_HONOR, player->GetGUID());
++		player->CLOSE_GOSSIP_MENU();
++	}else{
++		// Наложение Критического срабатывания положительных эффектов
++		player->CastSpell(player, 31305, true);
++		player->ModifyHonorPoints(-CONST_HONOR_2);
++        player->CLOSE_GOSSIP_MENU();
++	}
++				break;
++	case 19:
++	if (player->GetHonorPoints() < CONST_HONOR_2)
++		{
++		creature->MonsterWhisper(MSG_ERR_HONOR, player->GetGUID());
++	    player->CLOSE_GOSSIP_MENU();
++	}else{
++		// Наложение Благословения мистера Пинчи
++		player->CastSpell(player, 33053, true);
++		player->ModifyHonorPoints(-CONST_HONOR_2);
++        player->CLOSE_GOSSIP_MENU();
++	}
++				break;
++	case 20:
++        if (player->GetHonorPoints() < CONST_HONOR_2)
++		{
++		creature->MonsterWhisper(MSG_ERR_HONOR, player->GetGUID());
++	    player->CLOSE_GOSSIP_MENU();
++	}else{
++		// Наложение Прозрачности
++		player->CastSpell(player, 37802, true);
++		player->ModifyHonorPoints(-CONST_HONOR_2);
++        player->CLOSE_GOSSIP_MENU();
++	}
++		break;
++	case 21:
++		OnGossipHello(player, creature);
++		break;
++
++			}
++				return true;
++}
++
++   };
++void AddSC_npc_buffer()
++{
++    new npc_buffer;
++}
+\ No newline at end of file
+diff --git a/src/server/scripts/Custom/npc_morph.cpp b/src/server/scripts/Custom/npc_morph.cpp
+new file mode 100644
+index 0000000..3d28ad4
+--- /dev/null
++++ b/src/server/scripts/Custom/npc_morph.cpp
+@@ -0,0 +1,90 @@
++/*
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES
++('100004', '0', '0', '0', '0', '0', '18', '0', '18', '0', 'Morph', 'Morph master', '', '0', '59', '61', '0', '35', '35', '1', '1.48', '1.14286', '0.0', '0', '655.0', '663.0', '0', '158', '1.0', '1500', '1900', '1', '0', '0', '0', '0', '0', '0', '0', '0.0', '0.0', '100', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '3', '1.0', '1.0', '1.0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', 'npc_morph', '1');
++*/
++
++#include "ScriptPCH.h"
++#include "ScriptMgr.h"
++
++#define MSG_GOSSIP_TEXT_GETTING_STARTED	"Приветствуем вас на сервере Freedom-WoW!"
++
++#define MSG_ERR_INCOMBAT "Вы находитесь в бою. Чтобы использовать данного Npc выйдите из него."
++
++#define MSG_GOSSIP_TEXT_MORTH_GNOME_MALE "[Превратить] Гном, мужчина."
++#define MSG_GOSSIP_TEXT_MORTH_GNOME_FEMALE "[Превратить] Гном, женщина."
++#define MSG_GOSSIP_TEXT_MORTH_HUMAN_FEMALE "[Превратить] Человек, женщина."
++#define MSG_GOSSIP_TEXT_MORTH_HUMAN_MALE "[Превратить] Человек, мужчина."
++#define MSG_GOSSIP_TEXT_MORTH_BLOOD_ELF_MALE "[Превратить] Эльф Крови, мужчина."
++#define MSG_GOSSIP_TEXT_MORTH_BLOOD_ELF_FEMALE "[Превратить] Эльф Крови, женщина."
++#define MSG_GOSSIP_TEXT_MORTH_TAUREN_MALE "[Превратить] Таурен, мужчина."
++#define MSG_GOSSIP_TEXT_MORTH_TAUREN_FEMALE "[Превратить] Таурен, женщина."
++
++class npc_morph : public CreatureScript
++{
++    public: 
++    npc_morph() : CreatureScript("npc_morph") { }
++
++	bool OnGossipHello(Player *player, Creature *creature)
++		{ 
++			creature->MonsterWhisper(MSG_GOSSIP_TEXT_GETTING_STARTED, player->GetGUID());
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, MSG_GOSSIP_TEXT_MORTH_GNOME_MALE, GOSSIP_SENDER_MAIN, 2);
++		    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, MSG_GOSSIP_TEXT_MORTH_GNOME_FEMALE, GOSSIP_SENDER_MAIN, 3);
++		    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, MSG_GOSSIP_TEXT_MORTH_HUMAN_MALE, GOSSIP_SENDER_MAIN, 4);
++		    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, MSG_GOSSIP_TEXT_MORTH_HUMAN_FEMALE, GOSSIP_SENDER_MAIN, 5);
++		    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, MSG_GOSSIP_TEXT_MORTH_BLOOD_ELF_MALE, GOSSIP_SENDER_MAIN, 6);
++		    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, MSG_GOSSIP_TEXT_MORTH_BLOOD_ELF_MALE, GOSSIP_SENDER_MAIN, 7);
++		    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, MSG_GOSSIP_TEXT_MORTH_TAUREN_MALE, GOSSIP_SENDER_MAIN, 8);
++		    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, MSG_GOSSIP_TEXT_MORTH_TAUREN_FEMALE, GOSSIP_SENDER_MAIN, 9);
++		    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE,creature->GetGUID());
++			return true;
++	}
++	bool OnGossipSelect(Player *player, Creature *creature, uint32 sender, uint32 action )
++		{
++		  if (!player->getAttackers().empty())
++	{
++		creature->MonsterWhisper(MSG_ERR_INCOMBAT, player->GetGUID());
++		player->CLOSE_GOSSIP_MENU();
++        return false;
++		  }
++    switch (action)
++	{
++	case 2:
++		player->CastSpell(player, 37808, true);
++        player->CLOSE_GOSSIP_MENU();
++		break;
++	case 3:
++		player->CastSpell(player, 37809, true);
++        player->CLOSE_GOSSIP_MENU();
++		break;
++	case 4:
++		player->CastSpell(player, 35466, true);
++        player->CLOSE_GOSSIP_MENU();
++		break;
++	case 5:
++		player->CastSpell(player, 37805, true);
++        player->CLOSE_GOSSIP_MENU();
++		break;
++	case 6:
++		player->CastSpell(player, 37807, true);
++        player->CLOSE_GOSSIP_MENU();
++        break;
++	case 7:
++		player->CastSpell(player, 37806, true);
++        player->CLOSE_GOSSIP_MENU();
++        break;
++	case 8:
++		player->CastSpell(player, 37810, true);
++        player->CLOSE_GOSSIP_MENU();
++		break;
++	case 9:
++		player->CastSpell(player, 37811, true);
++        player->CLOSE_GOSSIP_MENU();
++		break;
++	}
++	return true;
++	}
++	};
++void AddSC_npc_morph()
++{
++    new npc_morph;
++}
+\ No newline at end of file
+diff --git a/src/server/scripts/Custom/npc_mount.sql b/src/server/scripts/Custom/npc_mount.sql
+new file mode 100644
+index 0000000..9ea02c1
+--- /dev/null
++++ b/src/server/scripts/Custom/npc_mount.sql
+@@ -0,0 +1 @@
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`) VALUES (100002, 0, 0, 0, 0, 0, 27153, 0, 0, 0, 'Mounts', 'Transport Service', '', 0, 80, 80, 0, 35, 35, 1, 0.75, 2, 1755, 1755, 0, 1504, 1000, 1500, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 'npc_mount');
+diff --git a/src/server/scripts/Custom/npc_other.cpp b/src/server/scripts/Custom/npc_other.cpp
+new file mode 100644
+index 0000000..349fa35
+--- /dev/null
++++ b/src/server/scripts/Custom/npc_other.cpp
+@@ -0,0 +1,272 @@
++/*
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES
++('100006', '0', '0', '0', '0', '0', '18', '0', '18', '0', 'npc_other', 'other master', '', '0', '59', '61', '0', '35', '35', '1', '1.48', '1.14286', '0.0', '0', '655.0', '663.0', '0', '158', '1.0', '1500', '1900', '1', '0', '0', '0', '0', '0', '0', '0', '0.0', '0.0', '100', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '3', '1.0', '1.0', '1.0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', 'npc_other', '1');
++*/
++
++#include "ScriptPCH.h"
++#include "ScriptMgr.h"
++
++#define MSG_GOSSIP_TEXT_GETTING_STARTED	"Приветствуем вас на сервере Freedom-WoW!"
++
++#define MSG_ERR_AURA "Снятие дебафа 'Слабость после воскрешения' не возможна."
++#define MSG_ERR_INCOMBAT "Вы находитесь в бою. Чтобы использовать данного Npc выйдите из него."
++#define MSG_ERR_ARENA_POINT "У вас не достаточно Апа!"
++
++#define MSG_COMPLETE_RENAME "Оплата Успешно Произведена Сделайте Логаут и Введите Новое Имя Персонажа.Не Забудьте После Смены Имени,Выйти Из Игры и Удалить Из Клиента Папку Cache!"
++#define MSG_CUSTOMIZE_COMPLETE "Оплата Успешно Произведена Сделайте Логаут и Измените Внешность Персонажа.Не Забудьте После Смены Внешности,Выйти Из Игры и Удалить Из Клиента Папку Cache!"
++#define MSG_CHANGE_FACTION_COMPLETE "Оплата Успешно Произведена Сделайте Логаут и Измените Фракцию Персонажа.Не Забудьте После Смены Внешности,Выйти Из Игры и Удалить Из Клиента Папку Cache!"
++
++#define MSG_GOSSIP_TEXT_MAX_HEALTH "Вылечи меня!"
++#define MSG_GOSSIP_TEXT_MAX_SKILL "Выучить все навыки оружия и защиты."
++#define MSG_GOSSIP_TEXT_UNAURA_ALL "Снять бафы, дебафы, заклинания."
++#define MSG_GOSSIP_TEXT_BAGS "Купить Сумки."
++#define MSG_GOSSIP_TEXT_RIDING "Изучить Верховую Езду."
++
++#define MSG_GOSSIP_TEXT_RENAME "Сменить Имя персонажа за 3 тысячи Апа."    // Thank Crispi
++#define MSG_GOSSIP_TEXT_CUSTOM "Сменить Внешность персонажа за 3 тысячи Апа." // Thank Crispi
++#define MSG_GOSSIP_TEXT_CHANGE_FACTION "Сменить Фракцию персонажа за 5 тысяч Апа."
++
++#define MSG_GOSSIP_TEXT_A7_PRIEST_HEAL "Купить Сет А7 для Приста-хила {Дух}."
++#define MSG_GOSSIP_TEXT_A7_PRIEST_DD "Купить Сет А7 для Приста на дд."
++#define MSG_GOSSIP_TEXT_A7_DRUID_FERAL "Купить Сет А7 для Друида-ферала."
++#define MSG_GOSSIP_TEXT_A7_DRUID_RESTOR "Купить Сет А7 для Друида-рестора."
++#define MSG_GOSSIP_TEXT_A7_DRUID_BALANSE "Купить Сет А7 для Друида-баланса."
++#define MSG_GOSSIP_TEXT_A7_WARRIOR "Купить Сет А7 для Воина."
++#define MSG_GOSSIP_TEXT_A7_MAGE "Купить Сет А7 для Мага."
++#define MSG_GOSSIP_TEXT_A7_HUNTER "Купить Сет А7 для Охотника."
++#define MSG_GOSSIP_TEXT_A7_PALLADIN_HOLI "Купить Сет А7 для Палладина-хила."
++#define MSG_GOSSIP_TEXT_A7_PALLADIN_DD "Купить Сет А7 для Палладина-дд."
++#define MSG_GOSSIP_TEXT_A7_ROGUE "Купить Сет А7 для Разбойника."
++#define MSG_GOSSIP_TEXT_A7_DK "Купить Сет А7 для Рыцаря Смерти."
++#define MSG_GOSSIP_TEXT_A7_LOOK "Купить Сет А7 для Чернокнижника."
++#define MSG_GOSSIP_TEXT_A7_SHAMAN_HOLI "Купить Сет А7 для Шамана-хила {Дух}." 
++#define MSG_GOSSIP_TEXT_A7_SHAMAN_RDD "Купить Сет А7 для Шамана-рдд" 
++#define MSG_GOSSIP_TEXT_A7_SHAMAN_DD "Купить Сет А7 для Шамана-дд."
++ 
++#define CONST_ARENA_POINT_1 1000
++#define CONST_ARENA_POINT_2 3000
++
++
++        int bag = 23162;
++        int warlockItem[5] =			{41994,41999,42006,42012,42018};
++		int warriorItem[5] =			{40829,40790,40850,40870,40810};
++		int druidRestorItem[5] =		{41322,41311,41299,41276,41288};
++		int druidBalanceItem[5] =		{41328,41317,41305,41282,41328};
++		int druidFeralItem[5] =			{41679,41662,41668,41716,41774};
++		int priestDiscItem[5] =			{41855,41860,41865,41870,41875};
++		int priestShadowItem[5] =		{41916,41922,41928,41935,41941};
++		int mageItem[5] =				{41947,41954,41960,41966,41972};
++		int hunterItem[5] =				{41158,41088,41206,41218,41144};
++		int paladinHolyItem[5] =		{40934,40910,40940,40964,40928};
++		int paladinMeleeItem[5] =		{40831,40792,40852,40872,40812};
++		int rogueItem[5] =				{41673,41651,41656,41684,41768};
++		int deathknightItem[5] =		{40830,40791,40851,40871,40811};
++		int shamanMeleeItem[5] =		{41152,41082,41200,41212,41138};
++		int shamanElementalItem[5] =	{41020,40995,41034,41045,41008};
++		int shamanRestorItem[5] =		{41014,40994,41028,41039,41002};
++
++class npc_other : public CreatureScript
++{
++    public: 
++    npc_other() : CreatureScript("npc_other") { }
++
++	void AddSet(Player* player, int massive[5])
++	{
++		for (int i = 0; i < 5; ++i)
++			{
++				player->AddItem(massive[i], 1);
++			}
++		player->CLOSE_GOSSIP_MENU();
++	}
++
++	bool OnGossipHello(Player *player, Creature *creature)
++		{ 
++        creature->MonsterWhisper(MSG_GOSSIP_TEXT_GETTING_STARTED, player->GetGUID());
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR , MSG_GOSSIP_TEXT_BAGS, GOSSIP_SENDER_MAIN, 2);
++		int playerClass = player->getClass();
++		switch (playerClass)
++		{
++		case CLASS_WARLOCK:
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, MSG_GOSSIP_TEXT_A7_LOOK, GOSSIP_SENDER_MAIN, 7);
++		break;
++		case CLASS_WARRIOR:
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, MSG_GOSSIP_TEXT_A7_WARRIOR, GOSSIP_SENDER_MAIN, 8);
++		break;
++		case CLASS_DRUID:
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, MSG_GOSSIP_TEXT_A7_DRUID_RESTOR, GOSSIP_SENDER_MAIN, 9);
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, MSG_GOSSIP_TEXT_A7_DRUID_BALANSE, GOSSIP_SENDER_MAIN, 10);
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, MSG_GOSSIP_TEXT_A7_DRUID_FERAL, GOSSIP_SENDER_MAIN, 11);
++		break;
++		case CLASS_PRIEST:
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, MSG_GOSSIP_TEXT_A7_PRIEST_HEAL, GOSSIP_SENDER_MAIN, 12);
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, MSG_GOSSIP_TEXT_A7_PRIEST_DD, GOSSIP_SENDER_MAIN, 13);
++		break;
++		case CLASS_MAGE:
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, MSG_GOSSIP_TEXT_A7_MAGE, GOSSIP_SENDER_MAIN, 14);
++		break;
++		case CLASS_PALADIN:
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, MSG_GOSSIP_TEXT_A7_PALLADIN_HOLI, GOSSIP_SENDER_MAIN, 15);
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, MSG_GOSSIP_TEXT_A7_PALLADIN_DD, GOSSIP_SENDER_MAIN, 16);
++		break;
++		case CLASS_ROGUE:
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, MSG_GOSSIP_TEXT_A7_ROGUE, GOSSIP_SENDER_MAIN, 17);
++		break;
++		case CLASS_DEATH_KNIGHT:
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, MSG_GOSSIP_TEXT_A7_DK, GOSSIP_SENDER_MAIN, 18);
++		break;
++		case CLASS_SHAMAN:
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, MSG_GOSSIP_TEXT_A7_SHAMAN_DD, GOSSIP_SENDER_MAIN, 19);
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, MSG_GOSSIP_TEXT_A7_SHAMAN_RDD, GOSSIP_SENDER_MAIN, 20);
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, MSG_GOSSIP_TEXT_A7_SHAMAN_HOLI, GOSSIP_SENDER_MAIN, 21);
++		break;
++		case CLASS_HUNTER:
++			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, MSG_GOSSIP_TEXT_A7_HUNTER, GOSSIP_SENDER_MAIN, 22);
++		break;
++		}
++		    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, MSG_GOSSIP_TEXT_MAX_HEALTH, GOSSIP_SENDER_MAIN, 3);
++		    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, MSG_GOSSIP_TEXT_MAX_SKILL, GOSSIP_SENDER_MAIN, 4);
++            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, MSG_GOSSIP_TEXT_UNAURA_ALL, GOSSIP_SENDER_MAIN, 5);
++            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, MSG_GOSSIP_TEXT_RIDING, GOSSIP_SENDER_MAIN, 6);
++		    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, MSG_GOSSIP_TEXT_RENAME, GOSSIP_SENDER_MAIN, 23);
++		    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, MSG_GOSSIP_TEXT_CUSTOM, GOSSIP_SENDER_MAIN, 24);
++		    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, MSG_GOSSIP_TEXT_CHANGE_FACTION, GOSSIP_SENDER_MAIN, 25);
++            player->SEND_GOSSIP_MENU (DEFAULT_GOSSIP_MESSAGE,creature->GetGUID()); 
++        return true;
++	}
++
++
++      bool OnGossipSelect(Player *player, Creature *creature, uint32 sender, uint32 action )
++		{
++		  if (!player->getAttackers().empty())
++	{
++		creature->MonsterWhisper(MSG_ERR_INCOMBAT, player->GetGUID());
++		player->CLOSE_GOSSIP_MENU();
++        return false;
++		  }
++		  switch (action)
++	{
++		  case 2:
++			 player->AddItem(bag, 4);
++			 player->CLOSE_GOSSIP_MENU();
++			 break;
++		  case 3:
++			  player->SetHealth(player->GetMaxHealth());
++		      player->CLOSE_GOSSIP_MENU();
++			  break;
++		  case 4:
++			  player->UpdateSkillsToMaxSkillsForLevel();
++		      player->CLOSE_GOSSIP_MENU();
++			  break;
++		  case 5:
++			 if (player->HasAura(15007))
++			 {
++		creature->MonsterWhisper(MSG_ERR_AURA, player->GetGUID());
++		player->CLOSE_GOSSIP_MENU();
++		}else
++			{
++        player->RemoveAllAuras();
++		player->CLOSE_GOSSIP_MENU();
++		player->RemoveAllSpellCooldown();
++		}
++		      break;
++		  case 6:
++		      player->SetSkill(762, 6, 450, 450);
++		      player->learnSpell(54197, true);
++		      player->CLOSE_GOSSIP_MENU();
++			  break;
++		  case 7:
++			  AddSet(player, warlockItem);
++			  player->CLOSE_GOSSIP_MENU();
++			  break;
++		  case 8:
++			  AddSet(player, warriorItem);
++			  break;
++		  case 9:
++              AddSet(player, druidRestorItem);
++			  break;
++		  case 10:
++			  AddSet(player, druidBalanceItem);
++			  break;
++		  case 11:
++			  AddSet(player, druidFeralItem);
++			  break;
++		  case 12:
++			  AddSet(player, priestDiscItem);
++			  break;
++		  case 13:
++			  AddSet(player,  priestShadowItem);
++			  break;
++		  case 14:
++			  AddSet(player,  mageItem);
++			  break;
++		  case 15:
++			  AddSet(player,  paladinHolyItem);
++			  break;
++		  case 16:
++			  AddSet(player,  paladinMeleeItem);
++			  break;
++		  case 17:
++			  AddSet(player, rogueItem);
++			  break;
++		  case 18:
++			  AddSet(player, deathknightItem);
++			  break;
++		  case 19:
++			  AddSet(player, shamanMeleeItem);
++			  break;
++		  case 20:
++			  AddSet(player, shamanRestorItem);
++			  break;
++		  case 21:
++			  AddSet(player, shamanElementalItem);
++			  break;
++		  case 22:
++			  AddSet(player, hunterItem);
++		  case 23:
++		if (player->GetArenaPoints() < CONST_ARENA_POINT_1)
++		{
++			  creature->MonsterWhisper(MSG_ERR_ARENA_POINT, player->GetGUID());
++	          player->CLOSE_GOSSIP_MENU();
++		}else{
++		      // Делаем Ренейм
++		      player->SetAtLoginFlag(AT_LOGIN_RENAME);
++		      player->ModifyArenaPoints(-CONST_ARENA_POINT_1);
++              creature->MonsterWhisper(MSG_COMPLETE_RENAME, player->GetGUID());
++              player->CLOSE_GOSSIP_MENU();
++		      }
++		      break;
++		  case 24:
++			  if (player->GetArenaPoints() < CONST_ARENA_POINT_1)
++			  {
++		      creature->MonsterWhisper(MSG_ERR_ARENA_POINT, player->GetGUID());
++		      player->CLOSE_GOSSIP_MENU();
++	    }else{
++		      // Делаем Смену внешности
++		      player->SetAtLoginFlag(AT_LOGIN_CUSTOMIZE);
++		      player->ModifyArenaPoints(-CONST_ARENA_POINT_1);
++              creature->MonsterWhisper(MSG_CUSTOMIZE_COMPLETE, player->GetGUID());
++              player->CLOSE_GOSSIP_MENU();
++			  }
++			  break;
++		  case 25:
++			  if (player->GetArenaPoints() < CONST_ARENA_POINT_2)
++			  {
++		       creature->MonsterWhisper(MSG_ERR_ARENA_POINT, player->GetGUID());
++		       player->CLOSE_GOSSIP_MENU();
++	     }else{
++		       // Делаем Смену фракции
++		       player->SetAtLoginFlag(AT_LOGIN_CHANGE_FACTION);
++		       player->ModifyArenaPoints(-CONST_ARENA_POINT_2);
++               creature->MonsterWhisper(MSG_CHANGE_FACTION_COMPLETE, player->GetGUID());
++               player->CLOSE_GOSSIP_MENU();
++			  }
++			  break; 
++}
++      return true;
++}
++	  };
++
++	  void AddSC_npc_other()
++{
++	new npc_other;
++}
+\ No newline at end of file
+diff --git a/src/server/scripts/Custom/npc_proff.cpp b/src/server/scripts/Custom/npc_proff.cpp
+new file mode 100644
+index 0000000..8a9fa2a
+--- /dev/null
++++ b/src/server/scripts/Custom/npc_proff.cpp
+@@ -0,0 +1,250 @@
++/*
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES
++('70001', '0', '0', '0', '0', '0', '18', '0', '18', '0', 'Cyon', 'Profession master', '', '0', '59', '61', '0', '35', '35', '1', '1.48', '1.14286', '0.0', '0', '655.0', '663.0', '0', '158', '1.0', '1500', '1900', '1', '0', '0', '0', '0', '0', '0', '0', '0.0', '0.0', '100', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '3', '1.0', '1.0', '1.0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', 'npc_proff', '1');
++*/
++
++#include "ScriptPCH.h"
++#include "ScriptMgr.h"
++
++#define MSG_GOSSIP_TEXT_GETTING_STARTED	"Приветствуем вас на сервере Freedom-WoW!"
++
++#define MSG_ERR_INCOMBAT "Вы находитесь в бою. Чтобы использовать данного Npc выйдите из него."
++
++#define MSG_GOSSIP_TEXT_PROFFESION_SECON_MENU "[Меню Второстепенных профессий] ->"
++#define MSG_GOSSIP_TEXT_MAIN_MENU "<- [Вернутся в Главное меню]"
++
++#define MSG_GOSSIP_TEXT_ALCHEMY "Изучить Алхимию."
++#define MSG_GOSSIP_TEXT_BLACKSMITHING "Изучить Кузнечное Дело."
++#define MSG_GOSSIP_TEXT_ENCNANTING "Изучить Наложение Чар."
++#define MSG_GOSSIP_TEXT_ENGINEERING "Изучить Инженерное дело."
++#define MSG_GOSSIP_TEXT_HERBALISM "Изучить Травничество."
++#define MSG_GOSSIP_TEXT_INSCRIPTION "Изучить Начертание."
++#define MSG_GOSSIP_TEXT_JEWELCRAFTING "Изучить Ювелирное дело."
++#define MSG_GOSSIP_TEXT_LEATHERWORKING "Изучить Кожевничество."
++#define MSG_GOSSIP_TEXT_MINING "Изучить Горное дело."
++#define MSG_GOSSIP_TEXT_SKINNING "Изучить Снятие шкур."
++#define MSG_GOSSIP_TEXT_TAILORING "Изучить Портное дело."
++
++#define MSG_GOSSIP_TEXT_COOKING	"Изучить Кулинарию."
++#define MSG_GOSSIP_TEXT_FIRST_AID "Изучить Первую помощь."
++#define MSG_GOSSIP_TEXT_FISHING	"Изучить Рыбную ловлю."
++
++class npc_proff : public CreatureScript
++{
++    public: 
++    npc_proff() : CreatureScript("npc_proff") { }
++	
++	void CompleteLearnProfession(Player *player, Creature * creature, SkillType skill) 
++     { 
++         if (PlayerAlreadyHasNineProfessions(player) && !IsSecondarySkill(skill)) 
++            creature->MonsterWhisper("Вы уже выучили 2 професcии!", player->GetGUID()); 
++         else 
++         { 
++             if (!LearnAllRecipesInProfession(player, skill)) 
++                 creature->MonsterWhisper("Ошибка!", player->GetGUID()); 
++         } 
++     } 
++   
++   bool IsSecondarySkill(SkillType skill) const 
++     { 
++         return skill == SKILL_COOKING || skill == SKILL_FIRST_AID; 
++     } 
++   
++   bool PlayerAlreadyHasNineProfessions(const Player *player) const 
++     { 
++         uint32 skillCount = 0; 
++
++         if (player->HasSkill(SKILL_MINING)) 
++             skillCount++; 
++         if (player->HasSkill(SKILL_SKINNING)) 
++             skillCount++; 
++         if (player->HasSkill(SKILL_HERBALISM)) 
++             skillCount++; 
++
++         if (skillCount >= 2) 
++             return true; 
++
++         for (uint32 i = 0; i < sSkillLineStore.GetNumRows(); ++i) 
++         { 
++             SkillLineEntry const *SkillInfo = sSkillLineStore.LookupEntry(i); 
++             if (!SkillInfo) 
++                 continue; 
++
++             if (SkillInfo->categoryId == SKILL_CATEGORY_SECONDARY) 
++                 continue; 
++
++             if ((SkillInfo->categoryId != SKILL_CATEGORY_PROFESSION) || !SkillInfo->canLink) 
++                 continue; 
++
++             const uint32 skillID = SkillInfo->id; 
++             if (player->HasSkill(skillID)) 
++                 skillCount++; 
++
++             if (skillCount >= 2) 
++                 return true; 
++         } 
++
++         return false; 
++     } 
++
++     bool LearnAllRecipesInProfession(Player *player, SkillType skill) 
++     { 
++         ChatHandler handler(player); 
++         char* skill_name; 
++
++         SkillLineEntry const *SkillInfo = sSkillLineStore.LookupEntry(skill); 
++         skill_name = SkillInfo->name[handler.GetSessionDbcLocale()]; 
++
++         if (!SkillInfo) 
++         { 
++             sLog->outError("Teleport NPC: received non-valid skill ID (LearnAllRecipesInProfession)"); 
++             return false; 
++         } 
++
++         LearnSkillRecipesHelper(player, SkillInfo->id); 
++
++         uint16 maxLevel = player->GetPureMaxSkillValue(SkillInfo->id); 
++         player->SetSkill(SkillInfo->id, player->GetSkillStep(SkillInfo->id), maxLevel, maxLevel); 
++         handler.PSendSysMessage(LANG_COMMAND_LEARN_ALL_RECIPES, skill_name); 
++          
++         return true; 
++     } 
++     // See "static void HandleLearnSkillRecipesHelper(Player* player,uint32 skill_id)" from cs_learn.cpp  
++     void LearnSkillRecipesHelper(Player *player, uint32 skill_id) 
++     { 
++         uint32 classmask = player->getClassMask(); 
++
++         for (uint32 j = 0; j < sSkillLineAbilityStore.GetNumRows(); ++j) 
++         { 
++             SkillLineAbilityEntry const *skillLine = sSkillLineAbilityStore.LookupEntry(j); 
++             if (!skillLine) 
++                 continue; 
++
++             // wrong skill 
++             if (skillLine->skillId != skill_id) 
++                 continue; 
++
++             // not high rank 
++             if (skillLine->forward_spellid) 
++                 continue; 
++
++             // skip racial skills 
++             if (skillLine->racemask != 0) 
++                 continue; 
++
++             // skip wrong class skills 
++             if (skillLine->classmask && (skillLine->classmask & classmask) == 0) 
++                 continue; 
++
++             SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(skillLine->spellId);
++            if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, player, false))
++                continue; 
++
++             player->learnSpell(skillLine->spellId, false); 
++         } 
++     } 
++	 bool OnGossipHello(Player *player, Creature *creature)
++	 {
++		 player->PlayerTalkClass->ClearMenus();
++		 creature->MonsterWhisper(MSG_GOSSIP_TEXT_GETTING_STARTED, player->GetGUID());
++		 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_ALCHEMY, GOSSIP_SENDER_MAIN, 2);
++		 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_BLACKSMITHING, GOSSIP_SENDER_MAIN, 3);
++		 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_ENCNANTING, GOSSIP_SENDER_MAIN, 4);
++		 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_ENGINEERING, GOSSIP_SENDER_MAIN, 5);
++		 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_HERBALISM, GOSSIP_SENDER_MAIN, 6);
++		 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_INSCRIPTION, GOSSIP_SENDER_MAIN, 7);
++		 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_JEWELCRAFTING, GOSSIP_SENDER_MAIN, 8);
++		 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_LEATHERWORKING, GOSSIP_SENDER_MAIN, 9);
++		 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_MINING, GOSSIP_SENDER_MAIN, 10);
++		 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_SKINNING, GOSSIP_SENDER_MAIN, 11);
++		 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_TAILORING, GOSSIP_SENDER_MAIN, 12);
++		 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, MSG_GOSSIP_TEXT_PROFFESION_SECON_MENU, GOSSIP_SENDER_MAIN, 13);
++	     player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE,creature->GetGUID());
++		 return true;
++	 }
++	 bool OnGossipSelect(Player *player, Creature *creature, uint32 sender, uint32 action )
++		 {
++		  if (!player->getAttackers().empty())
++	 {
++		creature->MonsterWhisper(MSG_ERR_INCOMBAT, player->GetGUID());
++		player->CLOSE_GOSSIP_MENU();
++        return false;
++		  }
++		  switch (action)
++	{
++	case 2:
++		CompleteLearnProfession(player, creature, SKILL_ALCHEMY); 
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 3:
++		CompleteLearnProfession(player, creature, SKILL_BLACKSMITHING); 
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 4:
++		CompleteLearnProfession(player, creature,  SKILL_ENCHANTING); 
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 5:
++		CompleteLearnProfession(player, creature, SKILL_ENGINEERING); 
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 6:
++		CompleteLearnProfession(player, creature, SKILL_HERBALISM); 
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 7:
++		CompleteLearnProfession(player, creature, SKILL_INSCRIPTION); 
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 8:
++		CompleteLearnProfession(player, creature, SKILL_JEWELCRAFTING);
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 9:
++		CompleteLearnProfession(player, creature, SKILL_LEATHERWORKING);
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 10:
++		CompleteLearnProfession(player, creature, SKILL_MINING);
++		player->CLOSE_GOSSIP_MENU();
++	    break;
++	case 11:
++		CompleteLearnProfession(player, creature, SKILL_SKINNING);
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 12:
++		CompleteLearnProfession(player, creature, SKILL_TAILORING);
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 13:
++		player->PlayerTalkClass->ClearMenus();
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_COOKING, GOSSIP_SENDER_MAIN, 14);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_FIRST_AID, GOSSIP_SENDER_MAIN, 15);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_FISHING, GOSSIP_SENDER_MAIN, 16);
++		player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, MSG_GOSSIP_TEXT_MAIN_MENU, GOSSIP_SENDER_MAIN, 17);
++		player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE,creature->GetGUID());
++		break;
++	case 14:
++		CompleteLearnProfession(player, creature, SKILL_COOKING);
++		player->CLOSE_GOSSIP_MENU();
++		break;
++	case 15:
++		CompleteLearnProfession(player, creature, SKILL_FIRST_AID); 
++		player->CLOSE_GOSSIP_MENU();
++	    break;
++	case 16:
++		CompleteLearnProfession(player, creature, SKILL_FISHING); 
++		player->CLOSE_GOSSIP_MENU();
++	    break;
++	case 17:
++		OnGossipHello(player, creature);
++		break;
++	 }
++		  return true;
++	 }
++	 
++	};
++ void AddSC_npc_proff()
++{
++    new npc_proff;
++}
+\ No newline at end of file
+diff --git a/src/server/scripts/Custom/npc_title.cpp b/src/server/scripts/Custom/npc_title.cpp
+new file mode 100644
+index 0000000..2bad9b8
+--- /dev/null
++++ b/src/server/scripts/Custom/npc_title.cpp
+@@ -0,0 +1,470 @@
++/*
++REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES
++('100005', '0', '0', '0', '0', '0', '18', '0', '18', '0', 'npc title', 'title master', '', '0', '59', '61', '0', '35', '35', '1', '1.48', '1.14286', '0.0', '0', '655.0', '663.0', '0', '158', '1.0', '1500', '1900', '1', '0', '0', '0', '0', '0', '0', '0', '0.0', '0.0', '100', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '1', '3', '1.0', '1.0', '1.0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', 'npc_title', '1');
++*/
++
++#include "ScriptPCH.h"
++#include "ScriptMgr.h"
++
++#define MSG_GOSSIP_TEXT_GETTING_STARTED	"Приветствуем вас на сервере Freedom-WoW!"
++
++#define MSG_ERR_ARENA_POINT "У вас не достаточно Апа!"
++#define MSG_ERR_TITLE "У данного персонажа уже есть такое звание!"
++#define MSG_ERR_INCOMBAT "Вы находитесь в бою. Чтобы использовать данного Npc выйдите из него."
++
++#define MSG_GOSSIP_TEXT_NEXT_2 "[Вторая страница] ->"
++#define MSG_GOSSIP_TEXT_NEXT_3 "[Третья страница] ->"
++#define MSG_GOSSIP_TEXT_NEXT_4 "[Четвертая страница] ->"
++#define MSG_GOSSIP_TEXT_NEXT_5 "[Пятая страница] ->"
++
++#define MSG_GOSSIP_TEXT_BACK_4 "<- [Четвертая страница] "
++#define MSG_GOSSIP_TEXT_BACK_3 "<- [Третья страница] "
++#define MSG_GOSSIP_TEXT_BACK_2 "<- [Вторая страница] "
++#define MSG_GOSSIP_TEXT_BACK_1 "<- [Первая страница] "
++
++
++#define MSG_GOSSIP_TEXT_144 "Получить звание Адмирал Кровавого Паруса {200 Апа}"
++#define MSG_GOSSIP_TEXT_62 "Получить звание Безжалостный гладиатор {200 Апа}"
++#define MSG_GOSSIP_TEXT_135 "Получить звание Безумно влюбленный {200 Апа}"
++#define MSG_GOSSIP_TEXT_141 "Получить звание Бессмертный {200 Апа}"
++#define MSG_GOSSIP_TEXT_138 "Получить звание Благодетель {200 Апа}"
++#define MSG_GOSSIP_TEXT_170 "Получить звание Великий крестоносец {200 Апа}"
++#define MSG_GOSSIP_TEXT_28 "Получить звание Верховный вождь {200 Апа}"
++#define MSG_GOSSIP_TEXT_48 "Получить звание Вершитель правосудия {200 Апа}"
++#define MSG_GOSSIP_TEXT_134 "Получить звание Весельчак {200 Апа}"
++#define MSG_GOSSIP_TEXT_72 "Получить звание Военачальник {200 Апа}"
++#define MSG_GOSSIP_TEXT_42 "Получить звание Гладиатор {200 Апа}"
++#define MSG_GOSSIP_TEXT_113 "Получить звание Гномреганский {200 Апа}"
++#define MSG_GOSSIP_TEXT_147 "Получить звание Дарнасский {200 Апа}"
++#define MSG_GOSSIP_TEXT_143 "Получить звание Дженкинс {200 Апа}"
++#define MSG_GOSSIP_TEXT_79 "Получить звание Дипломат {200 Апа}"
++#define MSG_GOSSIP_TEXT_64 "Получить звание Длань А'дала {200 Апа}"
++#define MSG_GOSSIP_TEXT_43 "Получить звание Дуэлянт {200 Апа}"
++#define MSG_GOSSIP_TEXT_80 "Получить звание Жестокий Гладиатор {200 Апа}"
++#define MSG_GOSSIP_TEXT_47 "Получить звание Завоеватель {200 Апа}"
++#define MSG_GOSSIP_TEXT_122 "Получить звание Завоеватель Наксрамаса {200 Апа}"
++#define MSG_GOSSIP_TEXT_81 "Получить звание Искатель {200 Апа}"
++#define MSG_GOSSIP_TEXT_78 "Получить звание Исследователь {200 Апа}"
++#define MSG_GOSSIP_TEXT_156 "Получить звание Крестоносец {200 Апа}"
++#define MSG_GOSSIP_TEXT_83 "Получить звание Морской дьявол {200 Апа}"
++#define MSG_GOSSIP_TEXT_71 "Получить звание Мстительный гладиатор {200 Апа}"
++#define MSG_GOSSIP_TEXT_142 "Получить звание Неумирающий {200 Апа}"
++#define MSG_GOSSIP_TEXT_146 "Получить звание Неумолимый гладиатор {200 Апа}"
++#define MSG_GOSSIP_TEXT_150 "Получить звание Оргриммарский {200 Апа}"
++#define MSG_GOSSIP_TEXT_46 "Получить звание Повелитель Скарабеев {200 Апа}"
++#define MSG_GOSSIP_TEXT_278 "Получить звание Повелитель Огня {200 Апа}"
++#define MSG_GOSSIP_TEXT_139 "Получить звание Покоритель Обсидианового святилища {200 Апа}"
++#define MSG_GOSSIP_TEXT_77 "Получить звание Превозносимый {200 Апа}"
++#define MSG_GOSSIP_TEXT_74 "Получить звание Премудрый {200 Апа}"
++#define MSG_GOSSIP_TEXT_45 "Получить звание Претендент {200 Апа}"
++#define MSG_GOSSIP_TEXT_177 "Получить звание Разгневанный гладиатор {200 Апа}"
++#define MSG_GOSSIP_TEXT_151 "Получить звание Сен'джинский {200 Апа}"
++#define MSG_GOSSIP_TEXT_171 "Получить звание Серебряный заступник {200 Апа}"
++#define MSG_GOSSIP_TEXT_131 "Получить звание Серебряный защитник {200 Апа}"
++#define MSG_GOSSIP_TEXT_173 "Получить звание Сияние Рассвета {200 Апа}"
++#define MSG_GOSSIP_TEXT_157 "Получить звание Смертоносный гладиатор {200 Апа}"
++#define MSG_GOSSIP_TEXT_75 "Получить звание Страж огня {200 Апа}"
++#define MSG_GOSSIP_TEXT_140 "Получить звание Сумеречный {200 Апа}"
++#define MSG_GOSSIP_TEXT_172 "Получить звание Терпеливый {200 Апа}"
++#define MSG_GOSSIP_TEXT_124 "Получить звание Тыквер {200 Апа}"
++#define MSG_GOSSIP_TEXT_133 "Получить звание Хмелевар {200 Апа}"
++#define MSG_GOSSIP_TEXT_125 "Получить звание Хранитель мудрости {200 Апа}"
++#define MSG_GOSSIP_TEXT_76 "Получить звание Хранитель огня {200 Апа}"
++#define MSG_GOSSIP_TEXT_145 "Получить звание Чокнутый {200 Апа}"
++#define MSG_GOSSIP_TEXT_155 "Получить звание Чудесный {200 Апа}"
++#define MSG_GOSSIP_TEXT_84 "Получить звание Шеф-повар {200 Апа}"
++
++#define CONST_ARENA_POINT 200
++
++class npc_title : public CreatureScript
++{
++    public: 
++    npc_title() : CreatureScript("npc_title") { }
++
++
++	bool AddTitle(Player* player , Creature* creature, CharTitlesEntry const* titleInfo) 
++{ 
++     if (player->HasTitle(titleInfo)) { 
++         creature->MonsterWhisper(MSG_ERR_TITLE, player->GetGUID()); 
++         player->CLOSE_GOSSIP_MENU(); 
++         return false; 
++     } 
++
++     if (player->GetArenaPoints() < CONST_ARENA_POINT) { 
++         creature->MonsterWhisper(MSG_ERR_ARENA_POINT, player->GetGUID()); 
++         player->CLOSE_GOSSIP_MENU(); 
++         
++	 } else{
++
++     player->SetTitle(titleInfo); 
++     player->ModifyArenaPoints(-CONST_ARENA_POINT); 
++     player->CLOSE_GOSSIP_MENU(); 
++	 }
++	 return true;
++} 
++
++	bool OnGossipHello(Player *player, Creature *creature)
++		{ 
++			  creature->MonsterWhisper(MSG_GOSSIP_TEXT_GETTING_STARTED, player->GetGUID());
++			  player->PlayerTalkClass->ClearMenus();
++			  player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_144, GOSSIP_SENDER_MAIN, 2);
++			  player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_62, GOSSIP_SENDER_MAIN, 3);
++			  player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_135, GOSSIP_SENDER_MAIN, 4);
++			  player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_141, GOSSIP_SENDER_MAIN, 5);
++			  player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_138, GOSSIP_SENDER_MAIN, 6);
++			  player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_170, GOSSIP_SENDER_MAIN, 7);
++			  player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_28, GOSSIP_SENDER_MAIN, 8);
++			  player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_48, GOSSIP_SENDER_MAIN, 9);
++			  player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_134, GOSSIP_SENDER_MAIN, 10);
++			  player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_72, GOSSIP_SENDER_MAIN, 11);
++			  player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, MSG_GOSSIP_TEXT_NEXT_2, GOSSIP_SENDER_MAIN, 12);
++			  player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE,creature->GetGUID());
++			  return true;
++
++}
++
++	bool OnGossipSelect(Player *player, Creature *creature, uint32 sender, uint32 action )
++		{
++		  if (!player->getAttackers().empty())
++	{
++		creature->MonsterWhisper(MSG_ERR_INCOMBAT, player->GetGUID());
++		player->CLOSE_GOSSIP_MENU();
++        return false;
++		  }
++
++		  switch (action)
++	{
++		 case 2:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(144);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 3:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(62);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 4:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(135);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 5:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(141);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 6:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(138);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 7:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(170);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 8:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(28);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 9:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(48);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 10:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(134);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 11:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(72);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 12:
++			   player->PlayerTalkClass->ClearMenus();
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_42, GOSSIP_SENDER_MAIN, 13);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_113, GOSSIP_SENDER_MAIN, 14);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_147, GOSSIP_SENDER_MAIN, 15);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_143, GOSSIP_SENDER_MAIN, 16);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_79, GOSSIP_SENDER_MAIN, 17);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_64, GOSSIP_SENDER_MAIN, 18);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_43, GOSSIP_SENDER_MAIN, 19);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_80, GOSSIP_SENDER_MAIN, 20);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_47, GOSSIP_SENDER_MAIN, 21);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_122, GOSSIP_SENDER_MAIN, 22);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, MSG_GOSSIP_TEXT_BACK_1, GOSSIP_SENDER_MAIN, 56);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, MSG_GOSSIP_TEXT_NEXT_3, GOSSIP_SENDER_MAIN, 23);
++			   player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE,creature->GetGUID());
++			   break;
++		 case 13:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(42);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++	     case 14:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(113);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++	     case 15:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(147);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 16:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(143);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 17:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(79);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++	     case 18:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(64);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 19:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(43);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++	     case 20:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(80);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 21:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(47);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++	     case 22:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(122);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 23:
++			   player->PlayerTalkClass->ClearMenus();
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_81, GOSSIP_SENDER_MAIN, 24);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_78, GOSSIP_SENDER_MAIN, 25);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_156, GOSSIP_SENDER_MAIN, 26);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_83, GOSSIP_SENDER_MAIN, 27);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_71, GOSSIP_SENDER_MAIN, 28);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_142, GOSSIP_SENDER_MAIN, 29);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_146, GOSSIP_SENDER_MAIN, 30);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_150, GOSSIP_SENDER_MAIN, 31);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_46, GOSSIP_SENDER_MAIN, 32);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_278, GOSSIP_SENDER_MAIN, 33);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, MSG_GOSSIP_TEXT_BACK_2, GOSSIP_SENDER_MAIN, 57);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, MSG_GOSSIP_TEXT_NEXT_4, GOSSIP_SENDER_MAIN, 34);
++			   player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE,creature->GetGUID());
++			   break;
++		 case 24:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(81);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 25:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(78);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 26:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(156);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 27:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(83);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 28:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(71);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 29:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(142);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 30:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(146);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 31:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(150);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 32:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(46);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 33:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(278);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 34:
++			   player->PlayerTalkClass->ClearMenus();
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_139, GOSSIP_SENDER_MAIN, 35);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_77, GOSSIP_SENDER_MAIN, 36);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_74, GOSSIP_SENDER_MAIN, 37);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_45, GOSSIP_SENDER_MAIN, 38);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_177, GOSSIP_SENDER_MAIN, 39);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_151, GOSSIP_SENDER_MAIN, 40);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_171, GOSSIP_SENDER_MAIN, 41);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_131, GOSSIP_SENDER_MAIN, 42);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_173, GOSSIP_SENDER_MAIN, 43);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_157, GOSSIP_SENDER_MAIN, 44);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, MSG_GOSSIP_TEXT_BACK_3, GOSSIP_SENDER_MAIN, 58);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, MSG_GOSSIP_TEXT_NEXT_5, GOSSIP_SENDER_MAIN, 45);
++			   player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE,creature->GetGUID());
++			   break;
++		 case 35:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(139);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 36:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(77);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 37:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(74);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 38:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(45);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 39:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(177);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 40:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(151);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 41:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(171);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 42:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(131);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 43:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(173);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 44:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(157);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 45:
++			   player->PlayerTalkClass->ClearMenus();
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_75, GOSSIP_SENDER_MAIN, 46);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_140, GOSSIP_SENDER_MAIN, 47);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_172, GOSSIP_SENDER_MAIN, 48);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_124, GOSSIP_SENDER_MAIN, 49);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_133, GOSSIP_SENDER_MAIN, 50);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_76, GOSSIP_SENDER_MAIN, 51);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_125, GOSSIP_SENDER_MAIN, 52);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_145, GOSSIP_SENDER_MAIN, 53);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_155, GOSSIP_SENDER_MAIN, 54);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, MSG_GOSSIP_TEXT_84, GOSSIP_SENDER_MAIN, 55);
++			   player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, MSG_GOSSIP_TEXT_BACK_4, GOSSIP_SENDER_MAIN, 59);
++			   player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE,creature->GetGUID());
++			   break;
++		 case 46:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(75);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 47:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(140);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		case 48:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(172);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++	     case 49:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(124);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++	     case 50:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(133);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 51:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(125);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 52:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(76);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 53:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(145);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 54:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(155);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 55:
++			   {CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(84);
++			   AddTitle(player, creature, titleInfo);
++			   }
++			   break;
++		 case 56:
++			 OnGossipHello(player, creature);
++			   break;
++		 case 57:
++			 OnGossipSelect(player, creature, sender, 12);
++			 break;
++		 case 58:
++			 OnGossipSelect(player, creature, sender, 23);
++			 break;
++		 case 59:
++			 OnGossipSelect(player, creature, sender, 34);
++			 break;
++}
++	
++		  return true;
++	}
++};
++void AddSC_npc_title()
++{
++    new npc_title;
++}
+\ No newline at end of file
+diff --git a/src/server/scripts/Custom/npc_vip_vendor.cpp b/src/server/scripts/Custom/npc_vip_vendor.cpp
+new file mode 100644
+index 0000000..b822b8a
+--- /dev/null
++++ b/src/server/scripts/Custom/npc_vip_vendor.cpp
+@@ -0,0 +1,56 @@
++/* Copyright (C) 2012 for TrinityCore <http://trinity-core.ru/>
++* This program is free software; you can redistribute it and/or modify
++* it under the terms of the GNU General Public License as published by
++* the Free Software Foundation; either version 2 of the License, or
++* (at your option) any later version.
++*
++* This program is distributed in the hope that it will be useful,
++* but WITHOUT ANY WARRANTY; without even the implied warranty of
++* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++* GNU General Public License for more details.
++*
++* You should have received a copy of the GNU General Public License
++* along with this program; if not, write to the Free Software
++* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++*/
++
++/* SQL
++INSERT INTO `creature_template` VALUES ('993372', '0', '0', '0', '0', '0', '16634', '0', '0', '0', 'MMOwning Elite', 'Elite Member Betreuung', '', '0', '80', '80', '0', '35', '35', '1', '1', '1.14286', '0.75', '2', '1755', '1755', '0', '1504', '1000', '1500', '0', '1', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '3', '1', '100', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', 'npc_vip', '1');
++INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES
++('100012','0','0','0','0','0','28769','0','0','0','ViP торговец','','','0','80','80','0','35','35','129','1','1.14286','1','0','0','0','0','0','1','0','0','1','0','0','0','0','0','0','0','0','0','0','7','4718662','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','','0','3','2','2','1','0','0','0','0','0','0','0','0','1','0','0','0','npc_vip_vendor','1');
++*/
++
++#include "ScriptPCH.h"
++
++class npc_vip_vendor : public CreatureScript
++{
++public:
++    npc_vip_vendor() : CreatureScript("npc_vip_vendor") { }
++
++    bool OnGossipHello(Player* player, Creature* creature)
++    {
++        if (player->GetSession()->IsPremium())
++        {
++            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
++            player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
++        }
++        else
++            creature->MonsterWhisper("Ваш аккаунт не является VIP аккаунтом.", player->GetGUID());
++
++        return true;
++    }
++
++    bool OnGossipSelect(Player* player, Creature* creature, uint32 uiSender, uint32 uiAction)
++    {
++        player->PlayerTalkClass->ClearMenus();
++
++        if (uiAction == GOSSIP_ACTION_TRADE)
++            player->GetSession()->SendListInventory(creature->GetGUID());
++        return true;
++    }
++};
++
++void AddSC_npc_vip_vendor()
++{
++    new npc_vip_vendor;
++}
+\ No newline at end of file

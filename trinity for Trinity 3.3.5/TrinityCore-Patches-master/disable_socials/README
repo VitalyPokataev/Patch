@@ -1,0 +1,17 @@
+PURPOSE
+  Disable /kiss, /dance, and /sexy commands.
+
+STATUS
+  Working as of: https://github.com/TrinityCore/TrinityCore/commit/5365bd25fae59a6ae225534b779bd6c14779599a
+
+DETAILS
+  This is a very quick implementation that checks for socials based on magic numbers.
+  If there is further interest it will eventually be moved to a database table so it
+  can be more easily maintained. For now, though, this is simply a working proof of
+  concept that you can disable /social commands on the client side.
+
+INSTALL
+  01 : Apply disable_socials.patch to TrinityCore folder.
+  02 : Recompile source and enjoy.
+
+

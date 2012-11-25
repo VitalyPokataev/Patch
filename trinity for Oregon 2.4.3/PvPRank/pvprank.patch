@@ -1,0 +1,249 @@
+diff -Nuar oregoncore-current/src/game/Player.cpp oregoncore-pq/src/game/Player.cpp
+--- oregoncore-current/src/game/Player.cpp	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/Player.cpp	2011-01-01 10:20:23.000000000 -0500
+@@ -6310,6 +6310,7 @@
+ 
+     uint64 victim_guid = 0;
+     uint32 victim_rank = 0;
++    uint32 rank_diff = 0;
+     time_t now = time(NULL);
+ 
+     // need call before fields update to have chance move yesterday data to appropriate fields before today data change.
+@@ -6345,20 +6346,49 @@
+                 //  [15..28] Horde honor titles and player name
+                 //  [29..38] Other title and player name
+                 //  [39+]    Nothing
+-                uint32 victim_title = pVictim->GetUInt32Value(PLAYER_CHOSEN_TITLE);
+-                                                            // Get Killer titles, CharTitlesEntry::bit_index
++                // PLAYER__FIELD_KNOWN_TITLES describe which titles player can use, 
++                // so we must find biggest pvp title , even for killer to find extra honor value
++                uint32 vtitle = pVictim->GetUInt32Value(PLAYER__FIELD_KNOWN_TITLES);
++                uint32 victim_title = 0;
++                uint32 ktitle = GetUInt32Value(PLAYER__FIELD_KNOWN_TITLES);
++                uint32 killer_title = 0;
++                if(PLAYER_TITLE_MASK_ALL_PVP & ktitle)
++                {
++                    for(int i = ((GetTeam() == ALLIANCE) ? 1:HKRANKMAX);i!=((GetTeam() == ALLIANCE) ? HKRANKMAX : (2*HKRANKMAX-1));i++)
++                    {
++                        if(ktitle & (1<<i))
++                            killer_title = i;
++                    }
++                }
++                if(PLAYER_TITLE_MASK_ALL_PVP & vtitle)
++                {
++                    for(int i = ((pVictim->GetTeam() == ALLIANCE) ? 1:HKRANKMAX);i!=((pVictim->GetTeam() == ALLIANCE) ? HKRANKMAX : (2*HKRANKMAX-1));i++)
++                    {
++                        if(vtitle & (1<<i))
++                            victim_title = i;
++                    }
++                }
++                // Get Killer titles, CharTitlesEntry::bit_index
+                 // Ranks:
+                 //  title[1..14]  -> rank[5..18]
+                 //  title[15..28] -> rank[5..18]
+                 //  title[other]  -> 0
+                 if (victim_title == 0)
+                     victim_guid = 0;                        // Don't show HK: <rank> message, only log.
+-                else if (victim_title < 15)
++                else if (victim_title < HKRANKMAX)
+                     victim_rank = victim_title + 4;
+-                else if (victim_title < 29)
++                else if (victim_title < (2*HKRANKMAX-1))
+                     victim_rank = victim_title - 14 + 4;
+                 else
+                     victim_guid = 0;                        // Don't show HK: <rank> message, only log.
++
++                // now find rank difference
++                if (killer_title == 0 && victim_rank>4)
++                    rank_diff = victim_rank - 4;  
++                else if (killer_title < HKRANKMAX)
++                    rank_diff = (victim_rank>(killer_title + 4))? (victim_rank - (killer_title + 4)) : 0;
++                else if (killer_title < (2*HKRANKMAX-1))
++                    rank_diff = (victim_rank>(killer_title - (HKRANKMAX-1) +4))? (victim_rank - (killer_title - (HKRANKMAX-1) + 4)) : 0;
+             }
+ 
+             if (k_level <= 5)
+@@ -6377,11 +6407,13 @@
+ 
+             honor = ((f * diff_level * (190 + v_rank*10))/6);
+             honor *= ((float)k_level) / 70.0f;              //factor of dependence on levels of the killer
++            honor *= 1 + sWorld.getRate(RATE_PVP_RANK_EXTRA_HONOR)*(((float)rank_diff) / 10.0f);
+ 
+             // count the number of playerkills in one day
+             ApplyModUInt32Value(PLAYER_FIELD_KILLS, 1, true);
+             // and those in a lifetime
+             ApplyModUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, 1, true);
++            UpdateKnownTitles();
+         }
+         else
+         {
+@@ -6460,6 +6492,30 @@
+     return true;
+ }
+ 
++void Player::UpdateKnownTitles()
++{
++    uint32 new_title = 0;
++    uint32 honor_kills = GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS);
++    uint32 old_title = GetUInt32Value(PLAYER_CHOSEN_TITLE);
++    RemoveFlag64(PLAYER__FIELD_KNOWN_TITLES,PLAYER_TITLE_MASK_ALL_PVP);
++    if(honor_kills < 0)
++        return;
++    bool max_rank = ((honor_kills >= sWorld.pvp_ranks[HKRANKMAX-1]) ? true : false);
++    for(int i = HKRANK01; i != HKRANKMAX; ++i)
++    {
++        if(honor_kills < sWorld.pvp_ranks[i] || (max_rank))
++        {
++            new_title = ((max_rank) ? (HKRANKMAX-1) : (i-1));
++            if(new_title > 0)
++                new_title += ((GetTeam() == ALLIANCE) ? 0 : (HKRANKMAX-1));
++            break;
++        }
++    }
++    SetFlag64(PLAYER__FIELD_KNOWN_TITLES,uint64(1) << new_title);
++    if(old_title > 0 && old_title < (2*HKRANKMAX-1) && new_title > old_title)
++        SetUInt32Value(PLAYER_CHOSEN_TITLE,new_title);
++}
++
+ void Player::ModifyHonorPoints(int32 value)
+ {
+     if (value < 0)
+diff -Nuar oregoncore-current/src/game/Player.h oregoncore-pq/src/game/Player.h
+--- oregoncore-current/src/game/Player.h	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/Player.h	2011-01-01 10:20:23.000000000 -0500
+@@ -371,6 +371,27 @@
+     PLAYER_UNK                  = 0x00040000,               // 2.0.8...
+ };
+ 
++#define PLAYER_TITLE_MASK_ALLIANCE_PVP             \
++    ( PLAYER_TITLE_PRIVATE | PLAYER_TITLE_CORPORAL |  \
++      PLAYER_TITLE_SERGEANT_A | PLAYER_TITLE_MASTER_SERGEANT | \
++      PLAYER_TITLE_SERGEANT_MAJOR | PLAYER_TITLE_KNIGHT | \
++      PLAYER_TITLE_KNIGHT_LIEUTENANT | PLAYER_TITLE_KNIGHT_CAPTAIN | \
++      PLAYER_TITLE_KNIGHT_CHAMPION | PLAYER_TITLE_LIEUTENANT_COMMANDER | \
++      PLAYER_TITLE_COMMANDER | PLAYER_TITLE_MARSHAL | \
++      PLAYER_TITLE_FIELD_MARSHAL | PLAYER_TITLE_GRAND_MARSHAL )
++
++#define PLAYER_TITLE_MASK_HORDE_PVP                           \
++    ( PLAYER_TITLE_SCOUT | PLAYER_TITLE_GRUNT |  \
++      PLAYER_TITLE_SERGEANT_H | PLAYER_TITLE_SENIOR_SERGEANT | \
++      PLAYER_TITLE_FIRST_SERGEANT | PLAYER_TITLE_STONE_GUARD | \
++      PLAYER_TITLE_BLOOD_GUARD | PLAYER_TITLE_LEGIONNAIRE | \
++      PLAYER_TITLE_CENTURION | PLAYER_TITLE_CHAMPION | \
++      PLAYER_TITLE_LIEUTENANT_GENERAL | PLAYER_TITLE_GENERAL | \
++      PLAYER_TITLE_WARLORD | PLAYER_TITLE_HIGH_WARLORD )
++
++#define PLAYER_TITLE_MASK_ALL_PVP  \
++    ( PLAYER_TITLE_MASK_ALLIANCE_PVP | PLAYER_TITLE_MASK_HORDE_PVP )
++
+ // used for PLAYER__FIELD_KNOWN_TITLES field (uint64), (1<<bit_index) without (-1)
+ // can't use enum for uint64 values
+ #define PLAYER_TITLE_DISABLED              UI64LIT(0x0000000000000000)
+@@ -1730,7 +1751,7 @@
+         void ModifyHonorPoints(int32 value);
+         void ModifyArenaPoints(int32 value);
+         uint32 GetMaxPersonalArenaRatingRequirement();
+-
++        void UpdateKnownTitles();
+         //End of PvP System
+ 
+         void SetDrunkValue(uint16 newDrunkValue, uint32 itemid=0);
+diff -Nuar oregoncore-current/src/game/World.cpp oregoncore-pq/src/game/World.cpp
+--- oregoncore-current/src/game/World.cpp	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/World.cpp	2011-01-01 10:20:23.000000000 -0500
+@@ -745,6 +745,19 @@
+         m_configs[CONFIG_START_HONOR_POINTS] = m_configs[CONFIG_MAX_HONOR_POINTS];
+     }
+ 
++    rate_values[RATE_PVP_RANK_EXTRA_HONOR] = sConfig.GetFloatDefault("PvPRank.Rate.ExtraHonor", 1);
++    std::string s_pvp_ranks = sConfig.GetStringDefault("PvPRank.HKPerRank", "10,50,100,200,450,750,1300,2000,3500,6000,9500,15000,21000,30000");
++    char *c_pvp_ranks = const_cast<char*>(s_pvp_ranks.c_str());
++    for (int i = 0; i !=HKRANKMAX; i++)
++    {
++        if(i==0)
++            pvp_ranks[0] = 0;
++        else if(i==1)
++            pvp_ranks[1] = atoi(strtok (c_pvp_ranks, ","));
++        else
++            pvp_ranks[i] = atoi(strtok (NULL, ","));
++    }
++
+     m_configs[CONFIG_MAX_ARENA_POINTS] = sConfig.GetIntDefault("MaxArenaPoints", 5000);
+     if (int32(m_configs[CONFIG_MAX_ARENA_POINTS]) < 0)
+     {
+diff -Nuar oregoncore-current/src/game/World.h oregoncore-pq/src/game/World.h
+--- oregoncore-current/src/game/World.h	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/World.h	2011-01-01 10:20:23.000000000 -0500
+@@ -309,9 +309,30 @@
+     RATE_DURABILITY_LOSS_PARRY,
+     RATE_DURABILITY_LOSS_ABSORB,
+     RATE_DURABILITY_LOSS_BLOCK,
++    RATE_PVP_RANK_EXTRA_HONOR,
+     MAX_RATES
+ };
+ 
++enum HonorKillPvPRank
++{
++    HKRANK00,
++    HKRANK01,
++    HKRANK02,
++    HKRANK03,
++    HKRANK04,
++    HKRANK05,
++    HKRANK06,
++    HKRANK07,
++    HKRANK08,
++    HKRANK09,
++    HKRANK10,
++    HKRANK11,
++    HKRANK12,
++    HKRANK13,
++    HKRANK14,
++    HKRANKMAX
++};
++
+ // Type of server
+ enum RealmType
+ {
+@@ -493,6 +514,8 @@
+         void SendZoneText(uint32 zone, const char *text, WorldSession *self = 0, uint32 team = 0);
+         void SendServerMessage(ServerMessageType type, const char *text = "", Player* player = NULL);
+ 
++        uint32 pvp_ranks[HKRANKMAX];
++
+         // Are we in the middle of a shutdown?
+         bool IsShutdowning() const { return m_ShutdownTimer > 0; }
+         void ShutdownServ(uint32 time, uint32 options, uint8 exitcode);
+diff -Nuar oregoncore-current/src/oregoncore/oregoncore.conf.dist oregoncore-pq/src/oregoncore/oregoncore.conf.dist
+--- oregoncore-current/src/oregoncore/oregoncore.conf.dist	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/oregoncore/oregoncore.conf.dist	2011-01-01 10:20:23.000000000 -0500
+@@ -1937,6 +1937,20 @@
+ #    PvPToken.ItemCount
+ #        Modify the item ID count - Default: 1
+ #
++#    PvPRank.Rate.ExtraHonor
++#    Rate of honor bonus for killing higher PVP ranked players
++#    Default: 
++#        1 - 10% more honor per RANK difference
++#        2 - 20%
++#        0 - off
++#
++#    PvPRank.HKPerRank
++#    Honor Kills needed for each rank, use "," between values.
++#    Whole string must be enclosed with " "
++#    Always specify 14 values, for 14 ranks
++#    Default: 
++#        "10,50,100,200,450,750,1300,2000,3500,6000,9500,15000,21000,30000"
++#
+ #    NoResetTalentsCost
+ #        Enable or disable no cost when reseting talents
+ #
+@@ -1993,6 +2007,8 @@
+ PvPToken.MapAllowType = 4
+ PvPToken.ItemID = 29434
+ PvPToken.ItemCount = 1
++PvPRank.Rate.ExtraHonor = 1
++PvPRank.HKPerRank = "10,50,100,200,450,750,1300,2000,3500,6000,9500,15000,21000,30000"
+ NoResetTalentsCost = 0
+ ShowKickInWorld = 0
+ RecordUpdateTimeDiffInterval = 60000

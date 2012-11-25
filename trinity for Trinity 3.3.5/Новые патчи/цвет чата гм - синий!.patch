@@ -1,0 +1,109 @@
+From fbc1ce64ebb4530755f99073090d9c963c7e5eec Mon Sep 17 00:00:00 2001
+From: Vitasic <vitasic-pokataev@yandex.ru>
+Date: Wed, 19 Sep 2012 18:53:00 +0400
+Subject: [PATCH] =?UTF-8?q?[Core]=20=D0=95=D1=81=D0=BB=D0=B8=20=D0=B2=D0=BA=D0?=
+ =?UTF-8?q?=BB=D1=8E=D1=87=D1=91=D0=BD=20=D0=B3=D0=BC=20=D1=87=D0=B0=D1=82,=20?=
+ =?UTF-8?q?=D1=82=D0=BE=20=D1=86=D0=B2=D0=B5=D1=82=20=D1=82=D0=B5=D0=BA=D1=81?=
+ =?UTF-8?q?=D1=82=D0=B0=20=D0=BC=D0=B5=D0=BD=D1=8F=D0=B5=D1=82=D1=81=D1=8F=20?=
+ =?UTF-8?q?=D0=BD=D0=B0=20=D1=81=D0=B8=D0=BD=D0=B8=D0=B9.?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ src/server/game/Handlers/ChatHandler.cpp |    2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/server/game/Handlers/ChatHandler.cpp b/src/server/game/Handlers/ChatHandler.cpp
+index 9615de6..6303a56 100644
+--- a/src/server/game/Handlers/ChatHandler.cpp
++++ b/src/server/game/Handlers/ChatHandler.cpp
+@@ -241,6 +241,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
+         if (msg.empty())
+             return;
+     }
++    if (sender->isGMChat())
++        msg = "|cff2998ff" + msg + "|r";
+ 
+     switch (type)
+     {
+-- 
+1.7.10
+
+
+From 25a9378c15daa0898624d91e5e6db293310ed336 Mon Sep 17 00:00:00 2001
+From: Neket007 <neket007wow@gmail.com>
+Date: Wed, 26 Sep 2012 22:38:43 +1000
+Subject: [PATCH] =?UTF-8?q?=D0=94=D0=BE=D0=BF=D0=BE=D0=BB=D0=BD=D0=B8=D1=82=D0?=
+ =?UTF-8?q?=B5=D0=BB=D1=8C=D0=BD=D0=BE:=20=D0=92=D0=BE=D0=B7=D0=BC=D0=BE=D0=B6?=
+ =?UTF-8?q?=D0=BD=D0=BE=D1=81=D1=82=D1=8C=20=D0=B8=D0=B7=D0=BC=D0=B5=D0=BD=D0?=
+ =?UTF-8?q?=B5=D0=BD=D0=B8=D1=8F=20=D1=86=D0=B2=D0=B5=D1=82=D0=B0=20=D1=87=D0?=
+ =?UTF-8?q?=B0=D1=82=D0=B0=20=D1=83=20=D0=90=D0=B4=D0=BC=D0=B8=D0=BD=D0=B8=D1?=
+ =?UTF-8?q?=81=D1=82=D1=80=D0=B0=D1=86=D0=B8=D0=B8.?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ src/server/game/Handlers/ChatHandler.cpp     |    3 +++
+ src/server/game/World/World.cpp              |    3 +++
+ src/server/game/World/World.h                |    1 +
+ src/server/worldserver/worldserver.conf.dist |    2 ++
+ 4 files changed, 9 insertions(+)
+
+diff --git a/src/server/game/Handlers/ChatHandler.cpp b/src/server/game/Handlers/ChatHandler.cpp
+index 711d7af..a19a7fb 100755
+--- a/src/server/game/Handlers/ChatHandler.cpp
++++ b/src/server/game/Handlers/ChatHandler.cpp
+@@ -236,6 +236,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
+             return;
+     }
+ 
++    if (sender->isGMChat() && sWorld->getBoolConfig(CONFIG_GM_BLUE_CHAT_ENABLE))
++        msg = "|cff2998ff" + msg + "|r";
++
+     switch (type)
+     {
+         case CHAT_MSG_SAY:
+diff --git a/src/server/game/World/World.cpp b/src/server/game/World/World.cpp
+index 1b662da..70a3803 100755
+--- a/src/server/game/World/World.cpp
++++ b/src/server/game/World/World.cpp
+@@ -1243,6 +1243,9 @@ void World::LoadConfigSettings(bool reload)
+     m_bool_configs[CONFIG_EXTERNAL_MAIL_ENABLE] = ConfigMgr::GetBoolDefault("External.Mail.Enable", false);
+     m_int_configs[CONFIG_EXTERNAL_MAIL_INTERVAL] = ConfigMgr::GetIntDefault("External.Mail.Interval", 1);
+ 
++    // Gm chat blue
++    m_bool_configs[CONFIG_GM_BLUE_CHAT_ENABLE] = ConfigMgr::GetBoolDefault("Gm.Chat.Blue.Enable", false);
++
+     if (reload)
+         sScriptMgr->OnConfigLoad(reload);
+ }
+diff --git a/src/server/game/World/World.h b/src/server/game/World/World.h
+index b7f165e..327aabc 100755
+--- a/src/server/game/World/World.h
++++ b/src/server/game/World/World.h
+@@ -177,6 +177,7 @@ enum WorldBoolConfigs
+  	CONFIG_VIP_HOME_COMMAND,
+  	CONFIG_VIP_CAPITAL_COMMAND,
+ 	CONFIG_EXTERNAL_MAIL_ENABLE,
++    CONFIG_GM_BLUE_CHAT_ENABLE,
+     BOOL_CONFIG_VALUE_COUNT
+ };
+ 
+diff --git a/src/server/worldserver/worldserver.conf.dist b/src/server/worldserver/worldserver.conf.dist
+index 188f663..a3b0a77 100644
+--- a/src/server/worldserver/worldserver.conf.dist
++++ b/src/server/worldserver/worldserver.conf.dist
+@@ -2710,6 +2710,8 @@ Vip.Capital.Command = 1
+ External.Mail.Enable = 1
+ External.Mail.Interval = 5
+ 
++Gm.Chat.Blue.Enable = 0
++
+ #
+ ###################################################################################################
+ 
+-- 
+1.7.10
+

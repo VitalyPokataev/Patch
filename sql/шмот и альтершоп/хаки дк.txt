@@ -1,0 +1,61 @@
+хаки взял сдал
+UPDATE `quest_template` SET `Method` = 0 WHERE `entry` = 12687; 
+UPDATE `quest_template` SET `NextQuestId` = 0, `NextQuestInChain` = 0 WHERE `entry` = 12680; 
+UPDATE `quest_template` SET `Method` = 0 WHERE `entry` = 12701; 
+UPDATE `quest_template` SET `NextQuestId` = 0, `NextQuestInChain` = 0 WHERE `entry` = 12700; 
+UPDATE `quest_template` SET `Method` = 0 WHERE `entry` = 12641; 
+UPDATE `quest_template` SET `NextQuestId` = 0, `NextQuestInChain` = 0 WHERE `entry` = 12636; 
+UPDATE `quest_template` SET `Method` = 0 WHERE `entry` = 12698; 
+UPDATE `quest_template` SET `NextQuestId` = 0, `NextQuestInChain` = 0 WHERE `entry` = 12697; 
+UPDATE `quest_template` SET `Method` = 0 WHERE `entry` = 12720; 
+UPDATE `quest_template` SET `NextQuestId` = 0, `NextQuestInChain` = 0 WHERE `entry` = 12719; 
+UPDATE `quest_template` SET `Method` = 0 WHERE `entry` = 12779; 
+UPDATE `quest_template` SET `NextQuestId` = 0, `NextQuestInChain` = 0 WHERE `entry` = 12778; 
+
+
+#смерть подбирается с высоты 
+UPDATE quest_template SET questflags='0', ReqCreatureOrGoid1='0', ReqCreatureOrGoid2='0', ReqCreatureOrGoid3='0', ReqCreatureOrGoid4='0', ReqCreatureOrGoCount1='0',  ReqCreatureOrGoCount2='0',  ReqCreatureOrGoCount3='0',  ReqCreatureOrGoCount4='0' WHERE entry='12641'; 
+
+#подарок с подвохом 
+UPDATE quest_template SET Method='0', SrcItemId='0', SrcItemCount='0', ReqItemId1='0', ReqItemCount1='0' WHERE entry='12698'; 
+
+#побоище у заставы света 
+UPDATE quest_template SET Method='0', ReqCreatureOrGoid1='0', ReqCreatureOrGoCount1='0' WHERE entry='12701'; 
+
+#путь в долину теней    
+UPDATE quest_template SET Method='0', ReqCreatureOrGoid1='0', ReqCreatureOrGoCount1='0' WHERE entry='12687'; 
+
+#конец всему    
+UPDATE quest_template SET Method='0', ReqItemId1='0', ReqItemCount1='0' WHERE entry='12779'; 
+
+#шаги короля... (альянс - до короля не дойти - убивают и с королем не поговорить) 
+UPDATE creature_template SET faction_A='122', faction_H='122' WHERE entry in  ('1748', '1756', '29611'); 
+
+#Благословение вождя (орда - до трала не дойти - убивают и с тралом не поговорить) 
+UPDATE creature_template SET faction_A='126', faction_H='126' WHERE entry in ('4949', '3296', '14375', '14304', '10540');     
+
+#вызов смерти (пвп с ДК-нпсами не работают ) 
+UPDATE quest_template SET Method='0', ReqCreatureOrGoid1='0', ReqCreatureOrGoCount1='0' WHERE entry='12733';       
+
+#как завоевать друзей... (добыть нужную информацию в боях с мобами нельзя) 
+UPDATE quest_template SET Method='0', Reqitemid1='0', ReqitemCount1='0' WHERE entry='12720'; 
+
+#приятный сюрприз (указаного моба нельзя атаковать, он умирает сам, а квест не засчитывается.) 
+
+#орда 
+UPDATE quest_template SET Method='0', ReqCreatureOrGoid1='0', ReqCreatureOrGoCount1='0' WHERE entry='12739'; 
+UPDATE quest_template SET Method='0', ReqCreatureOrGoid1='0', ReqCreatureOrGoCount1='0' WHERE entry='12742'; 
+UPDATE quest_template SET Method='0', ReqCreatureOrGoid1='0', ReqCreatureOrGoCount1='0' WHERE entry='12747'; 
+UPDATE quest_template SET Method='0', ReqCreatureOrGoid1='0', ReqCreatureOrGoCount1='0' WHERE entry='12748'; 
+UPDATE quest_template SET Method='0', ReqCreatureOrGoid1='0', ReqCreatureOrGoCount1='0' WHERE entry='12749'; 
+UPDATE quest_template SET Method='0', ReqCreatureOrGoid1='0', ReqCreatureOrGoCount1='0' WHERE entry='12750'; 
+
+#альянс 
+UPDATE quest_template SET Method='0', ReqCreatureOrGoid1='0', ReqCreatureOrGoCount1='0' WHERE entry='12742'; 
+UPDATE quest_template SET Method='0', ReqCreatureOrGoid1='0', ReqCreatureOrGoCount1='0' WHERE entry='12743'; 
+UPDATE quest_template SET Method='0', ReqCreatureOrGoid1='0', ReqCreatureOrGoCount1='0' WHERE entry='12744'; 
+UPDATE quest_template SET Method='0', ReqCreatureOrGoid1='0', ReqCreatureOrGoCount1='0' WHERE entry='12745'; 
+UPDATE quest_template SET Method='0', ReqCreatureOrGoid1='0', ReqCreatureOrGoCount1='0' WHERE entry='12746'; 
+
+#сияние рассвета (подходя к Могрейну, штурм не начинается) 
+UPDATE quest_template SET Method='0', ReqCreatureOrGoid1='0', ReqCreatureOrGoCount1='0' WHERE entry='12801';

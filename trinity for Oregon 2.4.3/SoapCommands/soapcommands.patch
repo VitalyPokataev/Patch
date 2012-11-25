@@ -1,0 +1,120 @@
+diff -Nuar oregoncore-current/sql/CMakeLists.txt oregoncore-pq/sql/CMakeLists.txt
+--- oregoncore-current/sql/CMakeLists.txt	2011-01-01 10:03:07.000000000 -0500
++++ oregoncore-pq/sql/CMakeLists.txt	2011-01-01 10:21:26.000000000 -0500
+@@ -1,6 +1,7 @@
+ add_subdirectory(updates)
+ add_subdirectory(tools)
+ add_subdirectory(scripts)
++add_subdirectory(oc-patch)
+ 
+ 
+ ########### install files ###############
+diff -Nuar oregoncore-current/sql/oc-patch/CMakeLists.txt oregoncore-pq/sql/oc-patch/CMakeLists.txt
+--- oregoncore-current/sql/oc-patch/CMakeLists.txt	1969-12-31 19:00:00.000000000 -0500
++++ oregoncore-pq/sql/oc-patch/CMakeLists.txt	2011-01-01 10:21:26.000000000 -0500
+@@ -0,0 +1,6 @@
++
++########### install files ###############
++
++FILE(GLOB _SQL *.sql)
++
++install(FILES ${_SQL} DESTINATION share/oregon/sql/oc-patch)
+diff -Nuar oregoncore-current/sql/oc-patch/world-soapcommands.sql oregoncore-pq/sql/oc-patch/world-soapcommands.sql
+--- oregoncore-current/sql/oc-patch/world-soapcommands.sql	1969-12-31 19:00:00.000000000 -0500
++++ oregoncore-pq/sql/oc-patch/world-soapcommands.sql	2011-01-01 10:21:26.000000000 -0500
+@@ -0,0 +1,8 @@
++INSERT INTO `command` VALUES
++('server version',1,'Syntax: .server version\r\n\r\nDisplay server version.'),
++('server dbversion',1,'Syntax: .server dbversion\r\n\r\nDisplay database version.'),
++('server rev',1,'Syntax: .server rev\r\n\r\nDisplay server revision number.'),
++('server playercount',1,'Syntax: .server playercount\r\n\r\nDisplay comma-delimited list of online players, max online players, queued players, max queued players.'),
++('server players',1,'Syntax: .server players\r\n\r\nDisplay status message of online and queued players'),
++('server uptime',1,'Syntax: .server uptime\r\n\r\nDisplay server uptime.');
++
+diff -Nuar oregoncore-current/src/game/Chat.cpp oregoncore-pq/src/game/Chat.cpp
+--- oregoncore-current/src/game/Chat.cpp	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/Chat.cpp	2011-01-01 10:21:26.000000000 -0500
+@@ -105,6 +105,12 @@
+         { "idlerestart",    SEC_ADMINISTRATOR,  true,  NULL,                                           "", serverIdleRestartCommandTable },
+         { "idleshutdown",   SEC_ADMINISTRATOR,  true,  NULL,                                           "", serverShutdownCommandTable },
+         { "info",           SEC_PLAYER,         true,  &ChatHandler::HandleServerInfoCommand,          "", NULL },
++        { "version",        SEC_PLAYER,         true,  &ChatHandler::HandleServerVersionCommand,       "", NULL },
++        { "rev",            SEC_PLAYER,         true,  &ChatHandler::HandleServerRevCommand,           "", NULL },
++        { "dbversion",      SEC_PLAYER,         true,  &ChatHandler::HandleServerDBVersionCommand,     "", NULL },
++        { "uptime",         SEC_PLAYER,         true,  &ChatHandler::HandleServerUptimeCommand,        "", NULL },
++        { "playercount",    SEC_PLAYER,         true,  &ChatHandler::HandleServerPlayerCountCommand,   "", NULL },
++        { "players",        SEC_PLAYER,         true,  &ChatHandler::HandleServerPlayersCommand,       "", NULL },
+         { "motd",           SEC_PLAYER,         true,  &ChatHandler::HandleServerMotdCommand,          "", NULL },
+         { "plimit",         SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleServerPLimitCommand,        "", NULL },
+         { "restart",        SEC_ADMINISTRATOR,  true,  NULL,                                           "", serverRestartCommandTable },
+diff -Nuar oregoncore-current/src/game/Chat.h oregoncore-pq/src/game/Chat.h
+--- oregoncore-current/src/game/Chat.h	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/Chat.h	2011-01-01 10:21:26.000000000 -0500
+@@ -310,6 +310,12 @@
+         bool HandleServerIdleRestartCommand(const char* args);
+         bool HandleServerIdleShutDownCommand(const char* args);
+         bool HandleServerInfoCommand(const char* args);
++        bool HandleServerVersionCommand(const char* args);
++        bool HandleServerRevCommand(const char* args);
++        bool HandleServerDBVersionCommand(const char* args);
++        bool HandleServerUptimeCommand(const char* args);
++        bool HandleServerPlayerCountCommand(const char* args);
++        bool HandleServerPlayersCommand(const char* args);
+         bool HandleServerMotdCommand(const char* args);
+         bool HandleServerPLimitCommand(const char* args);
+         bool HandleServerRestartCommand(const char* args);
+diff -Nuar oregoncore-current/src/game/Level0.cpp oregoncore-pq/src/game/Level0.cpp
+--- oregoncore-current/src/game/Level0.cpp	2011-01-01 10:03:08.000000000 -0500
++++ oregoncore-pq/src/game/Level0.cpp	2011-01-01 10:21:26.000000000 -0500
+@@ -113,6 +113,51 @@
+     return true;
+ }
+ 
++bool ChatHandler::HandleServerVersionCommand(const char* /*args*/)
++{
++    PSendSysMessage(_FULLVERSION);
++    return true;
++}
++
++bool ChatHandler::HandleServerRevCommand(const char* /*args*/)
++{
++    PSendSysMessage(_REVISION);
++    return true;
++}
++
++bool ChatHandler::HandleServerDBVersionCommand(const char* /*args*/)
++{
++    PSendSysMessage(LANG_USING_WORLD_DB,sWorld.GetDBVersion());
++    return true;
++}
++
++bool ChatHandler::HandleServerUptimeCommand(const char* /*args*/)
++{
++    std::string str = secsToTimeString(sWorld.GetUptime());
++    PSendSysMessage("%s", str.c_str());
++    return true;
++}
++
++bool ChatHandler::HandleServerPlayerCountCommand(const char* /*args*/)
++{
++    uint32 activeClientsNum = sWorld.GetActiveSessionCount();
++    uint32 queuedClientsNum = sWorld.GetQueuedSessionCount();
++    uint32 maxActiveClientsNum = sWorld.GetMaxActiveSessionCount();
++    uint32 maxQueuedClientsNum = sWorld.GetMaxQueuedSessionCount();
++    PSendSysMessage("%u,%u,%u,%u", activeClientsNum, maxActiveClientsNum, queuedClientsNum, maxQueuedClientsNum);
++    return true;
++}
++
++bool ChatHandler::HandleServerPlayersCommand(const char* /*args*/)
++{
++    uint32 activeClientsNum = sWorld.GetActiveSessionCount();
++    uint32 queuedClientsNum = sWorld.GetQueuedSessionCount();
++    uint32 maxActiveClientsNum = sWorld.GetMaxActiveSessionCount();
++    uint32 maxQueuedClientsNum = sWorld.GetMaxQueuedSessionCount();
++    PSendSysMessage(LANG_CONNECTED_USERS, activeClientsNum, maxActiveClientsNum, queuedClientsNum, maxQueuedClientsNum);
++    return true;
++}
++
+ bool ChatHandler::HandleDismountCommand(const char* /*args*/)
+ {
+     //If player is not mounted, so go out :)

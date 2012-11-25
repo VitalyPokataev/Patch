@@ -1,0 +1,81 @@
+From e9181d897dbf96121520e54b615d046d3eb3343e Mon Sep 17 00:00:00 2001
+From: LordPsyan <samccstudios@gmail.com>
+Date: Wed, 1 Feb 2012 10:50:33 -0600
+Subject: [PATCH] 2012-02-01_Reset_On_Duel_End
+
+---
+ src/server/game/Scripting/ScriptLoader.cpp |    5 +++++
+ src/server/scripts/Custom/CMakeLists.txt   |    1 +
+ src/server/scripts/Custom/resetduel.cpp    |   26 ++++++++++++++++++++++++++
+ 3 files changed, 32 insertions(+), 0 deletions(-)
+ create mode 100644 src/server/scripts/Custom/resetduel.cpp
+
+diff --git a/src/server/game/Scripting/ScriptLoader.cpp b/src/server/game/Scripting/ScriptLoader.cpp
+index c46721d..8a42ef4 100755
+--- a/src/server/game/Scripting/ScriptLoader.cpp
++++ b/src/server/game/Scripting/ScriptLoader.cpp
+@@ -62,6 +62,9 @@ void AddSC_titles_commandscript();
+ void AddSC_wp_commandscript();
+ void AddSC_gps_commandscript();
+ 
++//Custom
++void AddSC_Reset();
++
+ #ifdef SCRIPTS
+ //world
+ void AddSC_areatrigger_scripts();
+@@ -1236,5 +1239,7 @@ void AddCustomScripts()
+ #ifdef SCRIPTS
+     /* This is where custom scripts should be added. */
+ 
++       AddSC_Reset();
++
+ #endif
+ }
+diff --git a/src/server/scripts/Custom/CMakeLists.txt b/src/server/scripts/Custom/CMakeLists.txt
+index 1570ca1..7f23bb4 100644
+--- a/src/server/scripts/Custom/CMakeLists.txt
++++ b/src/server/scripts/Custom/CMakeLists.txt
+@@ -10,6 +10,7 @@
+ 
+ set(scripts_STAT_SRCS
+   ${scripts_STAT_SRCS}
++  Custom/resetduel.cpp
+ )
+ 
+ message("  -> Prepared: Custom")
+diff --git a/src/server/scripts/Custom/resetduel.cpp b/src/server/scripts/Custom/resetduel.cpp
+new file mode 100644
+index 0000000..25c8ea3
+--- /dev/null
++++ b/src/server/scripts/Custom/resetduel.cpp
+@@ -0,0 +1,26 @@
++#include "ScriptPCH.h"
++
++class Reset_OnDuelEnd : public PlayerScript
++{
++    public:
++        Reset_OnDuelEnd() : PlayerScript("Reset_OnDuelEnd") {}
++
++    void OnDuelEnd(Player *winner, Player *looser, DuelCompleteType type)
++    {
++        // reset cooldowns in zone 0, 41 and 616
++                if (winner->GetZoneId() == 0 || winner->GetZoneId() == 41 || winner->GetZoneId() == 616)
++                {
++                        winner->RemoveArenaSpellCooldowns();
++                        looser->RemoveArenaSpellCooldowns();
++                        winner->SetHealth(winner->GetMaxHealth());
++                        winner->SetPower(POWER_MANA, winner->GetMaxPower(POWER_MANA));
++                        looser->SetHealth(looser->GetMaxHealth());
++                        looser->SetPower(POWER_MANA, looser->GetMaxPower(POWER_MANA));
++                }
++    }
++};
++
++void AddSC_Reset()
++{
++    new Reset_OnDuelEnd;
++}
+-- 
+1.7.2.5
+

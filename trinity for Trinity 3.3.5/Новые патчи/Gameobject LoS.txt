@@ -1,0 +1,31 @@
+iff --git a/src/server/game/Entities/GameObject/GameObject.cpp b/src/server/game/Entities/GameObject/GameObject.cpp
+index b1662ae..e8f36dc 100644
+--- a/src/server/game/Entities/GameObject/GameObject.cpp
++++ b/src/server/game/Entities/GameObject/GameObject.cpp
+@@ -137,11 +137,11 @@ void GameObject::AddToWorld()
+        sObjectAccessor->AddObject(this);
+        bool startOpen = (GetGoType() == GAMEOBJECT_TYPE_DOOR || GetGoType() == GAMEOBJECT_TYPE_BUTTON ? GetGOInfo()->door.startOpen : false);
+        // The state can be changed after GameObject::Create but before GameObject::AddToWorld
+-        bool toggledState = GetGOData() ? GetGOData()->go_state != GO_STATE_READY : false;
++        bool collision = GetGOData() ? (GetGoType() != GAMEOBJECT_TYPE_CHEST ? GetGOData()->go_state == GO_STATE_READY : getLootState() == GO_READY) : !startOpen;
+        if (m_model)
+            GetMap()->InsertGameObjectModel(*m_model);
+ 
+-        EnableCollision(startOpen ^ toggledState);
++        EnableCollision(collision);
+        WorldObject::AddToWorld();
+    }
+}
+@@ -1960,11 +1960,9 @@ void GameObject::SetGoState(GOState state)
+ 
+        // startOpen determines whether we are going to add or remove the LoS on activation
+        bool startOpen = (GetGoType() == GAMEOBJECT_TYPE_DOOR || GetGoType() == GAMEOBJECT_TYPE_BUTTON ? GetGOInfo()->door.startOpen : false);
++        bool collision = GetGOData() ? state == GO_STATE_READY : !startOpen;
+ 
+-        if (state != GO_STATE_READY)
+-            startOpen = !startOpen;
+-
+-        EnableCollision(startOpen);
++        EnableCollision(collision);
+    }
+}

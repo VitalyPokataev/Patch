@@ -1,0 +1,165 @@
+From a3aca6fb94423eac629329d035576a9d9fe4509a Mon Sep 17 00:00:00 2001
+From: LordPsyan <uppp@juno.com>
+Date: Wed, 23 Nov 2011 13:36:58 -0600
+Subject: [PATCH] 2011-11-22_Dalaran-Squirrel
+
+---
+ sql/FlamingLegion.net/world_dalaran_squirrel.sql |    3 +
+ src/server/game/Scripting/ScriptLoader.cpp       |    4 +
+ src/server/scripts/Custom/CMakeLists.txt         |    2 +
+ src/server/scripts/Custom/alive.h                |    5 ++
+ src/server/scripts/Custom/dalaran_squirrel.cpp   |   83 ++++++++++++++++++++++
+ 5 files changed, 97 insertions(+), 0 deletions(-)
+ create mode 100644 sql/FlamingLegion.net/world_dalaran_squirrel.sql
+ create mode 100644 src/server/scripts/Custom/alive.h
+ create mode 100644 src/server/scripts/Custom/dalaran_squirrel.cpp
+
+diff --git a/sql/FlamingLegion.net/world_dalaran_squirrel.sql b/sql/FlamingLegion.net/world_dalaran_squirrel.sql
+new file mode 100644
+index 0000000..4846363
+--- /dev/null
++++ b/sql/FlamingLegion.net/world_dalaran_squirrel.sql
+@@ -0,0 +1,3 @@
++INSERT INTO `creature_template` (`entry`, `modelid1`, `name`, `minlevel`, `maxlevel`, `faction_A`, `faction_H`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `type`, `type_flags`, `MovementType`, `InhabitType`, `Health_mod`, `Armor_mod`, `RegenHealth`, `mechanic_immune_mask`, `ScriptName`, `WDBVerified`) VALUES
++('666666', '134', 'Eichhörnchen', '1', '1', '7', '7', '1', '0.8', '1', '0', '2000', '2000', '0', '2000', '4.6', '2000', '1', '0', '0', '0', '1', '0', '1', '1', '500', '500', '1', '650886911', 'npc_dalaran_squirrel', '12340'),
++('666667', '134', 'Eichhörnchen', '1', '1', '7', '7', '1', '0.8', '1', '0', '2000', '2000', '0', '2000', '4.6', '2000', '1', '0', '0', '0', '1', '0', '1', '1', '500', '500', '1', '650886911', '', '12340');
+\ No newline at end of file
+diff --git a/src/server/game/Scripting/ScriptLoader.cpp b/src/server/game/Scripting/ScriptLoader.cpp
+index 26d7034..415b63a 100755
+--- a/src/server/game/Scripting/ScriptLoader.cpp
++++ b/src/server/game/Scripting/ScriptLoader.cpp
+@@ -24,6 +24,9 @@ void AddSC_example_gossip_codebox();
+ void AddSC_example_misc();
+ void AddSC_example_commandscript();
+ 
++//custom
++void AddSC_dalaran_squirrel();
++
+ // spells
+ void AddSC_deathknight_spell_scripts();
+ void AddSC_druid_spell_scripts();
+@@ -1234,5 +1237,6 @@ void AddCustomScripts()
+ #ifdef SCRIPTS
+     /* This is where custom scripts should be added. */
+ 
++    AddSC_dalaran_squirrel();
+ #endif
+ }
+diff --git a/src/server/scripts/Custom/CMakeLists.txt b/src/server/scripts/Custom/CMakeLists.txt
+index 1570ca1..12c122f 100644
+--- a/src/server/scripts/Custom/CMakeLists.txt
++++ b/src/server/scripts/Custom/CMakeLists.txt
+@@ -10,6 +10,8 @@
+ 
+ set(scripts_STAT_SRCS
+   ${scripts_STAT_SRCS}
++  Custom/alive.h
++  Custom/dalaran_squirrel.cpp
+ )
+ 
+ message("  -> Prepared: Custom")
+diff --git a/src/server/scripts/Custom/alive.h b/src/server/scripts/Custom/alive.h
+new file mode 100644
+index 0000000..18aa289
+--- /dev/null
++++ b/src/server/scripts/Custom/alive.h
+@@ -0,0 +1,5 @@
++enum NPCs
++{
++NPC_DALARAN_SQUIRREL = 666666,
++NPC_DALARAN_SQUIRREL_SUMMON = 666667,
++};
+\ No newline at end of file
+diff --git a/src/server/scripts/Custom/dalaran_squirrel.cpp b/src/server/scripts/Custom/dalaran_squirrel.cpp
+new file mode 100644
+index 0000000..f319541
+--- /dev/null
++++ b/src/server/scripts/Custom/dalaran_squirrel.cpp
+@@ -0,0 +1,83 @@
++/********************************************
++*											*
++*				WoW ALive					*
++*		Dalaran Squirrel Script			*
++*											*
++*********************************************/
++
++
++#include "ScriptPCH.h"
++#include "alive.h"
++
++class npc_dalaran_squirrel : public CreatureScript
++{
++public:
++    npc_dalaran_squirrel() : CreatureScript("npc_dalaran_squirrel") { }
++
++    CreatureAI* GetAI(Creature* creature) const
++    {
++        return new npc_dalaran_squirrelAI (creature);
++    }
++
++    struct npc_dalaran_squirrelAI : public ScriptedAI
++    {
++		npc_dalaran_squirrelAI(Creature* c) : ScriptedAI(c), summons(c) {}
++
++		Unit* attacker;
++		SummonList summons;
++
++		void Reset()
++        {
++			summons.DespawnAll();
++		}
++
++		void EnterCombat(Unit* /*who*/)
++        {
++			me->MonsterSay("I would not have done that if I was in your place...", LANG_UNIVERSAL, 0);
++			for(int i = 0; i < 19; i++)
++				{
++					me->SummonCreature(NPC_DALARAN_SQUIRREL_SUMMON, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ());
++				}
++		}
++
++		void JustDied(Unit* /*victim*/)
++        {
++			me->Respawn();				
++			me->CombatStart(attacker);
++		}
++		
++		void JustSummoned(Creature* summon)
++            {
++				summons.Summon(summon);
++				if(Unit* target = me->getVictim())
++				{
++					if(target->isTotem() || target ->isPet())
++					{
++						target = target->GetOwner();
++					}
++				summon->AI()->AttackStart(target);
++				}
++			}
++
++		 void UpdateAI(const uint32 diff)
++        {
++			if (!UpdateVictim())
++				return;
++			
++			if(Unit* target = me->getVictim())
++			{
++				if(target->isTotem() || target->isPet())
++				{
++					target = target->GetOwner();
++				}
++				attacker = target;
++				DoMeleeAttackIfReady();
++			}
++		}
++	};
++};
++
++void AddSC_dalaran_squirrel()
++{
++	new npc_dalaran_squirrel();
++}
+\ No newline at end of file
+-- 
+1.7.2.3
+

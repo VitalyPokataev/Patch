@@ -1,0 +1,79 @@
+From f46b6faec516478a16af29740c4bf047ac0bef75 Mon Sep 17 00:00:00 2001
+From: LordPsyan <realmsofwarcraft@gmail.com>
+Date: Sat, 1 Sep 2012 23:35:34 -0500
+Subject: [PATCH] 2012_09_01-Summon_NPC_Item
+
+---
+ src/server/scripts/Custom/CMakeLists.txt |    1 +
+ src/server/scripts/Custom/summon.cpp     |   46 ++++++++++++++++++++++++++++++
+ 2 files changed, 47 insertions(+), 0 deletions(-)
+ create mode 100644 src/server/scripts/Custom/summon.cpp
+
+diff --git a/src/server/scripts/Custom/CMakeLists.txt b/src/server/scripts/Custom/CMakeLists.txt
+index 62abde2..136c5d7 100644
+--- a/src/server/scripts/Custom/CMakeLists.txt
++++ b/src/server/scripts/Custom/CMakeLists.txt
+@@ -10,6 +10,7 @@
+ 
+ set(scripts_STAT_SRCS
+   ${scripts_STAT_SRCS}
++  Custom/summon.cpp
+ )
+ 
+ message("  -> Prepared: Custom")
+diff --git a/src/server/scripts/Custom/summon.cpp b/src/server/scripts/Custom/summon.cpp
+new file mode 100644
+index 0000000..aa0e9cd
+--- /dev/null
++++ b/src/server/scripts/Custom/summon.cpp
+@@ -0,0 +1,46 @@
++#include "ScriptPCH.h"
++ 
++class summon : public ItemScript
++{
++        public:
++                summon() : ItemScript("summon")
++                {
++                }
++                bool OnUse(Player* pPlayer, Item* pItem, SpellCastTargets const& /*targets*/)
++                {
++   uint32 sSpell = 18282; //Icerune Visual Spell when used
++   if (pPlayer->isInCombat())
++   {
++        pPlayer->GetSession()->SendNotification("You are in combat.");
++   }
++  
++   else if (pPlayer->isMoving())
++   {
++        pPlayer->GetSession()->SendNotification("You can not do that while moving.");
++   }
++  
++   else if (pPlayer->FindNearestCreature(80410, 40) || pPlayer->FindNearestCreature(100000, 8))
++   {
++        pPlayer->GetSession()->SendNotification("Sister Sin can not be summoned right now.");
++   }
++  
++   else
++   {
++        float x, y, z, o = pPlayer->GetOrientation();
++  
++        if (o >= 3.141592)
++         o = o - 3.141592;
++        else
++         o = o + 3.141592;
++        pPlayer->GetClosePoint(x, y, z, pPlayer->GetObjectSize());
++        Creature* pCreature = pPlayer->SummonCreature(100000, x, y, z+1.2, o, TEMPSUMMON_TIMED_DESPAWN, 480000);
++        pCreature->CastSpell(pCreature, 63660);
++        return false;
++   }
++  return false;
++                }
++};
++void AddSC_summon()
++{
++        new summon();
++}
+\ No newline at end of file
+-- 
+1.7.2.5
+

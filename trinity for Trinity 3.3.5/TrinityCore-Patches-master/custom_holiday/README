@@ -1,0 +1,16 @@
+PURPOSE
+  Adds a custom holiday to the game to be used for granting a 50% server-wide
+  experience bonus every Saturday and Sunday.
+
+STATUS
+  Working as of: https://github.com/TrinityCore/TrinityCore/commit/d3a510957ec14f7f88951a73453f93a9b1e1a90e
+
+DETAILS
+  This patch will add a new event (#65) to the `game_events` table and grant a 50% experience
+  bonus every Saturday and Sunday starting 2001-02-11. The bonus amount can be changed via
+  worldserver.conf -- Rate.XP.Weekend. The EVID is also in worldserver.conf -- Rate.XP.Weekend.EVID.
+
+INSTALL
+  01 : Apply custom_holiday.patch to TrinityCore folder.
+  02 : Import custom_holiday.world.sql to TrinityCore `world` database.
+  03 : Recompile source and enjoy.
