@@ -20,8 +20,14 @@ REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_ent
 
 REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES (400010, 0, 0, 0, 0, 0, 12917, 0, 0, 0, 'Ювелирное Дело', 'Реагенты', '', 0, 80, 80, 0, 35, 35, 4224, 1, 1, 1, 1, 50, 150, 0, 1000, 1, 2000, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'SmartAI', 0, 3, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2026, 0, 0, '', 1);
 
+/*
 UPDATE `npc_vendor` SET `ExtendedCost` = '634' WHERE `entry` IN (400000, 400001, 400002, 400003, 400004, 400005, 400006, 400007, 400008, 400009, 400010);
-
+2805 хонора
+UPDATE `npc_vendor` SET `ExtendedCost` = '2557' WHERE `entry` IN (400000, 400001, 400002, 400003, 400004, 400005, 400006, 400007, 400008, 400009, 400010);
+2500 хонора
+UPDATE `npc_vendor` SET `ExtendedCost` = '460' WHERE `entry` IN (400000, 400001, 400002, 400003, 400004, 400005, 400006, 400007, 400008, 400009, 400010);
+1 хонор
+*/
 
 DELETE FROM `npc_vendor` WHERE (`entry`=400000);
 INSERT INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `ExtendedCost`) VALUES 
@@ -655,8 +661,6 @@ INSERT INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `Exte
 (400010,0,20817,0,0,0);
 
 
-
-
 DELETE FROM `smart_scripts` WHERE (`entryorguid`=400000 AND `source_type`=0);
 INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES 
 
@@ -711,3 +715,38 @@ DELETE FROM `smart_scripts` WHERE (`entryorguid`=400010 AND `source_type`=0);
 INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES 
 
 ('400010', '0', '1', '0', '1', '0', '100', '0', '2000', '2000', '10000', '10000', '11', '68758', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', 'Arthur the Faithful Cast Holy Light Rank 13');
+
+-- Расстановка (orgrim/shtorm)
+REPLACE INTO `creature` VALUES ('10667491', '400000', '13', '1', '1', '0', '2026', '43.6016', '-10.064', '-144.709', '3.12752', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10667494', '400001', '13', '1', '1', '0', '2026', '43.6419', '-7.20133', '-144.709', '3.12752', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10667496', '400002', '13', '1', '1', '0', '2026', '43.6844', '-4.17763', '-144.709', '3.12752', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10667499', '400003', '13', '1', '1', '0', '2026', '43.7318', '-0.810965', '-144.709', '3.12752', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10667501', '400004', '13', '1', '1', '0', '2026', '43.7794', '2.5767', '-144.709', '3.12752', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10667503', '400005', '13', '1', '1', '0', '2026', '43.8218', '5.5864', '-144.709', '3.12752', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10667509', '400006', '13', '1', '1', '0', '2026', '43.8678', '8.85508', '-144.709', '3.12752', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10667510', '400007', '13', '1', '1', '0', '2026', '43.9149', '12.2007', '-144.709', '3.12752', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10667511', '400008', '13', '1', '1', '0', '2026', '43.9597', '15.3854', '-144.709', '3.12752', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10667516', '400009', '13', '1', '1', '0', '2026', '44.0092', '18.9061', '-144.709', '3.12752', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10570141', '400000', '1', '1', '1', '0', '2026', '1517', '-4395.13', '18.2865', '5.92111', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10570149', '400001', '1', '1', '1', '0', '2026', '1518.13', '-4392.16', '18.0157', '5.92111', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10570159', '400002', '1', '1', '1', '0', '2026', '1519.3', '-4389.07', '17.8457', '5.92111', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10570166', '400003', '1', '1', '1', '0', '2026', '1520.5', '-4385.88', '17.9388', '5.92111', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+INSERT INTO `creature` VALUES ('10570169', '400004', '1', '1', '1', '0', '2026', '1521.62', '-4382.94', '18.0045', '5.92111', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10570173', '400005', '1', '1', '1', '0', '2026', '1522.73', '-4380.01', '18.0308', '5.92111', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10570351', '400006', '1', '1', '1', '0', '2026', '1523.89', '-4376.95', '18.0586', '5.92111', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10570412', '400007', '1', '1', '1', '0', '2026', '1524.95', '-4374.15', '18.0842', '5.92111', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10570445', '400008', '1', '1', '1', '0', '2026', '1526.07', '-4371.2', '18.1129', '5.92111', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10570446', '400009', '1', '1', '1', '0', '2026', '1527.29', '-4367.96', '18.1502', '5.92111', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10571307', '400000', '0', '1', '1', '0', '2026', '-8868.2', '575.372', '93.8946', '2.39075', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10572085', '400001', '0', '1', '1', '0', '2026', '-8866.11', '577.613', '93.905', '2.39075', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10572097', '400002', '0', '1', '1', '0', '2026', '-8864.19', '579.67', '93.9129', '2.39075', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10572099', '400003', '0', '1', '1', '0', '2026', '-8862.28', '581.717', '93.8382', '2.39075', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10572106', '400004', '0', '1', '1', '0', '2026', '-8860.3', '583.836', '93.6211', '2.39075', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10572107', '400005', '0', '1', '1', '0', '2026', '-8858.46', '585.813', '93.4192', '2.39075', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10572109', '400006', '0', '1', '1', '0', '2026', '-8856.41', '588.003', '93.1969', '2.39075', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10572129', '400007', '0', '1', '1', '0', '2026', '-8854.51', '590.045', '93.052', '2.39075', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10572131', '400008', '0', '1', '1', '0', '2026', '-8852.68', '592', '92.9454', '2.39075', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10572135', '400009', '0', '1', '1', '0', '2026', '-8850.8', '594.017', '92.8435', '2.39075', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10576407', '400010', '0', '1', '1', '0', '2026', '-8849', '596.08', '92.7258', '2.42687', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10576414', '400010', '1', '1', '1', '0', '2026', '1528.46', '-4364.41', '18.2302', '5.79991', '300', '0', '0', '1068', '0', '0', '0', '0', '0');
+REPLACE INTO `creature` VALUES ('10676418', '400010', '13', '1', '1', '0', '2026', '44.265', '21.99', '-144.709', '3.05922', '300', '0', '0', '1068', '0', '0', '0', '0', '0');

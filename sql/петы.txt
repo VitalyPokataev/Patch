@@ -84,3 +84,12 @@ DELETE FROM `creature` WHERE `id`=200135;
 INSERT INTO `creature` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`modelid`,`equipment_id`,`position_x`,`position_y`,`position_z`,`orientation`,`spawntimesecs`,`spawndist`,`currentwaypoint`,`curhealth`,`curmana`,`MovementType`) VALUES
 (9338226, 200135, 0, 1, 1, 0, 1949, -8940.63, 564.309, 93.7997, 3.71793, 300, 0, 0, 53420, 0, 0),
 (201410, 200135, 1, 1, 1, 0, 1949, 1424.27, -4378.62, 25.4627, 0.114134, 300, 0, 0, 5342, 0, 0);
+
+/*
+UPDATE `npc_vendor` SET `ExtendedCost` = '634' WHERE `entry` = 200135;
+2805 хонора
+UPDATE `npc_vendor` SET `ExtendedCost` = '2557' WHERE `entry` = 200135;
+2500 хонора
+UPDATE `npc_vendor` SET `ExtendedCost` = '460' WHERE `entry` = 200135;
+1 хонор
+*/
