@@ -98,9 +98,13 @@ INSERT INTO `npc_vendor` (entry, item, maxcount, incrtime, ExtendedCost) VALUES
 (220000, 51313, 0, 0, 0),
 (220000, 51314, 0, 0, 0);
 
+/*
+UPDATE `npc_vendor` SET `ExtendedCost` = '2403' WHERE `entry` = 220000;
+*/
+
 
 
 DELETE FROM `creature` WHERE `id`=220000;
 INSERT INTO `creature` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`modelid`,`equipment_id`,`position_x`,`position_y`,`position_z`,`orientation`,`spawntimesecs`,`spawndist`,`currentwaypoint`,`curhealth`,`curmana`,`MovementType`) VALUES
-(9337682, 220000, 0, 1, 1, 0, 4321, -8928.58, 530.4, 94.4189, 0.678247, 300, 0, 0, 5342, 0, 0),
-(201419, 220000, 1, 1, 1, 0, 0, 1427.49, -4417.65, 25.4627, 0.148082, 300, 0, 0, 5342, 0, 0);
+(9337683, 220000, 0, 1, 1, 0, 4321, -8928.58, 530.4, 94.4189, 0.678247, 300, 0, 0, 5342, 0, 0),
+(201418, 220000, 1, 1, 1, 0, 0, 1427.49, -4417.65, 25.4627, 0.148082, 300, 0, 0, 5342, 0, 0);
