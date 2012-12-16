@@ -1,0 +1,161 @@
+From 84706599d75f60b187f3c03e6c5218663db0346b Mon Sep 17 00:00:00 2001
+From: Kingswow <hossein.abavi@gmail.com>
+Date: Sun, 2 Dec 2012 17:58:32 +0330
+Subject: [PATCH] Add GM Island Players No Access
+
+---
+ src/server/game/Entities/Player/Player.cpp   |   48 ++++++++++++++++++++++++++
+ src/server/game/Spells/SpellEffects.cpp      |    7 ++++
+ src/server/game/World/World.cpp              |    4 +++
+ src/server/game/World/World.h                |    2 ++
+ src/server/worldserver/worldserver.conf.dist |   23 ++++++++++++
+ 5 files changed, 84 insertions(+)
+
+diff --git a/src/server/game/Entities/Player/Player.cpp b/src/server/game/Entities/Player/Player.cpp
+index 3c5bd68..c30526f 100644
+--- a/src/server/game/Entities/Player/Player.cpp
++++ b/src/server/game/Entities/Player/Player.cpp
+@@ -34,6 +34,7 @@
+ #include "Chat.h"
+ #include <cmath>
+ #include "Common.h"
++#include "Config.h"
+ #include "ConditionMgr.h"
+ #include "CreatureAI.h"
+ #include "DatabaseEnv.h"
+@@ -7514,6 +7515,53 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
+         if (Guild* guild = GetGuild())
+             guild->UpdateMemberData(this, GUILD_MEMBER_DATA_ZONEID, newZone);
+     }
++ // Prevent players from accessing GM Island
++ if (sWorld->getBoolConfig(CONFIG_GMISLAND_PLAYERS_NOACCESS_ENABLE) == true)
++ {
++ if (newZone == 876 && AccountMgr::IsPlayerAccount(GetSession()->GetSecurity()))
++ {
++ uint32 map = 13;
++ double coords[4] = { 1.118799, 0.477914, -144.708650, 3.133046 }; // Jail Box
++
++ std::string config = ConfigMgr::GetStringDefault("GMIsland.TeleportTo", "");
++ if (config != "")
++ {
++ std::istringstream ss(config);
++
++ for (int i = 0; i < 5; ++i)
++ {
++ if (!ss)
++ break;
++
++ if (i == 0)
++ ss >> map;
++ else
++ ss >> coords[i - 1];
++ }
++ }
++
++ if (map == 876)
++ {
++ sLog->outError("Error: Cannot set tele to GM Island (map: 876). Sending possible hacker to default location. (Jail Box)");
++ map = 13;
++ coords[0] = 1.118799; // x
++ coords[1] = 0.477914; // y
++ coords[2] = -144.708650; // z
++ coords[3] = 3.133046; // orientation
++ }
++
++ sLog->outError("Player (GUID: %u) tried to access GM Island.", GetGUIDLow());
++ TeleportTo(map, coords[0], coords[1], coords[2], coords[3]); // Tele to Jail Box
++ if (map == 13)
++ CastSpell(this, 9454, true); // Cast GM Freeze on player
++
++ if (sWorld->getBoolConfig(CONFIG_GMISLAND_BAN_ENABLE) == true)
++ {
++ sLog->outError("Player (GUID: %u) tried to access GM Island. Banning Player Account.", GetGUIDLow());
++ sWorld->BanAccount(BAN_ACCOUNT, this->GetName(), secsToTimeString(TimeStringToSecs("-1"), true).c_str(), "Being on GM Island", "Anticheat protection");
++ }
++ }
++ }
+ 
+     // group update
+     if (Group* group = GetGroup())
+diff --git a/src/server/game/Spells/SpellEffects.cpp b/src/server/game/Spells/SpellEffects.cpp
+index c049605..0b15995 100644
+--- a/src/server/game/Spells/SpellEffects.cpp
++++ b/src/server/game/Spells/SpellEffects.cpp
+@@ -4549,6 +4549,13 @@ void Spell::EffectStuck(SpellEffIndex /*effIndex*/)
+ 
+     Player* target = (Player*)m_caster;
+ 
++ // Prevent players from trying to unstuck themselves in the Jail box.
++ if (target->GetMapId() == 13 && AccountMgr::IsPlayerAccount(target->GetSession()->GetSecurity()))
++ {
++ sLog->outError("Player %s (guid %u) tried to use unstuck in Jail box.", target->GetName(), target->GetGUIDLow());
++ return;
++ }
++
+     sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Spell Effect: Stuck");
+     sLog->outInfo(LOG_FILTER_SPELLS_AURAS, "Player %s (guid %u) used auto-unstuck future at map %u (%f, %f, %f)", target->GetName().c_str(), target->GetGUIDLow(), m_caster->GetMapId(), m_caster->GetPositionX(), target->GetPositionY(), target->GetPositionZ());
+ 
+diff --git a/src/server/game/World/World.cpp b/src/server/game/World/World.cpp
+index 0ef8611..5aa53cc 100644
+--- a/src/server/game/World/World.cpp
++++ b/src/server/game/World/World.cpp
+@@ -1227,6 +1227,10 @@ void World::LoadConfigSettings(bool reload)
+     m_bool_configs[CONFIG_PDUMP_NO_PATHS] = ConfigMgr::GetBoolDefault("PlayerDump.DisallowPaths", true);
+     m_bool_configs[CONFIG_PDUMP_NO_OVERWRITE] = ConfigMgr::GetBoolDefault("PlayerDump.DisallowOverwrite", true);
+ 
++	// Prevent players from accessing GM Island
++	m_bool_configs[CONFIG_GMISLAND_PLAYERS_NOACCESS_ENABLE] = ConfigMgr::GetBoolDefault("GMIsland.PlayersNoAccess.Enable", true);
++	m_bool_configs[CONFIG_GMISLAND_BAN_ENABLE] = ConfigMgr::GetBoolDefault("GMIsland.Ban.Enable", false);
++
+     // call ScriptMgr if we're reloading the configuration
+     m_bool_configs[CONFIG_WINTERGRASP_ENABLE] = ConfigMgr::GetBoolDefault("Wintergrasp.Enable", false);
+     m_int_configs[CONFIG_WINTERGRASP_PLR_MAX] = ConfigMgr::GetIntDefault("Wintergrasp.PlayerMax", 100);
+diff --git a/src/server/game/World/World.h b/src/server/game/World/World.h
+index d901c98..a443811 100644
+--- a/src/server/game/World/World.h
++++ b/src/server/game/World/World.h
+@@ -164,6 +164,8 @@ enum WorldBoolConfigs
+     CONFIG_QUEST_IGNORE_AUTO_ACCEPT,
+     CONFIG_QUEST_IGNORE_AUTO_COMPLETE,
+     CONFIG_WARDEN_ENABLED,
++    CONFIG_GMISLAND_PLAYERS_NOACCESS_ENABLE,
++ 	CONFIG_GMISLAND_BAN_ENABLE,
+     CONFIG_WINTERGRASP_ENABLE,
+     BOOL_CONFIG_VALUE_COUNT
+ };
+diff --git a/src/server/worldserver/worldserver.conf.dist b/src/server/worldserver/worldserver.conf.dist
+index 4c019e5..0e352e0 100644
+--- a/src/server/worldserver/worldserver.conf.dist
++++ b/src/server/worldserver/worldserver.conf.dist
+@@ -2926,6 +2926,29 @@ PlayerDump.DisallowPaths = 1
+ PlayerDump.DisallowOverwrite = 1
+ 
+ #
++# GMIsland.PlayersNoAccess.Enable
++# Prevent access for players to gm island
++# Default: 1 - Enable
++# 0 - Disable
++
++GMIsland.PlayersNoAccess.Enable = 1
++
++#
++# GMIsland.TeleportTo
++# Teleport player to this coordinates (map, x, y, z, orientation)
++# Default: "13 1.118799 0.477914 -144.708650 3.133046" (Jailbox)
++
++GMIsland.TeleportTo = "13 1.118799 0.477914 -144.708650 3.133046"
++
++#
++# GMIsland.Ban.Enable
++# Enable to ban players that tries to access GM Island without proper Access
++# Default: 0 - Disable
++# 1 - Enable
++
++GMIsland.Ban.Enable = 0
++
++#
+ ###################################################################################################
+ 
+ ###################################################################################################
+-- 
+1.7.10
