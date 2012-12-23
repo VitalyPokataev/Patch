@@ -1,0 +1,137 @@
+#restart iptables-restore /etc/default/iptables
+*nat
+:PREROUTING ACCEPT
+:POSTROUTING ACCEPT
+:OUTPUT ACCEPT
+
+#-A PREROUTING -i eth0 -p tcp --dport 2581 -j REDIRECT --to-port 3306 
+
+COMMIT
+
+*filter
+:INPUT ACCEPT [14531:3091572]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [15082:2404507]
+
+# lan доступ
+-A INPUT -s 127.0.0.0/8 -j ACCEPT
+-A INPUT -s 192.168.0.0/8 -j ACCEPT
+-A INPUT -s 192.168.0.0/8 -p tcp --dport 21 -j ACCEPT 
+
+# ssh
+-I INPUT -p tcp --dport 22 -i eth0 -m state --state NEW -m recent --set
+-I INPUT -p tcp --dport 22 -i eth0 -m state --state NEW -m recent --update --seconds 60 --hitcount 4 -j DROP
+-A INPUT -s 127.0.0.0/127.0.0.32 -p tcp --dport 22 -j ACCEPT
+-A INPUT -s 192.168.0.0/192.168.32.32 -p tcp --dport 22 -j ACCEPT
+-A INPUT -s 10.0.0.0/10.32.32.32 -p tcp --dport 22 -j ACCEPT
+
+#
+## nwhisper
+#-A INPUT -s 188.123.251.10 -p tcp --dport 22 -j ACCEPT
+#-A INPUT -s 195.190.14.0/24 -p tcp --dport 22 -j ACCEPT
+#-A INPUT -p tcp --dport 22 -j ACCEPT
+
+## Leha
+#-A INPUT -s 46.187.8.105 -j DROP
+## Uk
+-A INPUT -s 193.93.228.0/8 -j DROP
+# BANS
+-A INPUT -s 91.123.18.61 -j DROP
+-A INPUT -s 213.141.157.167 -j DROP
+-A INPUT -s 77.89.250.210 -j DROP
+-A INPUT -s 92.248.229.222 -j DROP
+-A INPUT -s 74.115.1.90 -j DROP
+-A INPUT -s 199.255.209.79 -j DROP
+-A INPUT -s 199.255.209.73 -j DROP
+-A INPUT -s 91.202.144.18 -j DROP
+-A INPUT -s 95.188.221.133 -j DROP
+-A INPUT -s 37.113.194.94 -j DROP
+-A INPUT -s 78.36.81.223 -j DROP
+-A INPUT -s 78.36.81.41 -j DROP
+-A INPUT -s 78.36.81 -j DROP
+-A INPUT -s 178.67.84.198 -j DROP
+-A INPUT -s 78.171.39.242 -j DROP
+-A INPUT -s 178.122.116.229 -j DROP
+-A INPUT -s 178.126.44.67 -j DROP
+-A INPUT -s 178.205.2.243 -j DROP
+-A INPUT -s 178.44.25.222 -j DROP
+-A INPUT -s 46.109.167.88 -j DROP
+-A INPUT -s 188.234.157.186 -j DROP
+-A INPUT -s 46.39.34.2 -j DROP
+-A INPUT -s 78.29.95.215 -j DROP
+-A INPUT -s 82.209.206.106 -j DROP
+-A INPUT -s 88.147.177.239 -j DROP
+-A INPUT -s 89.248.86.196 -j DROP
+-A INPUT -s 91.201.245.2 -j DROP
+-A INPUT -s 109.229.70.61 -j DROP
+-A INPUT -s 178.94.124.234 -j DROP
+-A INPUT -s 188.115.130.252 -j DROP
+-A INPUT -s 212.109.30.194 -j DROP
+-A INPUT -s 2.94.105.31 -j DROP
+-A INPUT -s 5.166.22.166 -j DROP
+-A INPUT -s 93.79.85.188 -j DROP
+-A INPUT -s 77.37.183.28 -j DROP
+-A INPUT -s 109.254.0.204 -j DROP
+
+# сканы
+-A INPUT -p tcp --tcp-flags FIN,URG,PSH FIN,URG,PSH -j DROP
+-A INPUT -p tcp --tcp-flags ALL ALL -j DROP
+-A INPUT -p tcp --tcp-flags ALL NONE -j DROP
+-A INPUT -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
+-A INPUT -p tcp --tcp-flags FIN,ACK FIN -j DROP
+-A INPUT -p tcp --tcp-flags ALL SYN,RST,ACK,FIN,URG -j DROP
+
+# broadcast, multicast, invalid
+-A INPUT -p tcp -m pkttype --pkt-type broadcast -j DROP
+-A INPUT -p tcp -m pkttype --pkt-type multicast -j DROP
+-A INPUT -p tcp -m state --state INVALID -j DROP
+
+# Пропускаем соединения
+#-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+# SSH
+#-A INPUT -p tcp -m conntrack --ctstate NEW -m multiport --dports 2022 -j ACCEPT
+
+# ICMP
+#-A INPUT -p icmp -m limit --limit 3/sec --limit-burst 6 -m length --length 0:110 -j ACCEPT
+
+# WEB
+-A INPUT -p tcp -m tcp --dport 80 -m connlimit --connlimit-above 8 --connlimit-mask 32 -j REJECT --reject-with icmp-port-unreachable
+-A INPUT -p tcp --dport 80 -m conntrack --ctstate NEW -m limit --limit 32/sec --limit-burst 32 -j ACCEPT
+-A INPUT -p tcp --syn --dport 80 -m limit --limit 3/sec --limit-burst 1 -m length --length 0:110 -j ACCEPT
+-A INPUT -p tcp --dport 80 -m hashlimit --hashlimit-upto 50/min --hashlimit-burst 1 --hashlimit-mode srcip --hashlimit-name http -j ACCEPT
+-A INPUT -p tcp --dport 80 -m connbytes --connbytes :500000 --connbytes-dir original --connbytes-mode bytes -j ACCEPT 
+-A INPUT -p tcp --dport 80 -j DROP
+#-A INPUT -p tcp --dport 80 -m hashlimit --hashlimit-upto 50/min --hashlimit-burst 1 --hashlimit-mode srcip --hashlimit-name http -j ACCEPT
+#-A INPUT -p tcp --dport 80 -j DROP
+#-A INPUT -p tcp --syn --dport 80 -m limit --limit 3/sec --limit-burst 1 -m length --length 0:110 -j ACCEPT
+
+# WOW SERVER
+-A INPUT -p tcp -m conntrack --ctstate NEW -m multiport --dports 8080 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 3724 -m connlimit --connlimit-above 20 --connlimit-mask 32 -j REJECT --reject-with icmp-port-unreachable
+-A INPUT -p tcp -m tcp --dport 56021 -m connlimit --connlimit-above 20 --connlimit-mask 32 -j REJECT --reject-with icmp-port-unreachable
+-A INPUT -p tcp -m tcp --dport 57021 -m connlimit --connlimit-above 20 --connlimit-mask 32 -j REJECT --reject-with icmp-port-unreachable
+-A INPUT -p tcp -m tcp --dport 57022 -m connlimit --connlimit-above 20 --connlimit-mask 32 -j REJECT --reject-with icmp-port-unreachable
+
+# CS
+#-A INPUT -p tcp --dport 27038 -j ACCEPT
+#-A INPUT -p udp --dport 27038 -j ACCEPT
+-A INPUT -p udp -m udp --dport 27038 -m connlimit --connlimit-above 20 --connlimit-mask 32 -j REJECT --reject-with icmp-port-unreachable
+
+# MC
+#-A INPUT -p tcp -m conntrack --ctstate NEW -m multiport --dports 25565 -j ACCEPT
+
+# WEB
+#-A INPUT -p tcp -m conntrack --ctstate NEW -m multiport --dports 53,443,25,465,110,995,143,993,587,465 -j ACCEPT
+
+# MYSQL
+#-A INPUT -p tcp -m conntrack --ctstate NEW --dport 3306 -j ACCEPT
+
+####
+-A INPUT -p tcp --dport 57878 -j DROP
+-A INPUT -s 89.108.67.234 -p tcp --dport 57878 -j ACCEPT
+-A INPUT -p tcp --dport 47878 -j DROP
+-A INPUT -s 89.108.67.234 -p tcp --dport 47878 -j ACCEPT
+
+
+COMMIT
