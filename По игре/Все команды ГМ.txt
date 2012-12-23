@@ -1,0 +1,1205 @@
+send items Локерман "Поддержка пользователей" "" "54588"
+
+send items Шамбамбам "Поддержка пользователей" "" "32768"
+
+send items Шамбамбам "Поддержка пользователей" "" "48316"
+send items Шамбамбам "Поддержка пользователей" "" "48317"
+send items Шамбамбам "Поддержка пользователей" "" "48318"
+send items Шамбамбам "Поддержка пользователей" "" "48319"
+send items Шамбамбам "Поддержка пользователей" "" "48320"
+
+send money Шамбамбам "Поддержка пользователей" "голд" 20000000
+
+send items хантум "Поддержка пользователей" "" "50363"
+
+send items уаз "Поддержка пользователей" "" "51468"
+
+send items zyzz "Поддержка пользователей" "" "51476,51474,51475,47131"
+send items zyzz "Поддержка пользователей" "" "51468"
+send items zyzz "Поддержка пользователей" "" "51468"
+send items zyzz "Поддержка пользователей" "" "51468"
+send items zyzz "Поддержка пользователей" "" "51468"
+51476 51474 51475 47131
+
+send items вантуз "Поддержка пользователей" "" "31062"
+
+
+account - уровень доступа вашего аккаунта
+account create - создание аккаунта
+account delete - удаление аккаунта
+account lock - блокирование аккаунта по IP
+account onlinelist - список онлайн аккаунтов
+account password - изменение пароля аккаунта (собственного)
+account set addon - изменение типа аккаунта (Добк - 0,бк - 1,вотлк - 2)
+account set gmlevel - изменение уровня доступа аккаунта
+account set password - изменение пароля аккаунта (любого)
+additem - добавление вещи в инвентарь цели, или себе, если цель не выбрана
+additemset - добавление сета в инвентарь цели, или себе, если цель не выбрана
+announce - анонсирование сообщения для всех игроков
+aura - наложение ауры на цель, или на себя, если цель не выбрана
+ban account - забанить аккаунт
+ban character - забанить персонажа
+ban ip - забанить IP адресс
+baninfo account - вывод информации о бане(аккаунт)
+baninfo character - вывод информации о бане(персонаж)
+baninfo ip - вывод информации о бане(IP аресс)
+bank - вывод информации о вещах в вашем банке
+banlist account - список забаненных аккаунтов
+banlist character - список забаненных персонажей
+banlist ip - список забаненных IP адрессов
+cast - произнести заклинание
+cast back - ваша цель произнесет заклинание на вас
+cast dist - произнести заклинание на определенной дистанции (не все заклинания)
+cast self - ваша цель произнесет заклинание на себя
+cast target - ваша цель произнесет заклинание на собственную цель(цель цели)
+character customize - отметить персонажа на изменение. Владелец,при следующем логине, сможет изменить внешность своего персонажа.
+character delete - удалить персонажа
+character level - изменение уровня персонажа
+character rename - отметить персонажа на переименование. Владелец,при следующем логине, сможет поменять имя своего персонажа.
+character reputation - информация о репутации персонажа (цели или введенного имени)
+combatstop - выход из боя для выбранной цели,или себя, если цель не выбрана
+commands - список комманд(без описания)
+cooldown - сбросить все КД для цели,или себя, если цель не выбрана
+damage - нанесение цели определенного урона
+debug anim - проигрывание эмоции для вашего персонажа(смех,танец,плач и т.д.)
+debug arena - включение отлаживание арены. В этом режиме ГМ может войти на арену в одиночном режиме(без группы)
+debug bg - включение отлаживание поле боя. В этом режиме ГМ может войти на поле боя в одиночном режиме(без группы)
+debug getvalue - получение значения #field для выбранного существа.
+debug Mod32Value - добавление значения в #field для вашего персонажа
+debug play cinematic - проигрывание клипа для вашего персонажа. Вы будуте стоять на месте во время проигрывания.
+debug play movie - проигрывание фильма для вашего персонажа.
+debug play sound - проигрвание звука для вашего персонажа(никто кроме вас его не услышит). Предупреждение: клиент может иметь более 5000 звуков...
+debug setvalue - выбрать значение #field для выбранного существа.
+debug update - получение текущего значения #field для существа/персонажа.
+delticket - all для удаление всех тикетов на сервере; #какое либо число,для удаления определенного тикета; #имя персонажа,для удаления всех тикетов от выбранного персонажа
+demorph - приведение вида персонажа к стандартному виду(эффекты изменения вида при этом не отменяются,но сам облик становится стандартным)
+die - убить цель
+dismount - спешится с ездового животного
+distance - получение информации о растоянии до цели
+event - получение информации о событии
+event activelist - получение информации о текущих событиях
+event start - запуск события
+event stop - остановка события
+explorecheat - открытие или сокрытие всех зон для выбранного персонажа
+flusharenapoints - произвести зачисление очков арены
+gm on/off - включение/выключение режима ГМ
+gm chat on/off - включение/выключение вывода иконки ГМ в чате
+gm fly on/off - включение/выключение режима полета
+gm ingame - получение информации о ГМах в игре
+gm list - получение полного списка ГМов (аккаунты | уровень доступа)
+gm visible on/off - включение/выключение режима невидимости ГМ. В этом режиме вас НИКТО не увидит и игроки не получат сообщения о том,что вы телепортировались к нему
+go creature - телепортация к существу с одним из параметров: #creature_guid/#creature_name/#creature_id/. Если таких существ много, вы телепортируетесь к первейшему существу в списке из БД
+go graveyard - телепортация к указанному кладбищу
+go grid - телепортация...(кто знает просьба описать)
+go object - телепортация к объекту
+go taxinode - телепортация к taxinode. ID taxinode можно узнать через .lookup taxinode
+go trigger - телепортация к....
+go xy - телепортация к точку карты с координатами xy
+go xyz - телепортация к точку карты с координатами xyz
+go zonexy - телепортация в точку зоны с координатами xy и ID зоны(можно узнать с помощью .lookup area)
+gobject add - добавление объекта
+gobject delete - удаление объекта
+gobject move - перемещение объекта в ваше положение
+gobject near - список всех объектов вокруг вас
+gobject setphase - ...
+gobject target - информация об объекте находящимся перед вами
+gobject turn - поворот объекта по направлению ориентации вашего персонажа
+goname - телепортация к персонажу
+gps - информация о местонахождении персонажа (xyz mapid)
+groupgo - телепортация группы введенного персонажа к вам(собсна весь рейд,будь даже там 25 человек)
+guid - информация о #guid выбранного персонажа
+guild create - создание гильдии
+guild delete - удаление гильдии
+guild invite - пригласить игрока в гильдию
+guild rank - установить ранг члена гильдии
+guild uninvite - выгнать игрока из гильдии
+help - информация о команде(обычно на английском языке)
+hidearea - ...
+honor add - добавление нного кол-ва очков чести для вашей цели,или вас, если цель не выбрана
+honor addkill - изменение значения кол-ва убитых персонажей за этот день для вашей цели,или вас, если цель не выбрана
+honor update - обновление информации о очках чести,убитых игроков и т.п.
+hover - включение/выключение режима левитации
+instance listbinds - информация о текущих ID'ах подземелий
+instance savedata - сохранение информации о текущем прогрессе персонажа в подземелье     13211
+instance stats - информация о статистике подземелий
+instance unbind - удаление информации о ID'ах подземелий
+itemmove - перемещение предмета в другой слот в вашем инвентаре
+jail - посадить персонажа в тюрьму
+jailinfo - просмотреть информацию о вашем заключении
+jailreload - ...
+kick - исключить персонажа из игры
+learn - выучить заклинание
+learn all - выучить все заклинания
+learn all_crafts - выучить все заклинания, связанные с профессиями
+learn all_default - выучить все заклинания, связанные с расой/классом и заклинания получаемые по квестам
+learn all_gm - выучить все заклинания ГМа
+learn all_lang - выучить все языки
+learn all_myclass - выучить все заклинания и таланты для вашего класса
+learn all_mypettalents - выучить все таланты для вашего питомца(только для охотников)
+learn all_myspells - выучить все заклинания для вашего класса, исключая таланты
+learn all_mytalents - выучить все заклинания,связанные с вашими талантами
+learn all_recipes - выучить все рецепты
+levelup - повысить уровень персонажа
+linkgrave - информация о доступности кладбища(орда/альянс)
+list creature - информация о всех существах
+list item - информация о всех предметах персонажей в инвентаре,банках,письмах и т.п.
+list object - информация о всех объектах
+loadscripts - ...
+-------------------------------------------------------------
+lookup - команды для нахождения ID существа,предмета,объекта и т.д. и т.п.
+lookup area
+lookup creature
+lookup event
+lookup faction
+lookup item
+lookup itemset
+lookup object
+lookup player account
+lookup player email
+lookup player ip
+lookup quest
+lookup skill
+lookup spell
+lookup taxinode
+lookup tele
+-------------------------------------------------------------------------------------
+maxskill - повышение всех навыков до максимума
+-------------------------------------------------------------------------
+modify - команда для изменения тех или иных параметров(до логаута или изменения этого параметра)
+modify arena - очки арены
+modify aspeed - все скорости
+modify bit - ...
+modify bwalk - скорость движения спиной
+modify drunk - опъянение
+modify energy - энергия(разбойник,друид-кошка)
+modify faction - фракция
+modify gender - пол
+modify honor - очки чести
+modify hp - запас жизней
+modify mana - запас маны
+modify money - деньги(в бронзовых монетках)
+modify morph - облик
+modify mount - ездового животного(на мангосе не работает)
+modify phase - ...
+modify rage - ярость(воин,друид-медведь)
+modify rep - репутация
+modify runicpower - руническая энергия(дк)
+modify scale - размер
+modify speed - скорость движения
+modify spell - не используется
+modify standstate - эмоция
+modify swim - скорость плавания
+modify titles - звания
+modify tp - таланты
+-----------------------------------------------------------------------
+movegens - ...
+mute - запретить персонажу писать в чат
+namego - телепортация персонажа к себе
+neargrave - информация о ближайшем кладбище
+notify - аналог announce. Подробнее позже
+npc add - добавить существо
+npc additem - добавить предмет в существо(продавец)
+npc addmove - добавить точку маршрута для существа
+npc addweapon - добавить оружие существу(экипировка)
+npc allowmove - включение/отключение возможности передвижения для существа
+npc changelevel - изменение уровня существа
+npc delete - удаление существа
+npc delitem - удаление предмета из существа(продавец)
+npc factionid - изменение фракции существа
+npc flag - изменение флага для существа(продавец/ремонтник/квестгивер и т.п.)
+npc follow - существо будет следовать за вами до смерти/боя и т.п.
+npc info - информация о существе
+npc move - перемещение существа в вашу позицию
+npc name - команда не используется
+npc playemote - проигрывание эмоции у существа
+npc setdeathstate - изменение состояния существа на живой/мертвый
+npc setmodel - выбор облика для существа
+npc setmovetype - выбор тип передвижения для существа
+npc setphase - ...
+npc spawndist - ...
+npc spawntime - ...
+npc subname - команда отключена
+npc tame - приручить животное(приручаемые животные)
+npc textemote - ...
+npc unfollow - прекращение следование существа за вами
+npc whisper - шепот существа к указанному персонажу
+pdump load - ...
+pdump write - ...
+pinfo - информация об аккаунте цели, или себя, если цель не выбрана
+quest add - добавить квест
+quest complete - выполнить квест
+quest remove - удалить квест
+recall - возвращение персонажа в позицию,где тот был до телепортации(.goname,.namego,.tele)
+reload - перезагрузка таблицы(следует указать название таблицы)
+reload all - перезагрузка всех таблиц
+reload all_area - перезагрузка таблиц связанных с зонами
+reload all_locales - перезагрузка всех таблиц связанных с местами действий(бг,арена походу)
+reload all_loot - перезагрузка таблиц связанных с лутом
+reload all_quest - перезагрузка таблиц связанных с квестами
+reload all_spell - перезагрузка таблиц связанных с заклинаниями
+reload config - перезагрузка world config'а
+repairitems - починка всех предметов
+reset achievements - сброс данных о достижениях у персонажа
+reset all - сброс всех данных персонажа
+reset honor - сброс данных персонажа об очках чести
+reset level - сброс данных персонажа об уровне(1 уровень)
+reset spells - сброс данных персонажа об заклинаниях
+reset stats - сброс данных о статистике персонажа
+reset talents - сброс талантов персонажа
+respawn - возрождение существа или всех существ если цель не выбрана
+revive - возрождение персонажа
+save - сохранение персонажа
+saveall - сохранение всех персонажей
+send items -
+send mail - отправить предмет в письме для персонажа
+send message - отправить информационное письмо персонажу
+send money - отправить деньги в письме для персонажа
+server corpses - сброс данных о всех трупах на сервере
+server exit - выключение mangosd
+server idlerestart - перезагрузка сервера если на нем небудет игроков
+server idlerestart cancel - отменение предыдущей команды
+server idleshutdown - выключение сервера если на нем небудет игроков
+server idleshutdown cancel - отменение предыдущей команды
+server info - информация о сервере
+server motd - показать сообщение дня сервера
+server plimit - установить лимит игроков для сервера
+server restart - перезагрузка сервера
+server restart cancel - отменение предыдущей команды
+server set loglevel - установка режима сохранения информации mangosd(только ошибки,полная и т.п.)
+server set motd - установить сообщение дня сервера
+server shutdown - выключение сервера
+server shutdown cancel - отменение предыдущей команды
+setskill - изменение значения навыка(скила). Улучшить скил игры этой командой у вас не получится
+showarea - информация о зоне выбранного персонажа, или себя, если цель не выбрана
+start - возвращение домой(к хозяину таверны или инкипиру)
+taxicheat - открытие всех летный путей
+tele - телепортация в точку телепортации
+tele add - добавление места для команды tele. Сохраняется текущая позиция вашего персонажа под введенным именем
+tele del - удалить точку телепортации
+tele group - телепортировать группу в точку телепортации
+tele name - телепортация персонажа с указанным именем в указанную точку телепортации
+ticket - просмотреть тикет от игрока
+unaura - снять заклинания с цели
+unban account - разбанить аккаунт
+unban character - разбанить персонажа
+unban ip - разбанить IP адресс
+unjail - освободить персонажа из тюрьмы(себя освободить нельзя)
+unlearn - забыть заклинание
+unmute - снятие запрета отправки сообщений в чат
+waterwalk - ходьба по воде
+wchange - изменение погоды
+whispers - включение/отключение приема ЛС
+----------------------------------------------------
+WPs - вайпоинты или точки маршрута. Ниже идут команды для работы с ними,но на MaNGOS'е они работают очень криво. Не советую их использовать,дабы избежать краша сервера. Ограничтесь только перемещением существа
+wp
+wp add - добавление вайпоинта для выбранного существа
+wp export - экспорт сохраненного вайпоинта
+wp import - импорт вайпоинта
+wp modify - изменение выбранного вайпоинта
+wp show - изменение статуса отображения вайпоинтов для выбранного существа
+
+---------------------------------------------------------------------
+
+Гм ауры,спелы.
+
+.learn 41484
+.learn 38588
+.learn 41486
+.learn 41471
+.learn 41472
+.learn 41470
+.learn 42867
+.learn 41276
+.learn 23675
+.learn 31984
+.learn 34642
+.learn 31258
+.learn 39952
+.learn 40647
+.learn 40215
+.learn 40420
+.learn all_gm
+Gm спелы!
+24312 сделать своего игрока больше в размере(нету лимита)
+33329 убить всех врагов
+35354 убить всех врагов 2
+25840 хил на все хп
+7033 сделать любого мобы своим петом(можно юзать на игроков только нету контроля)
+25260 фир почти без кулдауна
+.aura 21862 - Зелёный пар
+.aura 22638 - Зелёный пар и кислотные брызги
+.aura 17743 - Аура сна (как у одного эльфа-алкаша, валяющегося под сильвермуном)... Эта аура в данном случае не пригодиться, но всёже прикольная ))
+.aura 33900 - Синеватое свечение
+.aura 36006 - Зелёный огонь под ногами
+.aura 30205 - Серенево-фиолетовое свечение с обволакивающими петлями
+.aura 39102 - Затемнение модели и блеск вокруг её (Клёвенько смотриться
+.learn 40421
+.learn 40422
+.learn 40423
+.learn 40424
+.learn 40425
+.learn 40426
+.learn 40427
+.learn 40428
+.learn 40429
+.learn 40430
+.learn 40431
+.learn 40432
+.learn 40433
+.learn 40437
+.learn 40434
+.learn 40457
+.learn 40463
+.learn 40445
+.learn 40443
+.learn 40442
+.learn 40466
+.learn 40468
+.learn 40494
+.learn 41454
+.learn 41456
+.learn 41457
+.learn 41459
+.learn 41471
+.learn 41465
+.learn 41464
+.learn 41478
+.learn 41447
+.learn 42687
+.learn 43568
+.learn 41975
+.learn 41457
+.learn 41864
+.learn 41456
+.learn 41486
+.learn 41474
+.learn 41496
+.learn 41411
+.learn 41445
+.learn 41578
+.learn 41515
+.learn 41578
+.learn 41479
+.learn 41565
+.learn 41598
+.learn 41580
+.learn 41653
+.learn 41571
+.learn 29318
+.learn 33382
+.learn 56062
+.learn 47314
+.learn 20374
+.learn 43113
+.learn 1609
+.learn 29388
+.learn 39089
+.learn 39092
+.learn 29476
+.learn 6812
+.learn 9454
+.learn 45018
+.learn 64487
+.learn 38866
+.learn 6754
+.learn 35132
+.learn 18500
+.learn 40733
+.learn 24709
+
+------------------------------------------------------------
+
+А это Скиллы на ношение определенного вида оружия:
+
+.learn 264 - изучение скилла для владение видом оружия "Bow"
+
+.learn 5011 - изучение скилла для владение видом оружия "Crossbow"
+
+.learn 1180 - изучение скилла для владение видом оружия "Daggers"
+
+.learn 15590 - изучение скилла для владение видом оружия "First Weapon"
+
+.learn 266 - изучение скилла для владение видом оружия "Gun"
+
+.learn 196 - изучение скилла для владение видом оружия "One Handed Axes"
+
+.learn 201 - изучение скилла для владение видом оружия "One Handed Swords"
+
+.learn 198 - изучение скилла для владение видом оружия "One Handed Maces"
+
+.learn 200 - изучение скилла для владение видом оружия "Polearms"
+
+.learn 227 - изучение скилла для владение видом оружия "Stawes (Staff)"
+
+.learn 2567 - изучение скилла для владение видом оружия "Throu"
+
+.learn 197 - изучение скилла для владение видом оружия "Two Handed Axes"
+
+.learn 199 - изучение скилла для владение видом оружия "Two Handed Maces"
+
+.learn 202 - изучение скилла для владение видом оружия "Two Handed Swords"
+
+.learn 5009 - изучение скилла для владение видом оружия "Wands"
+
+Дополнительные скиллы:
+
+.learn 107 - изучение способности "Block"
+
+.learn 204 - изучение способности "Defense"
+
+.learn 81 - изучение способности "Dodge"
+
+.learn 674 - изучение способности "Dual Wield"
+
+.learn 3127 - изучение способности "Parry"
+
+.learn 3018 - изучение способности "Shoot (Requairest Bow)"
+
+.learn 5019 - изучение способности "Shoot (Requairest Wand)"
+
+.learn 2764 - изучение способности "Throw"
+
+.learn 203 - изучение способности "Unarmed"
+
+Скиллы на ношение определенного вида брони:
+
+.learn 9078 - скилл на ношение брони типа "Cloth"
+
+.learn 9077 - скилл на ношение брони типа "Leather"
+
+.learn 8737 - скилл на ношение брони типа "Mail"
+
+.learn 750 - скилл на ношение брони типа "Plate"
+
+.learn 9116 - скилл на ношение "Shield"
+--------------------------------------------------------------------------
+.learn all_recipes <название профессии>
+
+Список профессий:
+алхимия
+горное дело
+кузнечное дело
+инженерное дело
+кулинария
+наложение чар
+портняжное дело
+снятие шкур
+ювелирное дело
+начертание
+кожевничество
+Выучить все професии .learn all_crafts
+-------------------------------------------------------------------------
+
+Все звания вов.
+Звания ставятся коммандой .title add [id]
+144- Адмирал Кровавого Паруса
+135- Безумно влюбленный
+141- Бессмертный
+138- Благодетель
+137- Благодетельница
+170- Великий крестоносец
+28- Верховный вождь
+48- Вершитель правосудия
+134- Весельчак
+72- Военачальник
+128- Всепобеждающий
+26- Генерал
+25- Генерал-лейтенант
+147- Дарнасский
+143- Дженкинс
+79- Дипломат
+64- Длань А'дала
+47- Завоеватель
+122- Завоеватель Наксрамаса
+81- Искатель
+78- Исследователь
+20- Каменный страж
+2- Капрал
+11- Командор
+21- Кровавый страж
+22- Легионер
+10- Лейтенант-командор
+12- Маршал
+83- Морской дьявол
+142- Неумирающий
+150- Оргриммарский
+16- Пехотинец
+82- Повелитель арены
+139- Покоритель Обсидианового святилища
+130- Посланник
+77- Премудрый
+15- Разведчик
+6- Рыцарь
+9- Рыцарь-защитник
+8- Рыцарь-капитан
+7- Рыцарь-лейтенант
+1- Рядовой
+27- Вождь
+151- Сен'джинский
+171- Серебряный заступник
+131- Серебряный защитник
+17- Сержант
+3- Сержант
+173- Сияние Рассвета
+148- Стальгорнский
+18- Старший сержант
+4- Старший сержант
+19- Старшина
+5- Старшина
+75- Страж огня
+140- Сумеречный
+172- Терпеливый
+124- Тыквер
+13- Фельдмаршал
+133- Хмелевар
+125- Хранитель мудрости
+23- Центурион
+145- Чокнутый
+155- Чудесный
+84- Шеф-Повар
+149- Штормградский
+146- Экзодарский
+164- говорящий со звездами
+160- завоеватель Ульдуара
+132- защитник Кенария
+53- защитник Наару
+161- защитник Ульдуара
+129- защитник ледяных пустошей
+165- звездный скиталец
+153- из Громового Утеса
+152- из Луносвета
+176- из Пепельного союза
+154- из Подгорода
+63- из Расколотого Солнца
+120- искатель магии
+159- небесный заступник
+174- победивший падшего Короля
+158- победивший смерть
+121- покоритель сумрака
+166- посланник титанов
+175- свергнувший Короля
+126- сын Альянса
+127- сын Орды
+--------------------------------------------------------------
+
+Иды цен .
+
+2353 Burning Blossom 350
+2352 Burning Blossom 200
+2351 Burning Blossom 100
+2350 Burning Blossom 20
+2349 Burning Blossom 5
+2348 Burning Blossom 2
+2347 Badge of Justicex40
+2346-2334 unknown appears unused
+2333 Badge of Justicex100
+2332 Badge of Justicex45
+2331 Badge of Justicex105
+2330 Badge of Justicex125
+2329 Badge of Justicex150
+2328 Boots of the Forgotten Protectorx1
+2327 Boots of the Forgotten Vanquisherx1
+2326-2292 unknown
+2291 Arathi Basin Mark of Honor 20
+2290 Arathi Basin Mark of Honor 20
+2289 Alterac Valley Mark of Honor 40
+2288 Arena Points 1500
+2287 Arena Points 2625
+2286 Arena Points 1125
+2285 Arena Points 1875
+2284 Arena Points 3150
+2283 Arena Points 1125
+2282 Arena Points 3750
+2281 Warsong Gulch Mark of Honor 30
+2280 Alterac Valley Mark of Honor 30
+2279 Arathi Basin Mark of Honor 30
+2278 Arathi Basin Mark of Honor 20
+2277 Alterac Valley Mark of Honor 20
+2276 манета хмельный фестеваль 200
+2275 манета хмельный фестеваль 100
+2274 манета хмельный фестеваль 50
+2273 манета хмельный фестеваль 600
+2272 Apexis Shard 50
+2271 Alterac Valley Mark of Honor 40
+2270 Alterac Valley Mark of Honor 40
+2269 Arathi Basin Mark of Honor 20
+2268 Arathi Basin Mark of Honor 20
+2267 Arathi Basin Mark of Honor 20
+2266 Arathi Basin Mark of Honor 20
+2265 Warsong Gulch Mark of Honor 30
+2264 Warsong Gulch Mark of Honor 30
+2263 Alterac Valley Mark of Honor 30
+2262 Alterac Valley Mark of Honor 30
+2261 Alterac Valley Mark of Honor 20
+2260 Alterac Valley Mark of Honor 20
+2259 Arathi Basin Mark of Honor 30
+2258 Arathi Basin Mark of Honor 30
+2257 Alterac Valley Mark of Honor 40
+2256 Alterac Valley Mark of Honor 40
+2255 Eye of the Storm Mark of Honor 20
+2254 Eye of the Storm Mark of Honor 20
+2253 Alterac Valley Mark of Honor 10
+2252 Eye of the Storm Mark of Honor 10
+2251 Warsong Gulch Mark of Honor 20
+2250 Eye of the Storm Mark of Honor 40
+2249 Arathi Basin Mark of Honor 40
+2248 Eye of the Storm Mark of Honor 10
+2242 Eye of the Storm Mark of Honor 20
+2241 Eye of the Storm Mark of Honor 10
+2240 Eye of the Storm Mark of Honor 20
+2239 Eye of the Storm Mark of Honor 20
+2238 Eye of the Storm Mark of Honor 20
+2237 Alterac Valley Mark of Honor 40
+2236 Halaa Research Token 4
+2060 Badge of Justice 35
+2059 Badge of Justice 60
+2049 Badge of Justice 75
+2028 Alterac Valley Mark of Honor 10
+1994 Glowcap 10
+1992 Spirit Shard 2
+1985 Apexis Crystal 3
+1981 Apexis Crystal 4
+1979 Apexis Shard 160
+1973 Apexis Shard 40
+1963 Coilfang Armaments 1
+1959 Mark of the Illidari 1
+1958 Apexis Shard 10
+1952 Apexis Crystal 1
+1950 Apexis Crystal 4
+1949 Apexis Shard 2
+1948 Apexis Shard 3
+1935 Warsong Gulch Mark of Honor 20
+1923 Arathi Basin Mark of Honor 40
+1911 Eye of the Storm Mark of Honor 40
+1910 Apexis Shard 35
+1909 Badge of Justice 10
+1765 Halaa Research Token 2
+1758 Arena Points 1000
+1757 Arena Points 3150
+1670 Arena Points 2625
+1664 Arena Points 3750
+1653 Warsong Gulch Mark of Honor 2
+1652 Eye of the Storm Mark of Honor 2
+1649 Alterac Valley Mark of Honor 2
+1648 Arathi Basin Mark of Honor 2
+1647 Halaa Battle Token 70
+1646 Halaa Battle Token 100
+1645 Silken Thread 1
+1642 Badge of Justice 15
+1565 Unused
+1564 Unused
+1524 Pauldrons of the Forgotten Vanquisher
+1523 Leggings of the Forgotten Vanquisher
+1522 Chestguard of the Forgotten Vanquisher
+1521 Helm of the Forgotten Vanquisher
+1520 Gloves of the Forgotten Vanquisher
+1497 Pauldrons of the Forgotten Conqueror
+1494 Leggings of the Forgotten Conqueror
+1491 Chestguard of the Forgotten Conqueror
+1488 Helm of the Forgotten Conqueror
+1485 Gloves of the Forgotten Conqueror
+1482 Pauldrons of the Forgotten Protector
+1480 Leggings of the forgotten Protector
+1478 Chestguard of the forgotten Protector
+1476 Helm of the Forgotten Protector
+1474 Gloves of the Forgotten Protector
+1468 Murloc Fin 60
+1454 Badge of Justice 30
+1452 Badge of Justice 20
+1442 Warsong Gulch Mark of Honor 60
+1435 Arena Points 1500
+1432 Arena Points 1125
+1361 Pauldrons of the Vanquished Hero
+1360 Leggings of the Vanquished Hero
+1359 Chestguard of the Vanquished Hero
+1358 Helm of the Vanquished Hero
+1357 Gloves of the Vanquished hero
+1346 Pauldrons of the Vanquished Champion
+1345 Leggings of the Vanquished Champion
+1344 Chestguard of the Vanquished Champion
+1343 Helm of the Vanquished CHampion
+1342 Gloves of the Vanquished Champion
+1336 Pauldrons of the Vanquished Defender
+1335 Leggings of the Vaquished Defender
+1334 Chestguard of the Vanquished Defender
+1333 Helm of the Vanquished Defender
+1332 Gloves of the Vanquished Defender
+1243 Pauldrons of the Fallen Defender
+1241 Leggings of the Fallen Defender
+1239 Chestguard of the Fallen Defender
+1237 Helm of the Fallen Defender
+1235 Gloves of the Fallen Defender
+1219 Pauldrons of the Fallen Hero
+1218 Leggings of the Fallen Hero
+1217 Chestguard of the Fallen Hero
+1216 Helm of the Fallen Hero
+1215 Gloves of the Fallen Hero
+1212 Pauldrons of the Fallen Champion
+1209 Leggings of the Fallen Champion
+1206 CHestguard of the Fallen Champion
+1203 Helm of the Fallen Champion
+1200 Gloves of the Fallen Champion
+1196 Arcane Rune 8
+1192 Arcane Rune 2
+1188 Holy Dust 8
+1184 Holy Dust 2
+1111 Warsong Gulch Mark of Honor 30
+1110 Arathi Basin Mark of Honor 30
+1077 Glowcap 45
+1076 Glowcap 20
+1062 Alterac Valley Mark of Honor 20
+1061 Arathi Basin Mark of Honor 20
+1055 Warsong Gulch Mark of Honor 30
+1054 Warsong Gulch Mark of Honor 30
+1050 Arathi Basin Mark of Honor 10
+1040 Badge of Justice 50
+1037 Badge of Justice 33
+1027 Badge of Justice 41
+1015 Badge of Justice 25
+1009 Warsong Gulch Mark of Honor 60
+1007 Arathi Basin Mark of Honor 3
+1006 Alterac Valley Mark of Honor 20
+1005 Alterac Valley Mark of Honor 50
+1003 Alterac Valley Mark of Honor 60
+1002 Alterac Valley Mark of Honor 30
+1000 Arathi Basin Mark of Honor 60
+990 Warsong Gulch Mark of Honor 20
+989 Warsong Gulch Mark of Honor 20
+986 Arathi Basin Mark of Honor 10
+968 Warsong Gulch Mark of Honor 30
+947 Arathi Basin Mark of Honor 30
+933 Arathi Basin Mark of Honor 20
+931 Warsong Gulch Mark of Honor 10
+930 Warsong Gulch Mark of Honor 20
+929 Warsong Gulch Mark of Honor 40
+917 Warsong Gulch Mark of Honor 30
+901 Arathi Basin Mark of Honor 30
+887 Arathi Basin Mark of Honor 20
+885 Warsong Gulch Mark of Honor 10
+884 Warsong Gulch Mark of Honor 20
+883 Warsong Gulch Mark of Honor 40
+871 Warsong Gulch Mark of Honor 30
+855 Arathi Basin Mark of Honor 30
+841 Arathi Basin Mark of Honor 20
+839 Warsong Gulch Mark of Honor 10
+838 Warsong Gulch Mark of Honor 20
+837 Warsong Gulch Mark of Honor 40
+826 Warsong Gulch Mark of Honor 30
+823 Warsong Gulch Mark of Honor 10
+822 Warsong Gulch Mark of Honor 20
+821 Warsong Gulch Mark of Honor 40
+774 Arathi Basin Mark of Honor 10
+748 Warsong Gulch Mark of Honor 40
+747 Warsong Gulch Mark of Honor 30
+746 Arathi Basin Mark of Honor 40
+702 Alterac Valley Mark of Honor 25
+701 Warsong Gultch Mark of Honor 30
+653 Warsong Gultch Mark of Honor 30
+652 Arathi Basin Mark of Honor 30
+634 Honor 2805
+567 Arathi Basin Mark of Honor 40
+565 Arathi Basin Mark of Honor 20
+542 Warsong Gultch Mark of Honor 30
+541 Alterac Valley Mark of Honor 20
+533 Alterac Valley Mark of Honor 20
+532 Atlerac Valley Mark of Honor 10
+520 Arathi Basin mark of Honor 30
+501 Arathi Basin Mark of Honor 40
+497 Alterac Valley Mark of Honor 15
+496 Alterac Valley Mark of Honor 10
+495 Arathi Basin Mark of Honor 20
+492 Warsong Gultch Mark of Honor 10
+491 Warsong Gultch Mark of Honor 20
+490 Warsong Gultch Mark of Honor 40
+489 Alterac Valley Mark of Honor 25
+488 Warsong Gultch Mark of Honor 20
+465 Arathi Basin Mark of Honor 20
+464 Alterac Valley Mark of Honor 30
+463 Arathi Basin Mark of Honor 30
+460 Honor 1
+444 Alterac Valley Mark of Honor 30
+428 Alterac Valley Mark of Honor 20
+427 Arathi Basin mark of Honor 20
+423 Alterac Valley Mark of Honor 30
+388 Glowcap 30
+386 Honor 15300
+360 ALterac Valley Mark of Honor 40
+359 Honor 15300 + Eye of the Storm Mark of Honor 20
+348 Eye of the Storm Mark of Honor 20
+298 Spirit Shard 8
+293 SPirit Shard 50
+205 Arathi Basin Mark of Honor 20
+204 Warsong Gultch Mark of Honor 30
+203 Alterac Valley Mark of Honor 30
+202 Alterac Valley Mark of Honor 20
+201 Arathi Basin Mark of Honor 30
+194 Spirit Shard 18
+173 Honor 12750
+172 Arathi Basin Mark of Honor 40
+171 Eye of the Storm Mark of Honor 40
+170 Honor 9435
+169 Warsong Gultch Mark of Honor 20
+165 Arathi Basin Mark of Honor 20
+148 Arena Points 2739
+146 Arena Points 870
+133 Arena Points 2283
+131 Alterac Valley Mark of honor 40
+129 Alterac Valley Mark of honor 10
+127 Eye of the Storm Mark of Honor 10
+125 Eye of the Storm Mark of Honor 10
+115 Honor 16983
+104 Glowcap 15
+103 Glowcap 25
+102 Glowcap 2
+100 Glowcap 1
+99 Honor 8500
+98 Honor 22950
+95 Honor 6885
+94 Honor 19125
+77 Mark of Honor Hold 30
+76 Mark of Thrallmar 30
+69 Mark of Honor Hold 15
+66 Honor 1 & Arena Points 1
+65 Mark of Thrallmar 15
+56 Mark of Honor Hold 10
+55 Mark of Thrallmar 10
+54 Mark of Thrallmar 5
+53 Mark of Honor hold 5
+26 Arena Points 3261
+24 Arena Points 1304
+22 Arena Points 1630
+21 Arena Points 978
+18 Halaa Battle Token 100
+7 Halaa Research Token 8
+6 Halaa Battle Token 20
+5 Halaa Battle Token 40
+2 Unused
+1 Tough Jerky 1
+
+2425 Alterac valley mark of honor 10
+2424 Alterac Valley Mark of Honor 5
+2412-2407 unknown
+2406 Eye of the Storm Mark of Honor 40
+2405 Eye of the Storm mark of Honor 20
+2402 Alterac Valley Mark of Honor 10
+2401 Warsong Gulch Mark of Honor 20
+2400 Eye of the Storm Mark of Honor 40
+2399 Brewfest Prize Token 20
+2398 Brewfest Prize Token 2
+2397 Brewfest Prize Token 200
+2393-2354 unknown appears unused
+2546 - сколок каменого хранителя 30
+2547 - сколок каменого хранителя 15
+2548 - осколок каменого хранителя 100
+2549 - сколок каменого хранителя 40
+2550 - емблемы героизма 200 штук 
+2551 - Emblem of Heroismx65
+2552 - Stone Keeper's Shardx300
+2553 - Dream Shardx4
+2554 - Dream Shardx10
+2555 - Heavy Borean Leatherx3
+2556 - Arctic Furx2
+2739 - Эмюлема льда
+2557 - Honor 2500
+2558 - Dalaran Jewelcrafter's Tokenx6
+2559 - Honor 49600
+2560 - Honor 31600
+2561 - Honor 38000
+2562 - Honor 62000
+2564 - Honor 39400
+2565 - Honor 47400
+2568 - Honor 62000
+2569 - Honor 60000
+2570 - Honor 50000
+-------------------------------------------------------------
+Id порталов:
+
+Ogrimmar - 183323;
+
+Stormwind - 183325;
+
+Thunder Bluff - 183326;
+
+Under City - 183327;
+
+Darnasus - 183317;
+
+Ironforge - 183322;
+
+Exodar - 183321;
+
+Silvermoon - 183324;
+
+Shattrath - 183384;
+
+Netherstorm - 184605;
+
+Socrethar`s seat - 184604.
+-----------------------------------------------------------------------------
+Пару обьектов для постройки ивентов.
+
+183493 |-| дом. (макет)
+183492 |-| дерево. (макет)
+183491 |-| стена (макет)
+174849 |-| Кровать(2места)
+178226 |-| Коврик(красн)
+180043 |-| Факел
+180006 |-| Туалет(дерево)
+179969 |-| Ящик
+179968 |-| Сено
+179970 |-| Ящик поменьше
+148418 |-| Алтарь огня
+148498 |-| Алтар фо снта(Столик)
+148503 |-| Столб из лавы
+148504 |-| Могила
+148506 |-| кучка красных кристалов
+148512 |-| Алтарь
+148513 |-| Синий алтаря
+148516 |-| Алтарь розовый
+148515 |-| Жолтый алтарь
+148831 |-| Алтарь Змея
+148883 |-| Зеленый сияние
+148997 |-| Дым(Стандарт)
+148998 |-| демон портал(зеленое)
+149027 |-| Шашлык
+149038 |-| Table Cooker
+149045 |-| Лифт(Большой)
+149048 |-| Лавочка(дерево)
+149420 |-| (Аni)Дерево
+149432 |-| Дверь(Большая)
+149480 |-| Алтарь(Rune of Jin'yael)
+150086 |-| Камень большой
+151973 |-| Idol Mouth Fire
+152097 |-| Belnistrasz's Brazier
+160445 |-| Скелет
+183198 |-| Cooking Fire
+180045 |-| Повозка торговца
+181063 |-| Цветы(гор положение)
+179977 |-| Фонарь (без ручки)
+287 |-| Стопка книг
+759 |-| Небольшой водопад(Холи)
+1593 |-| Лодка(Шлюпка)
+1594 |-| Книжная полка
+1599 |-| Куча земли
+1609/180744 |-| Катапульта(Орк)(Westlands)
+183164 |-| катапульта плети
+1720 |-| Собачья будка(Красн)
+1728 |-| Ковер(зелен)
+171617 |-| Стул(красный)
+171674 |-| Стул(дварф)
+22248 |-| Стул(дерево)
+181075 |-| Стол большой(Дерево)
+180698 |-| Стол маленький(дерево)
+180432 |-| Столб с флагом для хеллоуина
+180434 |-| Костер
+180438 |-| Магический синий костер
+180410 |-| Плоский скелетик
+180411 |-| Повесившийся призрак
+180412 |-| Котелок с углями ввиде головы тыквенной
+180415 |-| Фиолетовая свечка
+180400 |-| Баннер с деревом и луной
+180405/180406/18407 |-| Тыква!Разные виды рожиц
+180408 |-| Шляпа ведьмы
+180409 |-| Метла
+164729 |-| Стена(Door) Ей можно постаратся територию оградить.
+176148 |-| Арка из горящих символов
+1752 |-| Наковальня. Нужна всем Блексмитерам.
+1754 |-| Тоже наковальня.
+124388 |-| Сундучок. Если порытся в БД, то в сундук мочно чтото положить
+2650 |-| Топка. Нужна Блексмтерам.
+2842 |-| Прсто красиво. Статуя. Даже ОБЕЛИСК
+3943 |-| Mighty blaze. Осветит огнем ваш Дом. Также на нем можно готовить
+3941 |-| Blaze Big
+19587 |-| Токсический ядовитый дым
+181653 |-| Красивая статуя
+184665 |-| Трон
+186300 |-| Сцена (для рок группы <короли тауренов>
+170592 |-| Красивый трон
+180147 |-| Speed Buff
+180377 |-| Food Buff
+180148 |-| Berserk Buff
+170576 |-| Большая дверь(BC Stail Dwar)
+180605 |-| Дварф танк(IronForgeSteamTank)
+3943 |-| Факел(Свет)Огри стиль
+18340 |-| Cauldron
+170572 |-| Doodad_BlackRockIronDoor02
+55250 |-| Огри факел
+186738 |-| Brewfest Pony Keg(Бочка пива)
+178545 |-| Гномий маячок
+186300 |-| Сцена
+186393 |-| Скамейки зрителей
+186681 |-| Food Beerfest
+186681 |-| Bir Tent    ------------------- палатка
+211022 |-| Comander Tent
+176924 |-| Ironforge Auction house (Бочка)
+180035 |-| Забор
+3523 |-| Огонь
+3644 |-| Самальт
+185598 |-| Бочка с пивом (для опьянения)
+185500 |-| цветы
+175948 |-| Колокол
+184753 |-| Бочка пустая
+164885 |-| цветок
+176091 |-| Котел
+86811 |-| Портал белый (Другой стиль блек портала)
+184227 |-| Портал(Инст)
+181355 |-| Факел(Шторм стиль)
+142075 |-| Почта(Шторм стиль)
+186152 |-| Дверь(Маленькая БТ без ключа)
+183289 |-| Дверь Арены(Большая.Награнд)
+161525 |-| Арена двери(Маленькие.Тюремные)
+186154 |-| Cauldroun Fire
+186155 |-| Cauldroun Frost
+186858 |-| Стена из Воздуха
+186859 |-| Стена из Огня
+182539 |-| Большые замковые двери(Откр верх)
+180255 |-| Декоративная дверь(Альянс)
+177791 |-| Якорь(Рачет)
+181965 |-| Огонь(Простой)
+31 |-| Статуя(Лев)
+181618 |-| Синий свет(Аура)
+181619 |-| красный свет(Аура)
+21680 |-| Флаг дуели
+181603 |-| Гномий телепорт(Красный)
+186250 |-| Пивная повозка
+184477 |-| Большая повозка(Аля ХонорХолд)
+182058 |-| Труповозка(Нежить)
+20816 |-| Башня Альянс
+20812 |-| Орковская башня
+185178 |-| трава
+190236 |-| врата (как на входе ледяной цитадели, имеют характер визуального украшения
+191167 |-| дом
+190802 |-| водонапорная башня
+190932 |-| пугало
+190934/190933/190930 |-| тыковки
+190935 |-| подставка чумного котла
+190936 |-| чумной котёл
+190896 |-| флаг плети
+191330 |-| свет постамента в шатрах
+191264 |-| разделочный стол плети
+191263 |-| постамент плети
+194255 |-| древние врата хранителей (ульдуар)
+195527 |-| пол колизея
+195647 |-| ворота колизея
+185172/185173/185174 |-| Деревья зелёные
+194967 |-| скамья
+194820 |-| ширма
+195214/195310 |-| огромная клеть
+193789/193790 |-| поломанная тележка плети
+193939 |-| камень призыва
+192029 |-| гоблинская мастерская(здание)
+192951 |-| подобие телепорта
+191575 |-| подобие телепорта (поменьше)
+190221 |-| угловая башня
+191810 |-| невидимая стена
+191805 |-| стена с проходом
+177307 |-| ворота хиджала
+181899 |-| столб деревянный
+188084 |-| мешок с заражённым зерном
+181510 |-| чумной гнойник
+192059 |-| подобие завихрения на воде + красные рыбки
+180582 |-| подобие завихрения на воде + синие рыбки
+193202 |-| парящий лазурный камень сосредоточения
+188230 |-| глыба льды покрытая снегом
+193214 |-| неогранённый лазурный камень сосредоточения
+192908 |-| пень кристального дерева
+192909 |-| древнее ельфийское свечение
+192038 |-| окровавленный ржавый пол
+192037 |-| большой костёр
+192039 |-| печка
+190541 |-| высохшая колючка
+190534 |-| распустившийся водяной мак
+190550 |-| древний земляной курган
+190633 |-| харкоанская реликвия (каменная табличка)
+190399 |-| гриб-дурман
+191615 |-| загородительные колья
+190836 |-| бамбуковый сундук из крепости зол"маза
+194126 |-| яйцо ящера гундарака
+192060 |-| наковальня фьорна
+191815 |-| гранитный валун
+192524 |-| Арнгрим ненасытный
+192079 |-| копьё ходира
+191517 |-| табличка "Опасно"
+191502 |-| мина (взрывается если наступить)
+191510 |-| ослепительное сияние
+192122 |-| святящийся шар
+192583 |-| грозовой горн
+192582 |-| плоская наковальня
+193994 |-| гигантская статуя (смотреть всем !!!)
+194463 |-| каменный блок
+192243 |-| потёртый грозовой молот
+191647 |-| трон торима
+192128 |-| слитки железа
+192125 |-| наковальня мимира
+191760 |-| пульт управления библиотеки изобретателя
+192578 |-| сеятель чумы
+192575 |-| трибуна плети
+192576 |-| нанизанные на копья черепа
+192579 |-| плита плети
+192577 |-| нанизанные на копьё черепа
+192817 |-| параллельно натянутая паутина
+192813 |-| наискось натянутая паутина
+192227 |-| башня серебрянного авангарда
+192228 |-| стена серебрянного авангарда
+192982 |-| жутко взвивающиеся в небо зелёные дужи
+193940 |-| флаг серебрянного авангарда
+194213 |-| зимний гиацинт
+193199 |-| груда костей
+193584 |-| гномьи инструменты
+193585 |-| сундучок с инструментами
+193566 |-| ледяной факел
+193565 |-| черепа Имирхейма
+193944 |-| сердце алумета
+193945 |-| скипетр алумета
+193946 |-| одеяния алумета
+193060 |-| шевелящаяся на земле рука
+192933 |-| кровавый шар
+193203 |-| пламя крушения
+193941 |-| портал (вид портала в акерус)
+192932 |-| маленький зелёный шар
+192917/192861 |-| око короля лича
+192862 |-| сияние
+191820 |-| знамя врайкулов
+192547 |-| стол алхимика плети
+192123 |-| знамя рыцарей чёрного клинка
+191779 |-| подставка с оружием
+191757 |-| кузня рун
+191705 |-| испарение демонов
+191707 |-| руна призрачной луны
+190533 |-| папоротник
+191179 |-| бюст наблюдателя бурь
+190508 |-| столбик параллелипипедный
+190621 |-| распылитель гнили
+190503 |-| крассиво расположенные кристаллы
+190622 |-| свисающая лиана
+179666 |-| мини солнце
+177223 |-| анкиражский гонг
+180899 |-| анкиражский корень
+176147 |-| анкиражские корни ворот
+180461 |-| ветровой камень
+180559 |-| большой ветровой камень
+179667 |-| мини-ураган
+180472 |-| подвесная побрекушка из костей
+188149 |-| ледяной камень
+142179 |-| соларсальская беседка
+177243 |-| маленький демон портал
+177369 |-| большой демон портал
+176751 |-| череп кодо
+176166 |-| голубая руна
+126050 |-| деревянная скамья в виде половины бревна
+141860 |-| пушка
+2744 |-| гигантский маллюск
+186456 |-| свет маяка
+177928 |-| врата ониксии
+146084 |-| врата зул"фарака
+128403 |-| неглубокая могила
+194484 |-| ульдуарский защитный пузырь
+194414 |-| штормовой маяк
+194375 |-| башня жизни
+194371 |-| башня пламени
+194377 |-| башня гроз
+194370 |-| башня холода
+194663 |-| генератор бури фрейи
+194664 |-| генератор бури мимирона
+194666 |-| генератор бури торима
+194665 |-| генератор бур
