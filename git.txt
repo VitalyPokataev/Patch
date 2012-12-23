@@ -1,0 +1,79 @@
+Commits:
+git init
+git touth ./
+git add *
+git commit -m "Core/Chat"
+git push
+
+
+Merge: master
+git remote add off_repo https://github.com/garyfisher/GaryMoveOut.git
+git fetch off_repo
+git checkout -b off_repo off_repo/master
+git checkout master
+git pull off_repo master
+git push
+
+Merge: blizzlikecore
+git remote add off_repo https://github.com/blizzlikegroup/blizzlikecore.git
+git fetch off_repo
+git checkout -b off_repo off_repo/master
+git checkout master
+git pull off_repo master
+git push
+
+---- панды
+git remote add off_repo https://github.com/TrinityCore/TrinityCore.git
+git fetch off_repo
+git checkout -b off_repo off_repo/4.3.4
+git checkout master
+git pull off_repo 4.3.4
+git push
+
+Merge: AC
+git remote add off_repo https://github.com/Vitasic/BattleCore.git
+git fetch off_repo
+git checkout -b off_repo off_repo/master
+git checkout passive_anticheat_new
+git pull off_repo master
+git push
+
+Merge: AC
+git remote add of_repo https://github.com/SignFinder/FaceCore.git
+git fetch of_repo
+git checkout -b of_repo of_repo/passive_anticheat_new
+git checkout passive_anticheat_new
+git pull of_repo passive_anticheat_new
+git push
+
+Merge: master
+git remote add tc_repo https://github.com/TrinityCore/TrinityCore.git
+git fetch tc_repo
+git checkout -b tc_repo tc_repo/mmaps
+git checkout master
+git pull tc_repo mmaps
+git push
+
+Merge: master
+git remote add off_repo https://github.com/Vitasic/BattleCore.git
+git fetch off_repo
+git checkout -b off_repo off_repo/master
+git checkout master
+git pull off_repo master
+git push
+
+
+
+git checkout passive_anticheat_new
+git merge master
+
+git pull git://github.com/TrinityCore/TrinityCore.git mmaps
+
+git show $commit > file_name.patch
+
+git reset --hard HEAD~1 — больше никто и никогда не увидит этот позорный коммит.
+
+git reset --hard HEAD~3 — вернее, три последних коммита. Никто. Никогда.
+git push -f origin
+
+git branch -D имя_ветки

@@ -1,0 +1,42 @@
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.0.13'
+ IDENTIFIED BY '25826' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+GRANT ALL PRIVILEGES ON b_characters.* TO 'anton'@'%'
+ IDENTIFIED BY 'dvarf1884' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+«аливаем базы легко!!
+// ¬се делаетс€ через консоль, экономит врем€ в разы!
+// пишем
+
+mysql -u root -p25826
+
+// тут попросит пароль рута! вводим его
+
+passblabla
+
+теперь выбираем базу в которую лить! ≈сли ее нет то создадим а потом зальем
+
+CREATE DATABASE `world` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE `characters1` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE `auth` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+// базы созданы.. выбираем базу
+
+use worldcata;
+
+// указатель теперь на базе выставл€ем кодировку дл€ заливки (нам же ненужны кракоз€блы в русском)
+
+set names utf8;
+
+// все теперь льем файл
+
+source /home/server/Cata/sql/world.sql
+source /home/server/wow/lk/c/sql/characters.sql
+
+// тут курим или вьем кофе но это не оч долго будет) ѕуть у каждого свой к файлам базы! я лишь пример привел.
+// аналогично с каждый дл€ всех баз! повтор€ем
+
+SELECT * FROM `creature` WHERE `id`=23709;
+

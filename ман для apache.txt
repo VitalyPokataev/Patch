@@ -1,0 +1,28 @@
+sudo apt-get update
+sudo apt-get install apache2 apache2-doc apache2-mpm-prefork apache2-utils apache2-suexec
+sudo apt-get install php5 php-doc php-pear libapache2-mod-php5 libapache2-mod-auth-mysql libapache2-mod-ruby php5-mysql libapache2-mod-python php5-dev php5-cgi php5-mcrypt php5-gd php5-cli php5-common php5-curl php5-idn php5-imagick php5-imap php5-memcache php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl
+sudo apt-get install libpng12-dev libjpeg62-dev libxpm-dev libfreetype6-dev
+
+Защищаем Apache от DDoS атак.
+sudo apt-get install libapache2-mod-evasive
+sudo nano /etc/apache2/mods-available/mod-evasive.conf
+В нём пишем!
+<IfModule mod_evasive20.c>
+DOSHashTableSize 4096
+DOSPageCount 5
+DOSSiteCount 50
+DOSPageInterval 1
+DOSSiteInterval 1
+DOSBlockingPeriod 10
+</IfModule>
+
+sudo nano /etc/apache2/sites-available/default
+Изменяем параметр: AllowOverride None на AllowOverride All
+
+sudo /etc/init.d/apache2 restart
+
+http://ipdemon.ru/2011/12/mod_evasive_debian/
+http://habrahabr.ru/post/145215/
+http://wiki.vdsplanet.ru/%D0%97%D0%B0%D1%89%D0%B8%D1%82%D0%B0_%D0%BE%D1%82_%D0%BB%D0%B5%D0%B3%D0%BA%D0%BE%D0%B9_flood_%D0%B8_ddos_%D0%B0%D1%82%D0%B0%D0%BA%D0%B8_%D0%BF%D0%BE_HTTP-%D0%BF%D1%80%D0%BE%D1%82%D0%BE%D0%BA%D0%BE%D0%BB%D1%83_%D0%B8%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D1%83%D1%8F_mod_dosevasive
+
+http://www.ubuntomania.ru/servery/web/440-zashhita-apache-ot-ddos-atak.html

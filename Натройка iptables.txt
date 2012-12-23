@@ -1,0 +1,40 @@
+sudo nano /etc/network/if-pre-up.d/iptables
+
+Add these lines to it:
+#!/bin/bash
+/sbin/iptables-restore < /home/server/iptables.rules
+
+The file needs to be executable so change the permissions:
+sudo chmod +x /etc/network/if-pre-up.d/iptables 
+
+sudo /sbin/iptables-restore < /home/server/iptables.rules
+
+
+netstat -a 10 > C:\netstatlog.txt
+-- Пишет в лог всё)) поможет от ддоса
+
+http://wowjp.net/forum/224-140925-1
+Хочешь посылать всех спрутеорв?, пожалуйста, он работает по протоколу tcp с флагом syn, открывая сокеты на подключение, правило просто и надежно 
+ -A INPUT -p tcp -m tcp --dport 80 -m connlimit --connlimit-above 40 --connlimit-mask 32 -j -j DROP с цифрой 40 можно поиграться, но думаю, это оптимально. 
+ Не плохо было бы поставить ограничение на посылку своего рода траффика и тоже на порт 
+ -A INPUT -p tcp --dport 80 -m connbytes --connbytes :10000 --connbytes-dir original --connbytes-mode bytes -j ACCEPT - разрешаем посылку не более10 кбайт на 80 порт 
+ -A INPUT -p tcp --dport 80 -j DROP - всё остальное, что больше 10 кбайт уничтожаем 
+ С пакетами hashlimit и limit использовать, ну, думаю, старт дан, остальное можно почитать в манах)
+
+// WEB 
+ iptables -A INPUT -p tcp --dport 80 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT 
+ iptables -A INPUT -p tcp --dport 80 -m conntrack --ctstate NEW -m limit --limit 32/sec --limit-burst 32 -j ACCEPT 
+ iptables -P INPUT DROP 
+
+ // SERVER 
+ iptables -I INPUT -p tcp --dport 3724 -i eth0 -m state --state NEW -m recent --set 
+ iptables -I INPUT -p tcp --dport 3724 -i eth0 -m state --state NEW -m recent --update --seconds 60 --hitcount 15 -j DROP
+
+
+         # и отбрасываем пинг (в принципе, он и так отбрасывается действием
+         # по умолчанию, но это правило для возможного редактирования)
+         $IPTABLES -A icmp_packets -p ICMP -s 0/0 --icmp-type 8 -j DROP # Ping
+         # следующим правилом можно заменить предыдущее, тогда при пинговании
+         # нашей машины вместо сообщения о таймауте будет приходить сообщение
+         # Host unreachable
+         #$IPTABLES -A icmp_packets -p ICMP -s 0/0 --icmp-type 8 -j REJECT --reject-with icmp-host-unreachable
