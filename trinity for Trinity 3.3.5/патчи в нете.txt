@@ -23,3 +23,10 @@ https://bitbucket.org/Neket007/jetcore/changeset/28208192c30ad52bcd95148da805071
 
 
 https://github.com/Neket007/Jet-Core/commit/1980853f708e2ad386d0fa57e77bd3ea8932f95d
+
+дабл кил ультра кил))
+http://www.trinity-core.ru/threads/mod-ut-adwards-%D0%BE%D0%BF%D0%BE%D0%B2%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D1%8F-%D0%B2-%D1%81%D1%82%D0%B8%D0%BB%D0%B5-unreal-tournament.7513/#post-44889
+
+
+-- поиск спутников везде
+https://github.com/SignFinder/FaceCore/commit/6971f950468c492bf7150423c8ac159b75a395f8
