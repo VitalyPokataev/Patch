@@ -1,0 +1,37 @@
+AnticheatMgr.cpp
+-------------------------
+после
+sWorld->SendGlobalGMMessage(&data);
+добавить:
+  player->CastSpell(player, sWorld->getIntConfig(CONFIG_ANTICHEAT_PUNISHMENT), true);
+------------------------
+
+World.cpp
+------------------------
+после
+m_int_configs[CONFIG_ANTICHEAT_MAX_REPORTS_FOR_DAILY_REPORT] = ConfigMgr::GetIntDefault("Anticheat.MaxReportsForDailyReport",70);
+добавить:
+m_int_configs[CONFIG_ANTICHEAT_PUNISHMENT] = ConfigMgr::GetIntDefault("Anticheat.punishment",7);
+------------------------
+
+
+World.h
+------------------------
+после
+CONFIG_ANTICHEAT_DETECTIONS_ENABLED,
+добавить
+CONFIG_ANTICHEAT_PUNISHMENT,
+------------------------
+
+
+
+worldserver.conf.dist
+------------------------
+после
+Anticheat.MaxReportsForDailyReport = 70
+  
+Anticheat.punishment = 7
+------------------------
+
+Anticheat.punishment = выбираем спелл по душе , по умолчанию килл 
+Может что и не так , но мне нравиться как работает.
