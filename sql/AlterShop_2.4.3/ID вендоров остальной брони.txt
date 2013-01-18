@@ -1,0 +1,30 @@
+вендоры ставятся с помощью команды  .npc add ID
+<ID>		<vendor>
+100125		Shield 0-29lvl
+100126		Shield 30-59lvl
+100127		Shield 60-69lvl
+100128		Shield 70+lvl
+100129		libram/idol/totem
+
+100130		necklace 0-29lvl
+100131		necklace 30-59lvl
+100132		necklace 60-69lvl
+100133		necklace 70+lvl
+100134		ring 0-29lvl
+100135		ring 30-59lvl
+100136		ring 60-69lvl
+100137		ring 70+lvl
+100138		Trinket 0-29lvl
+100139		Trinket 30-59lvl
+100140		Trinket 60-69lvl
+100141		Trinket 70+lvl
+
+100142		Cloak_1 0-29lvl
+100143		Cloak_2 0-29lvl
+100144		Cloak_1 30-59lvl
+100145		Cloak_2 30-59lvl
+100146		Cloak_1 60-69lvl
+100147		Cloak_1 70+lvl
+100148		Shirt
+100149		Tabard
+

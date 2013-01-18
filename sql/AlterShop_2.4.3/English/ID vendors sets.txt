@@ -1,0 +1,26 @@
+vendors placed with the command  .npc add ID
+<ID>		<vendor>
+100150		Dangeon_1
+100151		Dangeon_2
+100152		Dangeon_3
+100153		Tier_1
+100154		Tier_2
+100155		Tier_3
+100156		Tier_4
+100157		Tier_5
+100158		Tier_6
+100159		Rare60lvl
+100160		Epic60lvl
+100161		Rare70lvl_1  #1
+100162		Rare70lvl_2
+100163		Arena 1
+100164		Arena 2
+100165		Arena 3
+100166		Arena 4
+100167		Arathi_basin
+100168		Ruins_of_AhnQiraj
+100169		Temple_of_AhnQiraj
+100170		ZulGurub
+100171		Rare70lvl_1  #2
+
+

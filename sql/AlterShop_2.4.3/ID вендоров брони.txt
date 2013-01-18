@@ -1,0 +1,82 @@
+вендоры ставятся с помощью команды  .npc add ID
+Armor_Light-легкие типы брони (клоуз ,лезер)
+Armor_Heavy-тяжелые типы брони (маил,плейт)
+<ID>		<vendor>
+00-29лвл
+100061		 Head Armor_Light	
+100062		 Shoulder Armor_Light	
+100063		 Chest Armor_Light
+100064		 Waist Armor_Light
+100065		 Legs Armor_Light
+100066		 Boots Armor_Light
+100067		 Bracers Armor_Light
+100068		 Gloves Armor_Light
+
+100069		 Head Armor_Heavy	
+100070		 Shoulder Armor_Heavy	
+100071		 Chest Armor_Heavy
+100072		 Waist Armor_Heavy
+100073		 Legs Armor_Heavy
+100074		 Boots Armor_Heavy
+100075		 Bracers Armor_Heavy
+100076		 Gloves Armor_Heavy
+
+30-59лвл
+100077		 Head Armor_Light	
+100078		 Shoulder Armor_Light	
+100079		 Chest Armor_Light
+100080		 Waist Armor_Light
+100081		 Legs Armor_Light
+100082		 Boots Armor_Light
+100083		 Bracers Armor_Light
+100084		 Gloves Armor_Light
+
+100085		 Head Armor_Heavy	
+100086		 Shoulder Armor_Heavy	
+100087		 Chest Armor_Heavy
+100088		 Waist Armor_Heavy
+100089		 Legs Armor_Heavy
+100090		 Boots Armor_Heavy
+100091		 Bracers Armor_Heavy
+100092		 Gloves Armor_Heavy
+
+60-69лвл
+100093		 Head Armor_Light	
+100094		 Shoulder Armor_Light	
+100095		 Chest Armor_Light
+100096		 Waist Armor_Light
+100097		 Legs Armor_Light
+100098		 Boots Armor_Light
+100099		 Bracers Armor_Light
+100100		 Gloves Armor_Light
+
+100101		 Head Armor_Heavy	
+100102		 Shoulder Armor_Heavy	
+100103		 Chest Armor_Heavy
+100104		 Waist Armor_Heavy
+100105		 Legs Armor_Heavy
+100106		 Boots Armor_Heavy
+100107		 Bracers Armor_Heavy
+100108		 Gloves Armor_Heavy
+
+70лвл
+100109		 Head Armor_Light	
+100110		 Shoulder Armor_Light	
+100111		 Chest Armor_Light
+100112		 Waist Armor_Light
+100113		 Legs Armor_Light
+100114		 Boots Armor_Light
+100115		 Bracers Armor_Light
+100116		 Gloves Armor_Light
+
+100117		 Head Armor_Heavy	
+100118		 Shoulder Armor_Heavy	
+100119		 Chest Armor_Heavy
+100120		 Waist Armor_Heavy
+100121		 Legs Armor_Heavy
+100122		 Boots Armor_Heavy
+100123		 Bracers Armor_Heavy
+100124		 Gloves Armor_Heavy
+
+
+		

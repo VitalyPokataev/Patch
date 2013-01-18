@@ -1,0 +1,1 @@
+﻿UPDATE `item_template` SET `BuyPrice`=(`BuyPrice` *3 ) , `SellPrice`=(`SellPrice` *3 ) ;

@@ -1,3 +1,14 @@
+INSERT INTO locales_creature VALUES ('40070', '', '', '', '', '', '', '', 'Тренер Паладинов', null, null, null, null, null, null, null, 'Тренер класса');        
+        INSERT INTO locales_creature VALUES ('40071', '', '', '', '', '', '', '', 'Тренер Магов', null, null, null, null, null, null, null, 'Тренер класса');        
+        INSERT INTO locales_creature VALUES ('40072', '', '', '', '', '', '', '', 'Тренер Шаманов', null, null, null, null, null, null, null, 'Тренер класса');        
+        INSERT INTO locales_creature VALUES ('40073', '', '', '', '', '', '', '', 'Тренер Жрецов', null, null, null, null, null, null, null, 'Тренер класса');        
+        INSERT INTO locales_creature VALUES ('40074', '', '', '', '', '', '', '', 'Тренер Воинов', null, null, null, null, null, null, null, 'Тренер класса');        
+        INSERT INTO locales_creature VALUES ('40075', '', '', '', '', '', '', '', 'Тренер Охотников', null, null, null, null, null, null, null, 'Тренер класса');        
+        INSERT INTO locales_creature VALUES ('40076', '', '', '', '', '', '', '', 'Тренер Разбойников', null, null, null, null, null, null, null, 'Тренер класса');        
+        INSERT INTO locales_creature VALUES ('40077', '', '', '', '', '', '', '', 'Тренер Друидов', null, null, null, null, null, null, null, 'Тренер класса');        
+        INSERT INTO locales_creature VALUES ('40078', '', '', '', '', '', '', '', 'Тренер Чернокнижников', null, null, null, null, null, null, null, 'Тренер класса');        
+        INSERT INTO locales_creature VALUES ('40079', '', '', '', '', '', '', '', 'Тренер Рыцарей Смерти', null, null, null, null, null, null, null, 'Тренер класса');
+
 REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `Health_mod`, `Mana_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`) VALUES (40070, 0, 0, 0, 0, 0, 30453, 0, 30453, 0, 'Lightbringer', 'Paladin Trainer', '', 0, 83, 83, 0, 35, 35, 49, 1, 2, 1000, 2000, 0, 2000, 100, 1500, 1500, 2, 2, 0, 0, 0, 0, 2, 0, 200, 500, 1000, 7, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10000, 10000, '', 0, 3, 10, 5, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2026, 0, 2, '');
 
 DELETE FROM `npc_trainer` WHERE (`entry`=40070);
@@ -1463,6 +1474,7 @@ REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_ent
 
 DELETE FROM `npc_trainer` WHERE (`entry`=40077);
 INSERT INTO `npc_trainer` (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) VALUES 
+(40077, 5487, 300, 0, 0, 10),  -- облик медведя
 (40077, 99, 300, 0, 0, 10),
 (40077, 5487, 30, 0, 0, 10),
 (40077, 339, 200, 0, 0, 8),
@@ -2018,8 +2030,8 @@ REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_ent
 
 DELETE FROM `npc_trainer` WHERE (`entry`=40079);
 INSERT INTO `npc_trainer` (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) VALUES 
+(40079, 53431, 61000, 0, 0, 61),  -- гравирование
 (40079, 53428, 61000, 0, 0, 61),
-(40079, 50977, 61000, 0, 0, 61),
 (40079, 3714, 61000, 0, 0, 61),
 (40079, 42650, 360000, 0, 0, 80),
 (40079, 43265, 6000, 0, 0, 60),

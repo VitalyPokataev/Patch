@@ -1,0 +1,40 @@
+﻿The author pawok13 (icq: 477-525-583) 
+
+About sellers: 
+Vendors very convenient - all items divided into groups (only for lvl 0-29, for 20-59, for 60-69, for 70) 
+Weapons are divided by class (only bows, swords , only one-hend only two-hend swords, etc.) 
+Armor is divided by class (only light: cloth, leather, only heavy: mail, plate) 
+Filling vendors maximum: for example the number of weapons in the vendor is ~ 2.7 thousand pieces, about the same show and wowhead.com 
+Many sets Reservation: Tier 1-6, Arena 1-4 seasons, Dangeon 1-3, rar and epic sets for 60 and 70 levels 
+Besides weapons and armour, there are many other types items: food and drink,  potions , elexir, flask, scrolls, enchant scrolls, all socket-stones, arrows and bullets, all recipe and much more 
+Total 256 vendors who sell a variety of things 20717 
+
+
+Files: 
+AlterShop.sql -  file sellers
+item_FIX.sql - file to correct quest items (weapons ,armor) and prices for PvP servers
+ID vendors weapons.txt-  numbers for the placement of weapon sellers
+ID vendors armor.txt- numbers for the placement of armor sellers
+ID vendors another armor.txt- numbers for the placement of  another armor sellers
+ID vendors sets.txt- numbers sets sellers 
+ID different vendors.txt- sellers number of other things 
+version history. txt-information about changes in the versions of vendors 
+folder spawn-partial spawn of vendors (author: ATLANT forum with mangos.ru)
+folder Multiplier Price-folder files to increase prices
+
+the application files, installed base of the world (mangos default): 
+1 AlterShop.sql 
+2 item_FIX.sql 
+
+topic of the project: 
+http://www.udbforums.org/index.php?showtopic=10365
+
+page for downloading: 
+http://filebeam.com/folder/4875
+
+
+table compatibility with vendors and mangos rev.
+<version gmshop> <rev. mangos> 
+0.1.0-0.8.0                 5772-6324 
+0.8.1                          6325-6397 
+0.8.2-0.9.2                 6398 +

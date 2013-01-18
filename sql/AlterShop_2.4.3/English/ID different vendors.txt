@@ -1,0 +1,94 @@
+vendors placed with the command  .npc add ID
+<ID>		<vendor>
+100172		consumable 5-59lvl
+100173		consumable 60-70lvl
+100174		food and drank 1-30lvl
+100175		food and drank 31-59lvl
+100176		food and drank 60-70lvl
+100177		potions
+100178		elixir
+100179		flask
+100180		scroll
+100181		enchancement
+100182		bandage
+100183		RED gemstone
+100184		BLUE gemstone
+100185		YELLOW gemstone
+100186		PURPLE gemstone
+100187		GREEN gemstone
+100188		ORANGE gemstone
+100189		META gemstone
+100190		Simple/Prismatic gemstone
+100191		Arrow/Bullet
+
+100192		Bag
+100193		Prof. bag
+100194		Ammo quiver
+100195		Key
+
+100196		Book_1
+100197		Book_2
+100198		Leatherworking_1 Recipe
+100199		Leatherworking_1 Recipe
+100200		Tailoring_1 Recipe
+100201		Tailoring_2 Recipe
+100202		Engineering_1 Recipe
+100203		Engineering_2 Recipe
+100204		Blacksmithing_1 Recipe
+100205		Blacksmithing_2 Recipe
+100206		Alchemy_1 Recipe
+100207		Alchemy_2 Recipe
+100208		Enchanting_1 Recipe
+100209		Enchanting_2 Recipe
+100210		Jewelcrafting_1 Recipe
+100211		Jewelcrafting_2 Recipe
+100212		Cooking/First Aid/Fishing Recipe
+
+100213		Reagent
+100214		Mount #1
+
+100215		Trade_Goods
+100216		Parts
+100217		Explosives
+100218		Devices
+100219		Jewelcrafting
+100220		Cloth
+100221		Leather
+100222		Metal/Stone
+100223		Meat
+100224		Herb
+100225		Elemental
+100226		Other
+100227		Enchanting
+100228		Materials
+
+100229		Vanity_pets
+
+100230		A quest_items
+100231		A-B quest_items
+100232		B-C quest_items
+100233		C quest_items
+100234		C-D quest_items
+100235		D-E quest_items
+100236		E-F quest_items
+100237		F quest_items
+100238		F-G quest_items
+100239		G-H quest_items
+100240		H-I quest_items
+100241		I-K-J-L quest_items
+100242		L-M quest_items
+100243		M-N quest_items
+100244		N-O-P quest_items
+100245		P-Q-R quest_items
+100246		R-S quest_items
+100247		S_1 quest_items
+100248		S_2 quest_items
+100249		S-T quest_items
+100250		T quest_items
+100251		T-U-V quest_items
+100252		V-W-X quest_items
+100253		Y-Z quest_items
+
+100254		Holiday
+
+100255		Mount #2

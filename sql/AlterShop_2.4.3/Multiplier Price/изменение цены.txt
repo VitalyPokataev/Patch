@@ -1,0 +1,4 @@
+Dump_normal.sql - создает резервную копию цен
+Restore_normal.sql - восстанавливает цены  , сохраненные с помощью Dump_normal.sql
+Price_x3.sql - увеличивает цены в 3 раза
+Price_x10.sql - увеличивает цены в 10 раз

@@ -28,7 +28,7 @@ index 3f4e3fb..4d36dfe 100755
 +        {
 +            std::string adStr = secsToTimeString(sWorld->getIntConfig(CONFIG_INT_CHAT_DISABLE_TIME) - sender->GetTotalPlayedTime());
 +            SendNotification(GetTrinityString(LANG_DISABLE_CHAT), adStr.c_str());
-+            recvData.rfinish();
++            recv_data.rfinish();
 +            return;
 +        }
 +

@@ -1,0 +1,934 @@
+From d91236724e0bc5e283bbaf72c5fa7133d32450f4 Mon Sep 17 000000 2001
+From fiveofeight hynste@gmail.com
+Date Mon, 17 Sep 2012 165143 -0400
+Subject [PATCH] Added transmogrification (Thanks to Rochet2).
+
+---
+ sqlTransmogrificationcharacters.sql                  5 +
+ ...updatescharacters_update_2_1_to_2_2.sql          12 +
+ ...updatescharacters_update_2_2_to_3_0.sql           2 +
+ ...updatesworld_update_3_5_to_3_6.sql                1 +
+ sqlTransmogrificationworld_NPC.sql                   6 +
+ sqlTransmogrificationworld_texts.sql                30 +++
+ srcservergameEntitiesItemItem.cpp                27 ++
+ srcservergameEntitiesItemItem.h                   6 +
+ srcservergameEntitiesItemItemPrototype.h          2 +
+ srcservergameEntitiesPlayerPlayer.cpp            53 +++-
+ srcservergameEntitiesPlayerPlayer.h              16 ++
+ srcservergameGlobalsObjectMgr.cpp                 27 ++
+ srcservergameGlobalsObjectMgr.h                    3 +
+ srcservergameMiscellaneousLanguage.h              34 +++
+ srcservergameScriptingScriptLoader.cpp             2 +
+ srcservergameWorldWorld.cpp                        3 +
+ srcserverscriptsCustomCMakeLists.txt               2 +
+ srcserverscriptsCustomTransmogrification.cpp     274 ++++++++++++++++++++
+ srcserverscriptsCustomTransmogrification.h        83 ++++++
+ srcserverworldserverworldserver.conf.dist          88 +++++++
+ 20 files changed, 675 insertions(+), 1 deletion(-)
+ create mode 100644 sqlTransmogrificationcharacters.sql
+ create mode 100644 sqlTransmogrificationupdatescharacters_update_2_1_to_2_2.sql
+ create mode 100644 sqlTransmogrificationupdatescharacters_update_2_2_to_3_0.sql
+ create mode 100644 sqlTransmogrificationupdatesworld_update_3_5_to_3_6.sql
+ create mode 100644 sqlTransmogrificationworld_NPC.sql
+ create mode 100644 sqlTransmogrificationworld_texts.sql
+ create mode 100644 srcserverscriptsCustomTransmogrification.cpp
+ create mode 100644 srcserverscriptsCustomTransmogrification.h
+
+diff --git asqlTransmogrificationcharacters.sql bsqlTransmogrificationcharacters.sql
+new file mode 100644
+index 0000000..83435cc
+--- devnull
++++ bsqlTransmogrificationcharacters.sql
+@@ -0,0 +1,5 @@
++CREATE TABLE IF NOT EXISTS `custom_transmogrification` (
++  `GUID` int(10) unsigned NOT NULL DEFAULT '0',
++  `FakeEntry` int(10) unsigned NOT NULL DEFAULT '0',
++  PRIMARY KEY (`GUID`)
++) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='version 3.0';
+diff --git asqlTransmogrificationupdatescharacters_update_2_1_to_2_2.sql bsqlTransmogrificationupdatescharacters_update_2_1_to_2_2.sql
+new file mode 100644
+index 0000000..ee57844
+--- devnull
++++ bsqlTransmogrificationupdatescharacters_update_2_1_to_2_2.sql
+@@ -0,0 +1,12 @@
++CREATE TABLE IF NOT EXISTS `custom_transmogrification` (
++	`GUID` INT(10) UNSIGNED NOT NULL DEFAULT '0',
++	`FakeOwner` INT(10) UNSIGNED NOT NULL DEFAULT '0',
++	`FakeEntry` INT(10) UNSIGNED NOT NULL DEFAULT '0'
++)
++COLLATE='latin1_swedish_ci'
++ENGINE=InnoDB;
++
++REPLACE INTO custom_transmogrification (GUID, FakeOwner, FakeEntry) SELECT guid, FakeOwner, FakeEntry FROM item_instance WHERE FakeOwner != 0 AND FakeEntry != 0;
++ALTER TABLE `item_instance`
++	DROP COLUMN `FakeEntry`,
++	DROP COLUMN `FakeOwner`;
+diff --git asqlTransmogrificationupdatescharacters_update_2_2_to_3_0.sql bsqlTransmogrificationupdatescharacters_update_2_2_to_3_0.sql
+new file mode 100644
+index 0000000..63059ee
+--- devnull
++++ bsqlTransmogrificationupdatescharacters_update_2_2_to_3_0.sql
+@@ -0,0 +1,2 @@
++ALTER TABLE `custom_transmogrification`
++	DROP COLUMN `FakeOwner`;
+diff --git asqlTransmogrificationupdatesworld_update_3_5_to_3_6.sql bsqlTransmogrificationupdatesworld_update_3_5_to_3_6.sql
+new file mode 100644
+index 0000000..03cc6d2
+--- devnull
++++ bsqlTransmogrificationupdatesworld_update_3_5_to_3_6.sql
+@@ -0,0 +1 @@
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11129, 'You don't have enough %ss', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+diff --git asqlTransmogrificationworld_NPC.sql bsqlTransmogrificationworld_NPC.sql
+new file mode 100644
+index 0000000..81879da
+--- devnull
++++ bsqlTransmogrificationworld_NPC.sql
+@@ -0,0 +1,6 @@
++SET
++@Entry = 190010,
++@Name = Warpweaver;
++
++INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `HoverHeight`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES
++(@Entry, 0, 0, 0, 0, 0, 19646, 0, 0, 0, @Name, 'Transmogrifier', NULL, 0, 80, 80, 2, 35, 35, 1, 1, 1.14286, 1, 0, 500, 500, 0, 350, 1, 2000, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 'NPC_Transmogrify', 0);
+diff --git asqlTransmogrificationworld_texts.sql bsqlTransmogrificationworld_texts.sql
+new file mode 100644
+index 0000000..f55fb68
+--- devnull
++++ bsqlTransmogrificationworld_texts.sql
+@@ -0,0 +1,30 @@
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11100, 'Transmogrifications removed from equipped items', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11101, 'You have no transmogrified items equipped', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11102, '%s transmogrification removed', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11103, 'No transmogrification on %s slot', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11104, '%s transmogrified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11105, 'Selected items are not suitable', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11106, 'Selected item does not exist', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11107, 'Equipment slot is empty', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11108, 'Head', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11109, 'Shoulders', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11110, 'Shirt', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11111, 'Chest', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11112, 'Waist', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11113, 'Legs', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11114, 'Feet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11115, 'Wrists', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11116, 'Hands', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11117, 'Back', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11118, 'Main hand', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11119, 'Off hand', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11120, 'Ranged', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11121, 'Tabard', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11122, 'Back..', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11123, 'Remove all transmogrifications', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11124, 'Remove transmogrifications from all equipped items', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11125, 'Update menu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11126, 'Remove transmogrification', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11127, 'Remove transmogrification from %s', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11128, 'Using this item for transmogrify will bind it to you and make it non-refundable and non-tradeable.rnDo you wish to continuernrn', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++REPLACE INTO `trinity_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11129, 'You don't have enough %ss', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+diff --git asrcservergameEntitiesItemItem.cpp bsrcservergameEntitiesItemItem.cpp
+index 58cc1d0..d605773 100755
+--- asrcservergameEntitiesItemItem.cpp
++++ bsrcservergameEntitiesItemItem.cpp
+@@ -473,6 +473,7 @@ bool ItemLoadFromDB(uint32 guid, uint64 owner_guid, Field fields, uint32 entr
+ static
+ void ItemDeleteFromDB(SQLTransaction& trans, uint32 itemGuid)
+ {
++    DeleteFakeFromDB(itemGuid);  custom
+     PreparedStatement stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ITEM_INSTANCE);
+     stmt-setUInt32(0, itemGuid);
+     trans-Append(stmt);
+@@ -1196,3 +1197,29 @@ bool ItemCheckSoulboundTradeExpire()
+ 
+     return false;
+ }
++
++uint32 ItemGetFakeEntry()  custom
++{
++    ItemFakeEntryContainerconst_iterator itr = sObjectMgr-_itemFakeEntryStore.find(GetGUIDLow());
++    if (itr == sObjectMgr-_itemFakeEntryStore.end()) return NULL;
++    return itr-second;
++}
++bool ItemDeleteFakeEntry()  custom
++{
++    if (!GetFakeEntry())
++        return false;
++    GetOwner()-UpdateUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (GetSlot()  2), GetEntry());
++    DeleteFakeFromDB(GetGUIDLow());
++    return true;
++}
++void ItemDeleteFakeFromDB(uint32 lowGUID)  custom
++{
++    sObjectMgr-_itemFakeEntryStore.erase(lowGUID);
++    CharacterDatabase.PExecute(DELETE FROM custom_transmogrification WHERE GUID = %u, lowGUID);
++}
++void ItemSetFakeEntry(uint32 entry)  custom
++{
++    GetOwner()-UpdateUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (GetSlot()  2), entry);
++    sObjectMgr-_itemFakeEntryStore[GetGUIDLow()] = entry;
++    CharacterDatabase.PExecute(REPLACE INTO custom_transmogrification (GUID, FakeEntry) VALUES (%u, %u), GetGUIDLow(), entry);
++}
+ No newline at end of file
+diff --git asrcservergameEntitiesItemItem.h bsrcservergameEntitiesItemItem.h
+index a5f9ed5..5cfd9bf 100755
+--- asrcservergameEntitiesItemItem.h
++++ bsrcservergameEntitiesItemItem.h
+@@ -340,6 +340,12 @@ class Item  public Object
+ 
+         void BuildUpdate(UpdateDataMapType&);
+ 
++         custom
++        uint32 GetFakeEntry();
++        bool DeleteFakeEntry();
++        static void DeleteFakeFromDB(uint32 lowGUID);
++        void SetFakeEntry(uint32 entry);
++
+         uint32 GetScriptId() const { return GetTemplate()-ScriptId; }
+     private
+         stdstring m_text;
+diff --git asrcservergameEntitiesItemItemPrototype.h bsrcservergameEntitiesItemItemPrototype.h
+index f2f41d6..84cb495 100755
+--- asrcservergameEntitiesItemItemPrototype.h
++++ bsrcservergameEntitiesItemItemPrototype.h
+@@ -744,6 +744,8 @@ struct ItemTemplate
+  Benchmarked Faster than stdmap (insertfind)
+ typedef UNORDERED_MAPuint32, ItemTemplate ItemTemplateContainer;
+ 
++typedef UNORDERED_MAPuint32, uint32 ItemFakeEntryContainer;  custom
++
+ struct ItemLocale
+ {
+     StringVector Name;
+diff --git asrcservergameEntitiesPlayerPlayer.cpp bsrcservergameEntitiesPlayerPlayer.cpp
+index a2eb438..c30d04a 100755
+--- asrcservergameEntitiesPlayerPlayer.cpp
++++ bsrcservergameEntitiesPlayerPlayer.cpp
+@@ -76,6 +76,7 @@
+ #include AccountMgr.h
+ #include Battlefield.h
+ #include BattlefieldMgr.h
++#include ......scriptsCustomTransmogrification.h
+ 
+ #define ZONE_UPDATE_INTERVAL (1IN_MILLISECONDS)
+ 
+@@ -12387,7 +12388,11 @@ void PlayerSetVisibleItemSlot(uint8 slot, Item pItem)
+ {
+     if (pItem)
+     {
+-        SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot  2), pItem-GetEntry());
++         custom
++        if (pItem-GetFakeEntry())
++            SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot  2), pItem-GetFakeEntry());
++        else
++            SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot  2), pItem-GetEntry());
+         SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot  2), 0, pItem-GetEnchantmentId(PERM_ENCHANTMENT_SLOT));
+         SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot  2), 1, pItem-GetEnchantmentId(TEMP_ENCHANTMENT_SLOT));
+     }
+@@ -12508,6 +12513,7 @@ void PlayerMoveItemFromInventory(uint8 bag, uint8 slot, bool update)
+ {
+     if (Item it = GetItemByPos(bag, slot))
+     {
++        it-DeleteFakeFromDB(it-GetGUIDLow());  custom
+         ItemRemovedQuestCheck(it-GetEntry(), it-GetCount());
+         RemoveItem(bag, slot, update);
+         it-SetNotRefundable(this, false);
+@@ -25558,3 +25564,48 @@ void PlayerSendMovementSetFeatherFall(bool apply)
+     data  uint32(0);          ! movement counter
+     SendDirectMessage(&data);
+ }
++
++uint32 PlayerSuitableForTransmogrification(Item oldItem, Item newItem)  custom
++{
++     not possibly the best structure here, but atleast I got my head around this
++    if (!sTransmogrification-AllowedQuality(newItem-GetTemplate()-Quality))
++        return ERR_FAKE_NEW_BAD_QUALITY;
++    if (!sTransmogrification-AllowedQuality(oldItem-GetTemplate()-Quality))
++        return ERR_FAKE_OLD_BAD_QUALITY;
++
++    if (oldItem-GetTemplate()-DisplayInfoID == newItem-GetTemplate()-DisplayInfoID)
++        return ERR_FAKE_SAME_DISPLAY;
++    if (oldItem-GetFakeEntry())
++        if (const ItemTemplate fakeItemTemplate = sObjectMgr-GetItemTemplate(oldItem-GetFakeEntry()))
++            if (fakeItemTemplate-DisplayInfoID == newItem-GetTemplate()-DisplayInfoID)
++                return ERR_FAKE_SAME_DISPLAY_FAKE;
++    if (CanUseItem(newItem, false) != EQUIP_ERR_OK)
++        return ERR_FAKE_CANT_USE;
++    uint32 newClass = newItem-GetTemplate()-Class;
++    uint32 oldClass = oldItem-GetTemplate()-Class;
++    uint32 newSubClass = newItem-GetTemplate()-SubClass;
++    uint32 oldSubClass = oldItem-GetTemplate()-SubClass;
++    uint32 newInventorytype = newItem-GetTemplate()-InventoryType;
++    uint32 oldInventorytype = oldItem-GetTemplate()-InventoryType;
++    if (newClass != oldClass)
++        return ERR_FAKE_NOT_SAME_CLASS;
++    if (newClass == ITEM_CLASS_WEAPON && newSubClass != ITEM_SUBCLASS_WEAPON_FISHING_POLE && oldSubClass != ITEM_SUBCLASS_WEAPON_FISHING_POLE)
++    {
++        if (newSubClass == oldSubClass  ((newSubClass == ITEM_SUBCLASS_WEAPON_BOW  newSubClass == ITEM_SUBCLASS_WEAPON_GUN  newSubClass == ITEM_SUBCLASS_WEAPON_CROSSBOW) && (oldSubClass == ITEM_SUBCLASS_WEAPON_BOW  oldSubClass == ITEM_SUBCLASS_WEAPON_GUN  oldSubClass == ITEM_SUBCLASS_WEAPON_CROSSBOW)))
++            if (newInventorytype == oldInventorytype  (newInventorytype == INVTYPE_WEAPON && (oldInventorytype == INVTYPE_WEAPONMAINHAND  oldInventorytype == INVTYPE_WEAPONOFFHAND)))
++                return ERR_FAKE_OK;
++            else
++                return ERR_FAKE_BAD_INVENTORYTYPE;
++        else
++            return ERR_FAKE_BAD_SUBLCASS;
++    }
++    else if (newClass == ITEM_CLASS_ARMOR)
++        if (newSubClass == oldSubClass)
++            if (newInventorytype == oldInventorytype  (newInventorytype == INVTYPE_CHEST && oldInventorytype == INVTYPE_ROBE)  (newInventorytype == INVTYPE_ROBE && oldInventorytype == INVTYPE_CHEST))
++                return ERR_FAKE_OK;
++            else
++                return ERR_FAKE_BAD_INVENTORYTYPE;
++        else
++            return ERR_FAKE_BAD_SUBLCASS;
++    return ERR_FAKE_BAD_CLASS;
++}
+diff --git asrcservergameEntitiesPlayerPlayer.h bsrcservergameEntitiesPlayerPlayer.h
+index 5637b3b..3dc1aea 100755
+--- asrcservergameEntitiesPlayerPlayer.h
++++ bsrcservergameEntitiesPlayerPlayer.h
+@@ -88,6 +88,20 @@ enum BuyBankSlotResult
+     ERR_BANKSLOT_OK                 = 3
+ };
+ 
++enum TransmogrificationResult  custom
++{
++    ERR_FAKE_NEW_BAD_QUALITY,
++    ERR_FAKE_OLD_BAD_QUALITY,
++    ERR_FAKE_SAME_DISPLAY,
++    ERR_FAKE_SAME_DISPLAY_FAKE,
++    ERR_FAKE_CANT_USE,
++    ERR_FAKE_NOT_SAME_CLASS,
++    ERR_FAKE_BAD_CLASS,
++    ERR_FAKE_BAD_SUBLCASS,
++    ERR_FAKE_BAD_INVENTORYTYPE,
++    ERR_FAKE_OK
++};
++
+ enum PlayerSpellState
+ {
+     PLAYERSPELL_UNCHANGED = 0,
+@@ -2540,6 +2554,8 @@ class Player  public Unit, public GridObjectPlayer
+             }
+         }
+ 
++        uint32 SuitableForTransmogrification(Item oldItem, Item newItem);  custom
++
+     protected
+          Gamemaster whisper whitelist
+         WhisperListContainer WhisperList;
+diff --git asrcservergameGlobalsObjectMgr.cpp bsrcservergameGlobalsObjectMgr.cpp
+index 7d94e0a..a2f575c 100755
+--- asrcservergameGlobalsObjectMgr.cpp
++++ bsrcservergameGlobalsObjectMgr.cpp
+@@ -1967,6 +1967,33 @@ uint32 ObjectMgrGetPlayerAccountIdByPlayerName(const stdstring& name) const
+     return 0;
+ }
+ 
++void ObjectMgrLoadTransmogrifications()  custom
++{
++    sLog-outString(Deleting non-existing transmogrification entries...);
++    CharacterDatabase.Execute(DELETE FROM custom_transmogrification WHERE NOT EXISTS (SELECT 1 FROM item_instance WHERE item_instance.guid = custom_transmogrification.GUID));
++
++    uint32 oldMSTime = getMSTime();
++    _itemFakeEntryStore.clear();
++    QueryResult result = CharacterDatabase.Query(SELECT GUID, FakeEntry FROM custom_transmogrification WHERE EXISTS (SELECT 1 FROM item_instance WHERE item_instance.guid = custom_transmogrification.GUID));
++    if (result)
++    {
++        do
++        {
++            uint32 lowGUID = (result)[0].GetUInt32();
++            uint32 entry = (result)[1].GetUInt32();
++            if (GetItemTemplate(entry))
++                _itemFakeEntryStore[lowGUID] = entry;
++            else
++            {
++                sLog-outErrorDb(Item entry (Entry %u, GUID %u) does not exist, deleting., entry, lowGUID);
++                CharacterDatabase.PExecute(DELETE FROM custom_transmogrification WHERE GUID = %u, lowGUID);
++            }
++        } while (result-NextRow());
++    }
++    sLog-outString( Loaded %lu Item fake entries in %u ms, (unsigned long)_itemFakeEntryStore.size(), GetMSTimeDiffToNow(oldMSTime));
++    sLog-outString();
++}
++
+ void ObjectMgrLoadItemLocales()
+ {
+     uint32 oldMSTime = getMSTime();
+diff --git asrcservergameGlobalsObjectMgr.h bsrcservergameGlobalsObjectMgr.h
+index a6d1dc6..114c74f 100755
+--- asrcservergameGlobalsObjectMgr.h
++++ bsrcservergameGlobalsObjectMgr.h
+@@ -861,6 +861,7 @@ class ObjectMgr
+         void LoadItemLocales();
+         void LoadItemSetNames();
+         void LoadItemSetNameLocales();
++        void LoadTransmogrifications();
+         void LoadQuestLocales();
+         void LoadNpcTextLocales();
+         void LoadPageTextLocales();
+@@ -1145,6 +1146,8 @@ class ObjectMgr
+         void LoadFactionChangeSpells();
+         void LoadFactionChangeReputations();
+ 
++        ItemFakeEntryContainer _itemFakeEntryStore;  custom
++
+     private
+          first free id for selected id type
+         uint32 _auctionId;
+diff --git asrcservergameMiscellaneousLanguage.h bsrcservergameMiscellaneousLanguage.h
+index 5893bbd..7d387fd 100755
+--- asrcservergameMiscellaneousLanguage.h
++++ bsrcservergameMiscellaneousLanguage.h
+@@ -1078,6 +1078,40 @@ enum TrinityStrings
+     LANG_AUTO_BROADCAST                 = 11000,
+     LANG_INVALID_REALMID                = 11001
+ 
++    LANG_REM_TRANSMOGRIFICATIONS_ITEMS  = 11100,
++    LANG_ERR_NO_TRANSMOGRIFICATIONS     = 11101,
++    LANG_REM_TRANSMOGRIFICATION_ITEM    = 11102,
++    LANG_ERR_NO_TRANSMOGRIFICATION      = 11103,
++    LANG_ITEM_TRANSMOGRIFIED            = 11104,
++    LANG_ERR_NO_ITEM_SUITABLE           = 11105,
++    LANG_ERR_NO_ITEM_EXISTS             = 11106,
++    LANG_ERR_EQUIP_SLOT_EMPTY           = 11107,
++
++    LANG_SLOT_NAME_HEAD                 = 11108,
++    LANG_SLOT_NAME_SHOULDERS            = 11109,
++    LANG_SLOT_NAME_BODY                 = 11110,
++    LANG_SLOT_NAME_CHEST                = 11111,
++    LANG_SLOT_NAME_WAIST                = 11112,
++    LANG_SLOT_NAME_LEGS                 = 11113,
++    LANG_SLOT_NAME_FEET                 = 11114,
++    LANG_SLOT_NAME_WRISTS               = 11115,
++    LANG_SLOT_NAME_HANDS                = 11116,
++    LANG_SLOT_NAME_BACK                 = 11117,
++    LANG_SLOT_NAME_MAINHAND             = 11118,
++    LANG_SLOT_NAME_OFFHAND              = 11119,
++    LANG_SLOT_NAME_RANGED               = 11120,
++    LANG_SLOT_NAME_TABARD               = 11121,
++
++    LANG_OPTION_BACK                    = 11122,
++    LANG_OPTION_REMOVE_ALL              = 11123,
++    LANG_POPUP_REMOVE_ALL               = 11124,
++    LANG_OPTION_UPDATE_MENU             = 11125,
++    LANG_OPTION_REMOVE_ONE              = 11126,
++    LANG_POPUP_REMOVE_ONE               = 11127,
++    LANG_POPUP_TRANSMOGRIFY             = 11128,
++
++    LANG_ERR_NO_TOKEN                   = 11129,
++
+      NOT RESERVED IDS                   12000-1999999999
+      `db_script_string` table index     2000000000-2000009999 (MIN_DB_SCRIPT_STRING_ID-MAX_DB_SCRIPT_STRING_ID)
+      For other tables maybe             2000010000-2147483647 (max index)
+diff --git asrcservergameScriptingScriptLoader.cpp bsrcservergameScriptingScriptLoader.cpp
+index fba025d..2ad9821 100755
+--- asrcservergameScriptingScriptLoader.cpp
++++ bsrcservergameScriptingScriptLoader.cpp
+@@ -1261,6 +1261,7 @@ void AddBattlegroundScripts()
+ #ifdef SCRIPTS
+  This is where custom scripts' loading functions should be declared. 
+ 
++void AddSC_NPC_Transmogrify();
+ #endif
+ 
+ void AddCustomScripts()
+@@ -1268,5 +1269,6 @@ void AddCustomScripts()
+ #ifdef SCRIPTS
+      This is where custom scripts should be added. 
+ 
++    AddSC_NPC_Transmogrify();
+ #endif
+ }
+diff --git asrcservergameWorldWorld.cpp bsrcservergameWorldWorld.cpp
+index 1d1fb45..c683c16 100755
+--- asrcservergameWorldWorld.cpp
++++ bsrcservergameWorldWorld.cpp
+@@ -1386,6 +1386,9 @@ void WorldSetInitialWorldSettings()
+     sLog-outInfo(LOG_FILTER_SERVER_LOADING, Loading Item set names...);                 must be after LoadItemPrototypes
+     sObjectMgr-LoadItemSetNames();
+ 
++    sLog-outString(Loading Transmogrifications...);            custom must be after LoadItemTemplates
++    sObjectMgr-LoadTransmogrifications();
++
+     sLog-outInfo(LOG_FILTER_SERVER_LOADING, Loading Creature Model Based Info Data...);
+     sObjectMgr-LoadCreatureModelInfo();
+ 
+diff --git asrcserverscriptsCustomCMakeLists.txt bsrcserverscriptsCustomCMakeLists.txt
+index 62abde2..88a17c4 100644
+--- asrcserverscriptsCustomCMakeLists.txt
++++ bsrcserverscriptsCustomCMakeLists.txt
+@@ -10,6 +10,8 @@
+ 
+ set(scripts_STAT_SRCS
+   ${scripts_STAT_SRCS}
++    CustomTransmogrification.cpp
++    CustomTransmogrification.h
+ )
+ 
+ message(  - Prepared Custom)
+diff --git asrcserverscriptsCustomTransmogrification.cpp bsrcserverscriptsCustomTransmogrification.cpp
+new file mode 100644
+index 0000000..03a1851
+--- devnull
++++ bsrcserverscriptsCustomTransmogrification.cpp
+@@ -0,0 +1,274 @@
++
++3.7
++Transmogrification 3.3.5a - Gossip Menu
++By Rochet2
++
++ScriptName for NPC
++NPC_Transmogrify
++
++
++TODO
++Make DB saving even better (Deleting) What about coding
++
++Fix the cost formula
++
++TODO in the distant future
++
++Are the qualities right Blizzard might have changed the quality requirements.
++What can and cant be used as source or target..
++
++Cant transmogrify
++rediculus _items  Foereaper would be fun to stab people with a fish
++-- Cant think of any good way to handle this easily
++
++Cataclysm
++Test on cata - implement UI xD
++Item link icon to Are You sure text
++
++
++#include ScriptPCH.h
++#include Transmogrification.h
++
++class NPC_Transmogrify  public CreatureScript
++{
++public
++    NPC_Transmogrify()  CreatureScript(NPC_Transmogrify) { }
++
++    bool OnGossipHello(Player player, Creature creature)
++    {
++        WorldSession session = player-GetSession();
++        for (uint8 slot = EQUIPMENT_SLOT_START; slot  EQUIPMENT_SLOT_TABARD; slot++)  EQUIPMENT_SLOT_END
++        {
++            if (Item newItem = player-GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
++            {
++                if (sTransmogrification-AllowedQuality(newItem-GetTemplate()-Quality))
++                {
++                    if (const char slotName = GetSlotName(slot, session))
++                        player-ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, slotName, EQUIPMENT_SLOT_END, slot);
++                }
++            }
++        }
++        player-ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, session-GetTrinityString(LANG_OPTION_REMOVE_ALL), EQUIPMENT_SLOT_END+2, 0, session-GetTrinityString(LANG_POPUP_REMOVE_ALL), 0, false);
++        player-ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, session-GetTrinityString(LANG_OPTION_UPDATE_MENU), EQUIPMENT_SLOT_END+1, 0);
++        player-SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, creature-GetGUID());
++        return true;
++    }
++
++    bool OnGossipSelect(Player player, Creature creature, uint32 sender, uint32 uiAction)
++    {
++        WorldSession session = player-GetSession();
++        player-PlayerTalkClass-ClearMenus();
++        switch(sender)
++        {
++        case EQUIPMENT_SLOT_END  Show items you can use
++            {
++                if (Item oldItem = player-GetItemByPos(INVENTORY_SLOT_BAG_0, uiAction))
++                {
++                    uint32 lowGUID = player-GetGUIDLow();
++                    _items[lowGUID].clear();
++                    uint32 limit = 0;
++                    uint32 price = 0;
++                    switch (sTransmogrification-GetRequireGold())
++                    {
++                    case 1 { price = (unsigned int)(GetFakePrice(oldItem)sTransmogrification-GetGoldModifier()); } break;
++                    case 2 { price = (unsigned int)sTransmogrification-GetGoldCost(); } break;
++                    }
++                    char tokenCost[250] = n;
++                    if(sTransmogrification-GetRequireToken())
++                        snprintf(tokenCost, 250, nn%u x %s, sTransmogrification-GetTokenAmount(), GetItemName(sObjectMgr-GetItemTemplate(sTransmogrification-GetTokenEntry()), session).c_str());
++
++                    for (uint8 i = INVENTORY_SLOT_ITEM_START; i  INVENTORY_SLOT_ITEM_END; i++)
++                    {
++                        if (limit  30)
++                            break;
++                        if (Item newItem = player-GetItemByPos(INVENTORY_SLOT_BAG_0, i))
++                        {
++                            uint32 display = newItem-GetTemplate()-DisplayInfoID;
++                            if (player-SuitableForTransmogrification(oldItem, newItem) == ERR_FAKE_OK)
++                            {
++                                if (_items[lowGUID].find(display) == _items[lowGUID].end())
++                                {
++                                    limit++;
++                                    _items[lowGUID][display] = newItem;
++                                    player-ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, GetItemName(newItem-GetTemplate(), session), uiAction, display, session-GetTrinityString(LANG_POPUP_TRANSMOGRIFY)+GetItemName(newItem-GetTemplate(), session)+tokenCost, price, false);
++                                }
++                            }
++                        }
++                    }
++
++                    for (uint8 i = INVENTORY_SLOT_BAG_START; i  INVENTORY_SLOT_BAG_END; i++)
++                    {
++                        if (Bag bag = player-GetBagByPos(i))
++                        {
++                            for (uint32 j = 0; j  bag-GetBagSize(); j++)
++                            {
++                                if (limit  30)
++                                    break;
++                                if (Item newItem = player-GetItemByPos(i, j))
++                                {
++                                    uint32 display = newItem-GetTemplate()-DisplayInfoID;
++                                    if (player-SuitableForTransmogrification(oldItem, newItem) == ERR_FAKE_OK)
++                                    {
++                                        if (_items[lowGUID].find(display) == _items[lowGUID].end())
++                                        {
++                                            limit++;
++                                            _items[lowGUID][display] = newItem;
++                                            player-ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, GetItemName(newItem-GetTemplate(), session), uiAction, display, session-GetTrinityString(LANG_POPUP_TRANSMOGRIFY)+GetItemName(newItem-GetTemplate(), session)+tokenCost, price, false);
++                                        }
++                                    }
++                                }
++                            }
++                        }
++                    }
++
++                    char removeOnePopup[250];
++                    snprintf(removeOnePopup, 250, session-GetTrinityString(LANG_POPUP_REMOVE_ONE), GetSlotName(uiAction, session));
++                    player-ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, session-GetTrinityString(LANG_OPTION_REMOVE_ONE), EQUIPMENT_SLOT_END+3, uiAction, removeOnePopup, 0, false);
++                    player-ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, session-GetTrinityString(LANG_OPTION_BACK), EQUIPMENT_SLOT_END+1, 0);
++                    player-SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, creature-GetGUID());
++                }
++                else
++                    OnGossipHello(player, creature);
++            } break;
++        case EQUIPMENT_SLOT_END+1  Back
++            {
++                OnGossipHello(player, creature);
++            } break;
++        case EQUIPMENT_SLOT_END+2  Remove Transmogrifications
++            {
++                bool removed = false;
++                for (uint8 Slot = EQUIPMENT_SLOT_START; Slot  EQUIPMENT_SLOT_END; Slot++)
++                {
++                    if (Item newItem = player-GetItemByPos(INVENTORY_SLOT_BAG_0, Slot))
++                    {
++                        if (newItem-DeleteFakeEntry() && !removed)
++                            removed = true;
++                    }
++                }
++                if (removed)
++                {
++                    session-SendAreaTriggerMessage(session-GetTrinityString(LANG_REM_TRANSMOGRIFICATIONS_ITEMS));
++                    player-PlayDirectSound(3337);
++                }
++                else
++                    session-SendNotification(session-GetTrinityString(LANG_ERR_NO_TRANSMOGRIFICATIONS));
++                OnGossipHello(player, creature);
++            } break;
++        case EQUIPMENT_SLOT_END+3  Remove Transmogrification from single item
++            {
++                if (Item newItem = player-GetItemByPos(INVENTORY_SLOT_BAG_0, uiAction))
++                {
++                    if (newItem-DeleteFakeEntry())
++                    {
++                        session-SendAreaTriggerMessage(session-GetTrinityString(LANG_REM_TRANSMOGRIFICATION_ITEM), GetSlotName(uiAction, session));
++                        player-PlayDirectSound(3337);
++                    }
++                    else
++                        session-SendNotification(session-GetTrinityString(LANG_ERR_NO_TRANSMOGRIFICATION), GetSlotName(uiAction, session));
++                }
++                OnGossipSelect(player, creature, EQUIPMENT_SLOT_END, uiAction);
++            } break;
++        default  Transmogrify
++            {
++                uint32 lowGUID = player-GetGUIDLow();
++                if(!sTransmogrification-GetRequireToken()  player-GetItemCount(sTransmogrification-GetTokenEntry()) = sTransmogrification-GetTokenAmount())
++                {
++                    if (Item oldItem = player-GetItemByPos(INVENTORY_SLOT_BAG_0, sender))
++                    {
++                        if (_items[lowGUID].find(uiAction) != _items[lowGUID].end() && _items[lowGUID][uiAction]-IsInWorld())
++                        {
++                            Item newItem = _items[lowGUID][uiAction];
++                            if (newItem-GetOwnerGUID() == player-GetGUIDLow() && (newItem-IsInBag()  newItem-GetBagSlot() == INVENTORY_SLOT_BAG_0) && player-SuitableForTransmogrification(oldItem, newItem) == ERR_FAKE_OK)
++                            {
++                                switch(sTransmogrification-GetRequireGold())
++                                {
++                                case 1 { player-ModifyMoney(-1(uint32)(GetFakePrice(oldItem)sTransmogrification-GetGoldModifier())); } break;
++                                case 2 { player-ModifyMoney(-1(unsigned int)sTransmogrification-GetGoldCost()); } break;
++                                }
++                                if(sTransmogrification-GetRequireToken())
++                                    player-DestroyItemCount(sTransmogrification-GetTokenEntry(), sTransmogrification-GetTokenAmount(), true);
++                                oldItem-SetFakeEntry(newItem-GetEntry());
++                                newItem-SetNotRefundable(player);
++                                newItem-SetBinding(true);
++                                player-PlayDirectSound(3337);
++                                session-SendAreaTriggerMessage(session-GetTrinityString(LANG_ITEM_TRANSMOGRIFIED), GetSlotName(sender, session));
++                            }
++                            else
++                                session-SendNotification(session-GetTrinityString(LANG_ERR_NO_ITEM_SUITABLE));
++                        }
++                        else
++                            session-SendNotification(session-GetTrinityString(LANG_ERR_NO_ITEM_EXISTS));
++                    }
++                    else
++                        session-SendNotification(session-GetTrinityString(LANG_ERR_EQUIP_SLOT_EMPTY));
++                }
++                else
++                    session-SendNotification(session-GetTrinityString(LANG_ERR_NO_TOKEN), GetItemName(sObjectMgr-GetItemTemplate(sTransmogrification-GetTokenEntry()), session).c_str());
++                _items[lowGUID].clear();
++                OnGossipSelect(player, creature, EQUIPMENT_SLOT_END, sender);
++            } break;
++        }
++        return true;
++    }
++
++private
++    stdmapuint64, stdmapuint32, Item  _items;  _items[lowGUID][DISPLAY] = item
++
++    const char  GetSlotName(uint8 slot, WorldSession session)
++    {
++        switch (slot)
++        {
++        case EQUIPMENT_SLOT_HEAD       return session-GetTrinityString(LANG_SLOT_NAME_HEAD);
++        case EQUIPMENT_SLOT_SHOULDERS  return session-GetTrinityString(LANG_SLOT_NAME_SHOULDERS);
++        case EQUIPMENT_SLOT_BODY       return session-GetTrinityString(LANG_SLOT_NAME_BODY);
++        case EQUIPMENT_SLOT_CHEST      return session-GetTrinityString(LANG_SLOT_NAME_CHEST);
++        case EQUIPMENT_SLOT_WAIST      return session-GetTrinityString(LANG_SLOT_NAME_WAIST);
++        case EQUIPMENT_SLOT_LEGS       return session-GetTrinityString(LANG_SLOT_NAME_LEGS);
++        case EQUIPMENT_SLOT_FEET       return session-GetTrinityString(LANG_SLOT_NAME_FEET);
++        case EQUIPMENT_SLOT_WRISTS     return session-GetTrinityString(LANG_SLOT_NAME_WRISTS);
++        case EQUIPMENT_SLOT_HANDS      return session-GetTrinityString(LANG_SLOT_NAME_HANDS);
++        case EQUIPMENT_SLOT_BACK       return session-GetTrinityString(LANG_SLOT_NAME_BACK);
++        case EQUIPMENT_SLOT_MAINHAND   return session-GetTrinityString(LANG_SLOT_NAME_MAINHAND);
++        case EQUIPMENT_SLOT_OFFHAND    return session-GetTrinityString(LANG_SLOT_NAME_OFFHAND);
++        case EQUIPMENT_SLOT_RANGED     return session-GetTrinityString(LANG_SLOT_NAME_RANGED);
++        case EQUIPMENT_SLOT_TABARD     return session-GetTrinityString(LANG_SLOT_NAME_TABARD);
++        default return NULL;
++        }
++    }
++
++    stdstring GetItemName(const ItemTemplate itemTemplate, WorldSession session)
++    {
++        stdstring name = itemTemplate-Name1;
++        int loc_idx = session-GetSessionDbLocaleIndex();
++        if (loc_idx = 0)
++            if (ItemLocale const il = sObjectMgr-GetItemLocale(itemTemplate-ItemId))
++                sObjectMgr-GetLocaleString(il-Name, loc_idx, name);
++        return name;
++    }
++
++    uint32 GetFakePrice(Item item)
++    {
++        uint32 sellPrice = item-GetTemplate()-SellPrice;
++        uint32 minPrice = item-GetTemplate()-RequiredLevel  1176;
++        if (sellPrice  minPrice)
++            sellPrice = minPrice;
++        return sellPrice;
++    }
++};
++
++class config_Transmogrify  public WorldScript
++{
++public
++    config_Transmogrify()  WorldScript(config_Transmogrify) { }
++
++    void OnConfigLoad(bool reload)
++    {
++        sTransmogrification-LoadConfig();
++    }
++};
++
++void AddSC_NPC_Transmogrify()
++{
++    new NPC_Transmogrify();
++    new config_Transmogrify();
++}
+diff --git asrcserverscriptsCustomTransmogrification.h bsrcserverscriptsCustomTransmogrification.h
+new file mode 100644
+index 0000000..e72c7b2
+--- devnull
++++ bsrcserverscriptsCustomTransmogrification.h
+@@ -0,0 +1,83 @@
++#ifndef DEF_TRANSMOGRIFICATION_H
++#define DEF_TRANSMOGRIFICATION_H
++
++#include Config.h
++
++class Transmogrification
++{
++public
++    Transmogrification() { };
++    ~Transmogrification() { };
++
++    uint32 GetRequireGold() { return RequireGold; }
++    float GetGoldModifier() { return GoldModifier; }
++    uint32 GetGoldCost() { return GoldCost; }
++
++    bool GetRequireToken() { return RequireToken; }
++    uint32 GetTokenEntry() { return TokenEntry; }
++    uint32 GetTokenAmount() { return TokenAmount; }
++
++    bool AllowedQuality(uint32 quality)  Only thing used elsewhere (Player.cpp)
++    {
++        switch(quality)
++        {
++        case ITEM_QUALITY_POOR return AllowPoor;
++        case ITEM_QUALITY_NORMAL return AllowCommon;
++        case ITEM_QUALITY_UNCOMMON return AllowUncommon;
++        case ITEM_QUALITY_RARE return AllowRare;
++        case ITEM_QUALITY_EPIC return AllowEpic;
++        case ITEM_QUALITY_LEGENDARY return AllowLegendary;
++        case ITEM_QUALITY_ARTIFACT return AllowArtifact;
++        case ITEM_QUALITY_HEIRLOOM return AllowHeirloom;
++        default return false;
++        }
++    }
++
++    void LoadConfig()
++    {
++        RequireGold = (uint32)ConfigMgrGetIntDefault(Transmogrification.RequireGold, 1);
++        GoldModifier = ConfigMgrGetFloatDefault(Transmogrification.GoldModifier, 1.0f);
++        GoldCost = (uint32)ConfigMgrGetIntDefault(Transmogrification.GoldCost, 100000);
++
++        RequireToken = ConfigMgrGetBoolDefault(Transmogrification.RequireToken, false);
++        TokenEntry = (uint32)ConfigMgrGetIntDefault(Transmogrification.TokenEntry, 49426);
++        TokenAmount = (uint32)ConfigMgrGetIntDefault(Transmogrification.TokenAmount, 1);
++
++        AllowPoor = ConfigMgrGetBoolDefault(Transmogrification.AllowPoor, false);
++        AllowCommon = ConfigMgrGetBoolDefault(Transmogrification.AllowCommon, false);
++        AllowUncommon = ConfigMgrGetBoolDefault(Transmogrification.AllowUncommon, true);
++        AllowRare = ConfigMgrGetBoolDefault(Transmogrification.AllowRare, true);
++        AllowEpic = ConfigMgrGetBoolDefault(Transmogrification.AllowEpic, true);
++        AllowLegendary = ConfigMgrGetBoolDefault(Transmogrification.AllowLegendary, false);
++        AllowArtifact = ConfigMgrGetBoolDefault(Transmogrification.AllowArtifact, false);
++        AllowHeirloom = ConfigMgrGetBoolDefault(Transmogrification.AllowHeirloom, true);
++
++        if(!sObjectMgr-GetItemTemplate(TokenEntry))
++        {
++            sLog-outError(Transmogrification.TokenEntry (%u) does not exist. Using default., TokenEntry);
++            TokenEntry = 49426;
++        }
++    }
++
++private
++
++    uint32 RequireGold;
++    float GoldModifier;
++    uint32 GoldCost;
++
++    bool RequireToken;
++    uint32 TokenEntry;
++    uint32 TokenAmount;
++
++    bool AllowPoor;
++    bool AllowCommon;
++    bool AllowUncommon;
++    bool AllowRare;
++    bool AllowEpic;
++    bool AllowLegendary;
++    bool AllowArtifact;
++    bool AllowHeirloom;
++};
++#define sTransmogrification ACE_SingletonTransmogrification, ACE_Null_Mutexinstance()
++
++#endif
+diff --git asrcserverworldserverworldserver.conf.dist bsrcserverworldserverworldserver.conf.dist
+index 55443f4..4c5a2df 100644
+--- asrcserverworldserverworldserver.conf.dist
++++ bsrcserverworldserverworldserver.conf.dist
+@@ -2821,3 +2821,91 @@ Loggers=Root Chat DBErrors GM RA Warden Character Load WorldServer Opcodes
+ 
+ #
+ ###################################################################################################
++
++###################################################################################################
++#    Transmogrification config
++###################################################################################################
++#
++#    GOLD COST
++#
++#    Transmogrification.RequireGold
++#        Description 0 No gold cost, 1 scaling gold cost, 2 custom gold cost
++#        Default    1
++#
++#    Transmogrification.GoldModifier
++#        Description A multiplier for the default gold cost (Transmogrification.RequireGold is 1)
++#        Default    1.0
++#
++#    Transmogrification.GoldCost
++#        Description Cost of transmogrification in copper for custom gold cost (Transmogrification.RequireGold is 2)
++#        Default    100000
++
++Transmogrification.RequireGold = 1
++Transmogrification.GoldModifier = 1.0
++Transmogrification.GoldCost = 100000
++
++#
++#    TOKEN COST
++#
++#    Transmogrification.RequireToken
++#        Description Addsdisables token cost
++#        Default    0
++#
++#    Transmogrification.TokenEntry
++#        Description Entry of the token item
++#        Default    49426
++#
++#    Transmogrification.TokenAmount
++#        Description Amount of tokens required
++#        Default    1
++
++Transmogrification.RequireToken = 0
++Transmogrification.TokenEntry = 49426
++Transmogrification.TokenAmount = 1
++
++#
++#    QUALITIES
++#
++#    Transmogrification.AllowPoor
++#        Description Allow poor quality items to be used as source and target items
++#        Default    0
++#
++#    Transmogrification.AllowCommon
++#        Description Allow common quality items to be used as source and target items
++#        Default    0
++#
++#    Transmogrification.AllowUncommon
++#        Description Allow uncommon quality items to be used as source and target items
++#        Default    1
++#
++#    Transmogrification.AllowRare
++#        Description Allow rare quality items to be used as source and target items
++#        Default    1
++#
++#    Transmogrification.AllowEpic
++#        Description Allow epic quality items to be used as source and target items
++#        Default    1
++#
++#    Transmogrification.AllowLegendary
++#        Description Allow legendary quality items to be used as source and target items
++#        Default    0
++#
++#    Transmogrification.AllowArtifact
++#        Description Allow artifact quality items to be used as source and target items
++#        Default    0
++#
++#    Transmogrification.AllowHeirloom
++#        Description Allow heirloom quality items to be used as source and target items
++#        Default    1
++
++Transmogrification.AllowPoor = 0
++Transmogrification.AllowCommon = 0
++Transmogrification.AllowUncommon = 1
++Transmogrification.AllowRare = 1
++Transmogrification.AllowEpic = 1
++Transmogrification.AllowLegendary = 0
++Transmogrification.AllowArtifact = 0
++Transmogrification.AllowHeirloom = 1
++
++#
++###################################################################################################
+-- 
+1.7.10

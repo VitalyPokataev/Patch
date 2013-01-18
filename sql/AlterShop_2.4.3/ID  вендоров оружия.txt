@@ -1,0 +1,70 @@
+вендоры ставятся с помощью команды  .npc add ID
+<ID>		<vendor>
+00-29лвл
+100000		Axe 1hand	
+100001		Axe 2hand
+100002		Bow
+100003		Gun
+100004		Mace 1hand
+100005		Mace 2hand
+100006		Polearm
+100007		Sword 1hand
+100008		Sword 2hand
+100009		Staff
+100010		Fist weapon
+100011		Dagger
+100012		Thrown
+100013		Crossbow
+100014		Wand
+
+30-59лвл
+100015		Axe 1hand	
+100016		Axe 2hand
+100017		Bow
+100018		Gun
+100019		Mace 1hand
+100020		Mace 2hand
+100021		Polearm
+100022		Sword 1hand
+100023		Sword 2hand
+100024		Staff
+100025		Fist weapon
+100026		Dagger
+100027		Thrown
+100028		Crossbow
+100029		Wand
+
+60-69лвл
+100030		Axe 1hand	
+100031		Axe 2hand
+100032		Bow
+100033		Gun
+100034		Mace 1hand
+100035		Mace 2hand
+100036		Polearm
+100037		Sword 1hand
+100038		Sword 2hand
+100039		Staff
+100040		Fist weapon
+100041		Dagger
+100042		Thrown
+100043		Crossbow
+100044		Wand
+
+70+лвл
+100045		Axe 1hand	
+100046		Axe 2hand
+100047		Bow
+100048		Gun
+100049		Mace 1hand
+100050		Mace 2hand
+100051		Polearm
+100052		Sword 1hand
+100053		Sword 2hand
+100054		Staff
+100055		Fist weapon
+100056		Dagger
+100057		Thrown
+100058		Crossbow
+100059		Wand
+100060		Orenge and Red Weapon

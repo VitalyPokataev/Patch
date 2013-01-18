@@ -1,0 +1,148 @@
+﻿
+1) version 0.1.0 
+the first version of vendors, only  weapons. 
+
+2) version 0.1.1 
+corrected magic wand 
+edited sells 100011 
+edited sells 100045 
+
+3) version 0.2.0 
+Vendors added nosets armor, sell  armor from 1 to 70 lvl 
+fixes the level of claims and changing prices for armor added to item_FIX.sql
+ID vendors added to the "ID vendors armor.txt"  
+
+4) version 0.2.1 
+3 seller added shields from 1 to 70 lvl 
+added sells relics (totems, idols, librams) 
+fixes the level of claims and changing prices for shields and relics added to item_FIX.sql 
+ID vendors added to the "ID vendors armor.txt" 
+
+5) version 0.2.2 
+Vendors added jewellery (necklaces, rings, earrings) from 1 to 70 lvl 
+fixes the level of claims and changing prices for jewellery added to item_FIX.sql 
+ID vendors added to the "ID vendors another armor.txt" 
+
+6) version 0.2.3 
+added incomplete spawn in capitals
+
+7) version 0.2.4 
+Vendors added cloaks  from 1 to 70 lvl 
+Vendors added shirts and tobards
+ID vendors added to the "ID vendors another armor.txt" 
+fixes the level of claims and changing prices for cloaks added to item_FIX.sql 
+
+8) version 0.3.0 
+Vendors sets added : dangeon 1-3, tier 1-6, rare60lvl, epic60lvl 
+changes in prices added to item_FIX.sql 
+ID vendors added to the "ID vendors sets.tx" 
+
+9) version 0.3.1 
+Vendors new sets added : rare70lvl 1-2, arena 1-4 seasons, Arathi basin, Ruins of AhnQiraj, Temple of AhnQiraj, ZulGurub 
+changes in prices added to item_FIX.sql 
+ID vendors added to the "ID vendors sets.tx" 
+
+10) version 0.3.2 
+raresets 70 lvl 1 divided on the two vendors (100161 and 100171) 
+
+11) version 0.4.0 
+Vendors added (100172-100191): food, potion, elixir, flask, scroll, enchant scroll, bandage, all socket stones, arrows and bullets 
+changes in prices added to item_FIX.sql 
+ID vendors added to the "ID different vendors.txt" 
+
+12) version 0.4.1 
+added spawns for 100172-100191 
+
+13) version 0.4.2 
+Vendors added (100192-100195): bags, bags for professions and warlocks, bags for bullets and arrows, and the seller keys 
+ID vendors added to the "ID different vendors.txt" 
+changes in prices added to item_FIX.sql 
+
+14) version 0.5.0 
+Vendors added (100196-100112): all recipes, books 
+ID vendors added to the "ID different vendors.txt" 
+changes in prices added to item_FIX.sql 
+
+15) version 0.5.1 
+Added spawns
+Added portals spawns  in all capitals
+
+16) version 0.6.0 
+item_FIX.sql added correction in prices for your reservation (for some reason in versions from 0.2.1 to 0.5.1 and they were not) 
+AlterShop.sql rebuilt for new bases (new items from 2.4 patch) 
+restructured file AlterShop.sql 
+in the list of items from vendors are in ascending 
+replaced by model vendors armour 
+changed files spawn 
+
+17) version 0.6.1 
+item_FIX.sql added to remedy fractional attack with weapons (such attack 65.43-120.32) 
+item_FIX.sql inserted in the correction of errors of non-existent items (errors may appear when using different from bases UDB) 
+AlterShop.sql rectified in filling vendors (corrected for errors of fractional attack) 
+
+18) version 0.6.2 
+AlterShop.sql rebuilt for new bases (a 29 new items, total number items of vendors - 16139) 
+in item_FIX.sql corrected many errors (new more accurate estimation of requirements levels in nolevels weapons have been added to remedy missing) 
+AlterShop.sql rectified in filling vendors (for a more accurate calculation requirements level from nolevels weapons) 
+
+19) version 0.6.3 
+AlterShop.sql rebuilt for new bases (total number items of vendors - 16205) 
+
+20) version 0.7.0 
+Vendors added (100213-100214): reagents, maunts
+ID vendors added to the "ID different vendors.txt" 
+changes in prices added to item_FIX.sql 
+total number items of vendors - 16400 
+
+21) version 0.7.1 
+AlterShop.sql rebuilt for new bases (total number items of vendors - 16413) 
+AlterShop.sql optimized for some  SQL clients
+
+22) version 0.7.2 
+Added spawns
+corrected portals 
+
+23) version 0.8.0 
+Vendors added (100215-100228): reagents professions 
+ID vendors added to the "ID different vendors.txt" 
+changes in prices added to item_FIX.sql 
+total number items of vendors - 16994
+
+24) version 0.8.1 
+AlterShop.sql rebuilt for new bases (total number items of vendors - 17019 ) 
+AlterShop.sql upgraded to the 6325  mangos 
+
+25) version 0.8.2 
+AlterShop.sql upgraded to the 6397 mangos
+
+26) version 0.8.3 
+Vendor added (100229): Small pets 
+ID vendor added to the "ID different vendors. Txt" 
+changes in prices added to item_FIX.sql 
+AlterShop.sql rebuilt for new bases (total number items of vendors - 17099 )
+info.txt divided into two files: 1 version history.txt - information about changes in the versions of vendors, 2 information. txt-links to download, discussion topics vendors
+
+27) version 0.9.0 
+Vendors added (100230-100253): quest items 
+ID vendors added to the "ID different vendors. Txt" 
+changes in prices added to item_FIX.sql 
+AlterShop.sql rebuilt for new bases (total number items of vendors - 20580 )
+
+28) version 0.9.1
+Vendor added (100254): holiday 
+ID vendor added to the "ID different vendors. Txt" 
+changes in prices added to item_FIX.sql 
+total number items of vendors - 20678
+added instruction in English
+
+29) version 0.9.2
+Vendor added (100254): maunt # 2
+ID vendor added to the "ID different vendors. Txt" 
+changes in prices added to item_FIX.sql
+edited seller 100155:  added Tire 3 to Hunter
+total number items of vendors - 20717
+added folder Multiplier Price: files for price increases, details "Multiplier Price\change in price.txt"
+
+
+
+
