@@ -30,3 +30,6 @@ http://www.trinity-core.ru/threads/mod-ut-adwards-%D0%BE%D0%BF%D0%BE%D0%B2%D0%B5
 
 -- поиск спутников везде
 https://github.com/SignFinder/FaceCore/commit/6971f950468c492bf7150423c8ac159b75a395f8
+
+-всё по фану
+https://github.com/Darkelmo/LivingLegend/commits/master
