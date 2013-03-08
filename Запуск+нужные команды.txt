@@ -1,6 +1,10 @@
 
-screen -S auth /home/server/wow/auth/auth.sh
+screen -S auth /home/auth.sh
+screen -S world /home/world.sh
+
+screen -dmS auth /home/server/wow/auth/auth.sh
 screen -S wowlum /home/server/wow/lum/world.sh
+screen -dmS bc /home/server/wow/bc/world.sh
 
 screen -S wowfun /home/server/wow/fun/world.sh
 
@@ -10,6 +14,9 @@ screen -S bk /home/server/wow/bk/world.sh
 
 
 screen -S hlds sh ~/cs/start_hlds.sh
+
+cd /home/server/cs/cs16
+screen -S hlds ./hlds_run -binary ./hlds_i686 -game cstrike -nomaster +ip 192.168.0.11 +maxplayers 32 +port 27038 +map de_dust2_2x2  -pingboost 3
 
 cd ~/cs/cs16_W3
 ./hlds_run -game cstrike +ip 192.168.0.11 +port 27015 +maxplayers 32 -pingboost 3 -nomaster
@@ -40,3 +47,34 @@ sudo vnstat -u -i eth0
 vnstat -i eth0
 vnstat -h -i eth0
 
+#####################################
+netstat -a 10 > C:\netstatlog.txt
+-- Пишет в лог всё)) поможет от ддоса
+
+netstat -na | grep ':80 '
+netstat -na
+#####################################
+nmap!
+sudo nmap -v ip
+http://www.cherepovets-city.ru/insecure/runmap/nmap_manpage-ru.htm
+
+
+
+########################################
+-- Автозагрузка
+########################################
+sudo nano /etc/init.d/wow
+----------------------------------------------------------------------
+#!/bin/sh
+sleep 10
+screen -dmS auth /home/server/wow/auth/auth.sh
+sleep 5
+screen -dmS wowlum /home/server/wow/lum/world.sh
+----------------------------------------------------------------------
+sudo chmod +x /etc/init.d/wow
+sudo update-rc.d wow defaults 80
+########################################
+
+--Крон
+sudo crontab -u root -e
+http://blog.elmor.ru/linux-i-ego-bratya/cron-v-ubuntu/

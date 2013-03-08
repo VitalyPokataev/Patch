@@ -1,0 +1,19 @@
+commit c579dea9a1325ccada8254281c5f3e483115338d
+Author: Vlad <vlad852@gmail.com>
+Date:   Tue Feb 5 22:51:19 2013 +0300
+
+    Implement offlike GO-summon animation.
+
+diff --git a/src/server/game/Entities/Object/Object.cpp b/src/server/game/Entities/Object/Object.cpp
+index 342bc93..4b172d5 100644
+--- a/src/server/game/Entities/Object/Object.cpp
++++ b/src/server/game/Entities/Object/Object.cpp
+@@ -235,6 +235,8 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) c
+                     flags |= UPDATEFLAG_TRANSPORT;
+                     break;
+                 default:
++                    if (((GameObject*)this)->GetOwner())
++                        updatetype = UPDATETYPE_CREATE_OBJECT2;
+                     break;
+             }
+         }

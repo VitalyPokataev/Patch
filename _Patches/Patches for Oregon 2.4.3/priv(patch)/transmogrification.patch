@@ -1,0 +1,660 @@
+diff --git a/sql/transmogrification/characters_transmogrification.sql b/sql/transmogrification/characters_transmogrification.sql
+new file mode 100644
+index 0000000..8a73e1b
+--- /dev/null
++++ b/sql/transmogrification/characters_transmogrification.sql
+@@ -0,0 +1,6 @@
++-- Copyright (C) 2013 Vitasic
++CREATE TABLE IF NOT EXISTS `custom_transmogrification` (
++  `GUID` int(10) unsigned NOT NULL DEFAULT '0',
++  `FakeEntry` int(10) unsigned NOT NULL DEFAULT '0',
++  PRIMARY KEY (`GUID`)
++) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='version 1.0';
+\ No newline at end of file
+diff --git a/sql/transmogrification/world_transmogrification.sql b/sql/transmogrification/world_transmogrification.sql
+new file mode 100644
+index 0000000..1d16daf
+--- /dev/null
++++ b/sql/transmogrification/world_transmogrification.sql
+@@ -0,0 +1,34 @@
++-- Copyright (C) 2013 Vitasic
++DELETE FROM `creature_template` WHERE `entry` = 91011;
++INSERT INTO `creature_template` (`entry`, `heroic_entry`, `modelid_A`, `modelid_A2`, `modelid_H`, `modelid_H2`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `minhealth`, `maxhealth`, `minmana`, `maxmana`, `armor`, `faction_A`, `faction_H`, `npcflag`, `speed`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `baseattacktime`, `rangeattacktime`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `class`, `race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `PetSpellDataId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `RacialLeader`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`) VALUES
++(91011, 0, 10216, 0, 10216, 0, 'Willy', 'Transmogrification', NULL, 0, 70, 70, 5000, 5000, 0, 0, 2865, 35, 35, 1, 1, 1, 1, 60, 165, 0, 97, 1500, 1500, 0, 0, 0, 0, 0, 0, 0, 50, 100, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 1, 1, 0, 0, 0, 'transmog');
++
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11100, 'Transmogrifications removed from equipped items', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11101, 'You have no transmogrified items equipped', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11102, '%s transmogrification removed', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11103, 'No transmogrification on %s slot', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11104, '%s transmogrified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11105, 'Selected items are not suitable', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11106, 'Selected item does not exist', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11107, 'Equipment slot is empty', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11108, 'Head', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11109, 'Shoulders', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11110, 'Shirt', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11111, 'Chest', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11112, 'Waist', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11113, 'Legs', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11114, 'Feet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11115, 'Wrists', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11116, 'Hands', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11117, 'Back', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11118, 'Main hand', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11119, 'Off hand', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11120, 'Ranged', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11121, 'Tabard', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11122, 'Back..', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11123, 'Remove all transmogrifications', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11124, 'Remove transmogrifications from all equipped items?', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11125, 'Update menu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11126, 'Remove transmogrification', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11127, 'Remove transmogrification from %s?', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
++INSERT INTO `blizzlike_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`) VALUES (11128, 'Using this item for transmogrify will bind it to you and make it non-refundable and non-tradeable.\r\nDo you wish to continue?\r\n\r\n', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+\ No newline at end of file
+diff --git a/src/game/Item.cpp b/src/game/Item.cpp
+index 8f42622..3f583ca 100644
+--- a/src/game/Item.cpp
++++ b/src/game/Item.cpp
+@@ -408,6 +408,7 @@ bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, QueryResult_AutoPtr result
+ 
+ void Item::DeleteFromDB()
+ {
++	DeleteFakeFromDB(GetGUIDLow()); // transmogrification
+     CharacterDatabase.PExecute("DELETE FROM item_instance WHERE guid = '%u'",GetGUIDLow());
+ }
+ 
+@@ -918,3 +919,42 @@ void Item::BuildUpdate(UpdateDataMapType& data_map)
+     ClearUpdateMask(false);
+ }
+ 
++uint32 Item::GetFakeEntry() // transmogrification
++{
++ItemFakeEntryContainer::const_iterator itr = objmgr._itemFakeEntryStore.find(GetGUIDLow());
++    if (itr == objmgr._itemFakeEntryStore.end()) return NULL;
++    return itr->second;
++}
++
++bool Item::DeleteFakeEntry() // transmogrification
++{
++if (!GetFakeEntry())
++        return false;
++	//GetOwner()->SetUInt32Value(PLAYER_VISIBLE_ITEM_1_0 + (GetSlot() * MAX_VISIBLE_ITEM_OFFSET), GetEntry());
++	GetOwner()->SetUInt32Value(PLAYER_VISIBLE_ITEM_1_0 + (GetSlot() * 2), GetEntry());
++    DeleteFakeFromDB(GetGUIDLow());
++    return true;
++}
++
++void Item::DeleteFakeFromDB(uint32 lowGUID) // custom
++{
++    objmgr._itemFakeEntryStore.erase(lowGUID);
++    CharacterDatabase.PExecute("DELETE FROM custom_transmogrification WHERE GUID = %u", lowGUID);
++}
++
++void Item::SetFakeEntry(uint32 entry) // custom
++{
++    //GetOwner()->SetUInt32Value(PLAYER_VISIBLE_ITEM_1_0 + (GetSlot() * MAX_VISIBLE_ITEM_OFFSET), Entry);
++	GetOwner()->SetUInt32Value(PLAYER_VISIBLE_ITEM_1_0 + (GetSlot() * 2), entry);
++	objmgr._itemFakeEntryStore[GetGUIDLow()] = entry;
++    CharacterDatabase.PExecute("REPLACE INTO custom_transmogrification (GUID, FakeEntry) VALUES (%u, %u)", GetGUIDLow(), entry);
++}
++
++bool Item::HasGoodFakeQuality() // custom
++{
++    uint32 quality = GetProto()->Quality;
++    if (quality == ITEM_QUALITY_UNCOMMON || quality == ITEM_QUALITY_RARE || quality == ITEM_QUALITY_EPIC)
++        return true;
++    return false;
++}
++
+diff --git a/src/game/Item.h b/src/game/Item.h
+index 7ec9981..c9f02e3 100644
+--- a/src/game/Item.h
++++ b/src/game/Item.h
+@@ -289,6 +289,15 @@ class Item : public Object
+         bool hasInvolvedQuest(uint32 /*quest_id*/) const { return false; }
+ 
+         void BuildUpdate(UpdateDataMapType& );
++		
++		// transmogrification
++        uint32 GetFakeEntry();
++        bool DeleteFakeEntry();
++        static void DeleteFakeFromDB(uint32 lowGUID);
++        void SetFakeEntry(uint32 entry);
++        bool HasGoodFakeQuality();
++		Bag* ToBag() { if (IsBag()) return reinterpret_cast<Bag*>(this); else return NULL; }
++		const Bag* ToBag() const { if (IsBag()) return reinterpret_cast<const Bag*>(this); else return NULL; }
+ 
+     private:
+         uint8 m_slot;
+diff --git a/src/game/ItemPrototype.h b/src/game/ItemPrototype.h
+index 88f236e..5e599f2 100644
+--- a/src/game/ItemPrototype.h
++++ b/src/game/ItemPrototype.h
+@@ -562,6 +562,8 @@ struct ItemPrototype
+     }
+ };
+ 
++typedef UNORDERED_MAP<uint32, uint32> ItemFakeEntryContainer; // transmogrification
++
+ struct ItemLocale
+ {
+     std::vector<std::string> Name;
+diff --git a/src/game/Language.h b/src/game/Language.h
+index 2d3b749..8d5df6b 100644
+--- a/src/game/Language.h
++++ b/src/game/Language.h
+@@ -919,6 +919,39 @@ enum BlizzLikeStrings
+     // Use for custom patches             11000-11999
+     LANG_AUTO_BROADCAST                 = 11000,
+     LANG_INVALID_REALMID                = 11001,
++	
++    //transmogrification
++    LANG_REM_TRANSMOGRIFICATIONS_ITEMS  = 11100,
++    LANG_ERR_NO_TRANSMOGRIFICATIONS     = 11101,
++    LANG_REM_TRANSMOGRIFICATION_ITEM    = 11102,
++    LANG_ERR_NO_TRANSMOGRIFICATION      = 11103,
++    LANG_ITEM_TRANSMOGRIFIED            = 11104,
++    LANG_ERR_NO_ITEM_SUITABLE           = 11105,
++    LANG_ERR_NO_ITEM_EXISTS             = 11106,
++    LANG_ERR_EQUIP_SLOT_EMPTY           = 11107,
++
++    LANG_SLOT_NAME_HEAD                 = 11108,
++    LANG_SLOT_NAME_SHOULDERS            = 11109,
++    LANG_SLOT_NAME_BODY                 = 11110,
++    LANG_SLOT_NAME_CHEST                = 11111,
++    LANG_SLOT_NAME_WAIST                = 11112,
++    LANG_SLOT_NAME_LEGS                 = 11113,
++    LANG_SLOT_NAME_FEET                 = 11114,
++    LANG_SLOT_NAME_WRISTS               = 11115,
++    LANG_SLOT_NAME_HANDS                = 11116,
++    LANG_SLOT_NAME_BACK                 = 11117,
++    LANG_SLOT_NAME_MAINHAND             = 11118,
++    LANG_SLOT_NAME_OFFHAND              = 11119,
++    LANG_SLOT_NAME_RANGED               = 11120,
++    LANG_SLOT_NAME_TABARD               = 11121,
++
++    LANG_OPTION_BACK                    = 11122,
++    LANG_OPTION_REMOVE_ALL              = 11123,
++    LANG_POPUP_REMOVE_ALL               = 11124,
++    LANG_OPTION_UPDATE_MENU             = 11125,
++    LANG_OPTION_REMOVE_ONE              = 11126,
++    LANG_POPUP_REMOVE_ONE               = 11127,
++    LANG_POPUP_TRANSMOGRIFY             = 11128,
+ 
+     // ChatSpy
+     LANG_CHATSPY_APENDED                = 11600,
+diff --git a/src/game/ObjectMgr.cpp b/src/game/ObjectMgr.cpp
+index 2eb17ff..8284841 100644
+--- a/src/game/ObjectMgr.cpp
++++ b/src/game/ObjectMgr.cpp
+@@ -1494,6 +1494,31 @@ uint32 ObjectMgr::GetPlayerAccountIdByPlayerName(const std::string& name) const
+     return 0;
+ }
+ 
++void ObjectMgr::LoadTransmogrifications() //transmogrification
++{
++    sLog.outString("Deleting non-existing transmogrification entries...");
++    CharacterDatabase.Execute("DELETE FROM custom_transmogrification WHERE NOT EXISTS (SELECT 1 FROM item_instance WHERE item_instance.guid = custom_transmogrification.GUID)");
++
++    uint32 oldMSTime = getMSTime();
++    _itemFakeEntryStore.clear();
++    QueryResult_AutoPtr result = CharacterDatabase.Query("SELECT GUID, FakeEntry FROM custom_transmogrification WHERE EXISTS (SELECT 1 FROM item_instance WHERE item_instance.guid = custom_transmogrification.GUID)");
++    if (result)
++        do
++        {
++            uint32 lowGUID = (*result)[0].GetUInt32();
++            uint32 entry = (*result)[1].GetUInt32();
++            if (GetItemPrototype(entry))
++                _itemFakeEntryStore[lowGUID] = entry;
++            else
++            {
++                sLog.outErrorDb("Item entry (Entry: %u, GUID: %u) does not exist, deleting.", entry, lowGUID);
++                CharacterDatabase.PExecute("DELETE FROM custom_transmogrification WHERE GUID = %u", lowGUID);
++            }
++        } while (result->NextRow());
++    //sLog.outString(">> Loaded %lu Item fake entries in %u ms", (unsigned long)_itemFakeEntryStore.size(), GetMSTimeDiffToNow(oldMSTime));
++    sLog.outString();
++}
++
+ void ObjectMgr::LoadItemLocales()
+ {
+     mItemLocaleMap.clear();                                 // need for reload case
+diff --git a/src/game/ObjectMgr.h b/src/game/ObjectMgr.h
+index 7370d55..6d475c9 100644
+--- a/src/game/ObjectMgr.h
++++ b/src/game/ObjectMgr.h
+@@ -527,6 +527,8 @@ class ObjectMgr
+     public:
+         ObjectMgr();
+         ~ObjectMgr();
++		
++		ItemFakeEntryContainer _itemFakeEntryStore;
+ 
+         typedef UNORDERED_MAP<uint32, Item*> ItemMap;
+ 
+@@ -755,6 +757,7 @@ class ObjectMgr
+         void LoadGameobjectRespawnTimes();
+         void LoadItemPrototypes();
+         void LoadItemLocales();
++		void LoadTransmogrifications(); //transmogrification
+         void LoadQuestLocales();
+         void LoadNpcTextLocales();
+         void LoadPageTextLocales();
+diff --git a/src/game/Player.cpp b/src/game/Player.cpp
+index b599912..2102f8e 100644
+--- a/src/game/Player.cpp
++++ b/src/game/Player.cpp
+@@ -10846,7 +10846,11 @@ void Player::SetVisibleItemSlot(uint8 slot, Item *pItem)
+         SetUInt64Value(PLAYER_VISIBLE_ITEM_1_CREATOR + (slot * MAX_VISIBLE_ITEM_OFFSET), pItem->GetUInt64Value(ITEM_FIELD_CREATOR));
+ 
+         int VisibleBase = PLAYER_VISIBLE_ITEM_1_0 + (slot * MAX_VISIBLE_ITEM_OFFSET);
+-        SetUInt32Value(VisibleBase + 0, pItem->GetEntry());
++		//transmogrification
++        if (pItem->GetFakeEntry())
++            SetUInt32Value(VisibleBase + 0, pItem->GetFakeEntry());
++        else
++            SetUInt32Value(VisibleBase + 0, pItem->GetEntry());
+ 
+         for (int i = 0; i < MAX_INSPECTED_ENCHANTMENT_SLOT; ++i)
+             SetUInt32Value(VisibleBase + 1 + i, pItem->GetEnchantmentId(EnchantmentSlot(i)));
+@@ -10970,6 +10974,7 @@ void Player::MoveItemFromInventory(uint8 bag, uint8 slot, bool update)
+ {
+     if (Item* it = GetItemByPos(bag,slot))
+     {
++		it->DeleteFakeFromDB(it->GetGUIDLow()); //transmogrification
+         ItemRemovedQuestCheck(it->GetEntry(), it->GetCount());
+         RemoveItem(bag, slot, update);
+         it->RemoveFromUpdateQueueOf(this);
+@@ -20833,3 +20838,56 @@ void Player::SetMap(Map * map)
+     Unit::SetMap(map);
+     m_mapRef.link(map, this);
+ }
++
++uint32 Player::SuitableForTransmogrification(Item* oldItem, Item* newItem) //transmogrification
++{
++    if (!newItem->HasGoodFakeQuality())
++        return ERR_FAKE_NEW_BAD_QUALITY;
++    if (!oldItem->HasGoodFakeQuality())
++        return ERR_FAKE_OLD_BAD_QUALITY;
++
++    if (oldItem->GetProto()->DisplayInfoID == newItem->GetProto()->DisplayInfoID)
++        return ERR_FAKE_SAME_DISPLAY;
++    if (oldItem->GetFakeEntry())
++		if(const ItemPrototype* FakeItemTemplate = objmgr.GetItemPrototype(oldItem->GetFakeEntry()))
++            if(FakeItemTemplate->DisplayInfoID == newItem->GetProto()->DisplayInfoID)
++                return ERR_FAKE_SAME_DISPLAY_FAKE;
++    if (CanUseItem(newItem, false) != EQUIP_ERR_OK)
++        return ERR_FAKE_CANT_USE;
++    uint32 newClass = newItem->GetProto()->Class;
++    uint32 oldClass = oldItem->GetProto()->Class;
++    uint32 newSubClass = newItem->GetProto()->SubClass;
++    uint32 oldSubClass = oldItem->GetProto()->SubClass;
++    uint32 newInventorytype = newItem->GetProto()->InventoryType;
++    uint32 oldInventorytype = oldItem->GetProto()->InventoryType;
++    if (newClass != oldClass)
++        return ERR_FAKE_NOT_SAME_CLASS;
++    if (newClass == ITEM_CLASS_WEAPON && newSubClass != ITEM_SUBCLASS_WEAPON_FISHING_POLE && oldSubClass != ITEM_SUBCLASS_WEAPON_FISHING_POLE)
++    {
++        if (newSubClass == oldSubClass || ((newSubClass == ITEM_SUBCLASS_WEAPON_BOW || newSubClass == ITEM_SUBCLASS_WEAPON_GUN || newSubClass == ITEM_SUBCLASS_WEAPON_CROSSBOW) && (oldSubClass == ITEM_SUBCLASS_WEAPON_BOW || oldSubClass == ITEM_SUBCLASS_WEAPON_GUN || oldSubClass == ITEM_SUBCLASS_WEAPON_CROSSBOW)))
++            if (newInventorytype == oldInventorytype || (newInventorytype == INVTYPE_WEAPON && (oldInventorytype == INVTYPE_WEAPONMAINHAND || oldInventorytype == INVTYPE_WEAPONOFFHAND)))
++                return ERR_FAKE_OK;
++            else
++                return ERR_FAKE_BAD_INVENTORYTYPE;
++        else
++            return ERR_FAKE_BAD_SUBLCASS;
++    }
++    else if (newClass == ITEM_CLASS_ARMOR)
++        if (newSubClass == oldSubClass)
++            if (newInventorytype == oldInventorytype || (newInventorytype == INVTYPE_CHEST && oldInventorytype == INVTYPE_ROBE) || (newInventorytype == INVTYPE_ROBE && oldInventorytype == INVTYPE_CHEST))
++                return ERR_FAKE_OK;
++            else
++                return ERR_FAKE_BAD_INVENTORYTYPE;
++        else
++            return ERR_FAKE_BAD_SUBLCASS;
++    return ERR_FAKE_BAD_CLASS;
++}
++
++Bag* Player::GetBagByPos(uint8 bag) const
++{
++    if ((bag >= INVENTORY_SLOT_BAG_START && bag < INVENTORY_SLOT_BAG_END)
++        || (bag >= BANK_SLOT_BAG_START && bag < BANK_SLOT_BAG_END))
++        if (Item* item = GetItemByPos(INVENTORY_SLOT_BAG_0, bag))
++            return item->ToBag();
++    return NULL;
++}
+diff --git a/src/game/Player.h b/src/game/Player.h
+index 4f02362..7fa4e34 100644
+--- a/src/game/Player.h
++++ b/src/game/Player.h
+@@ -80,6 +80,20 @@ enum BuyBankSlotResult
+     ERR_BANKSLOT_OK                 = 3
+ };
+ 
++enum TransmogrificationResult //transmogrification
++{
++    ERR_FAKE_NEW_BAD_QUALITY,
++    ERR_FAKE_OLD_BAD_QUALITY,
++    ERR_FAKE_SAME_DISPLAY,
++    ERR_FAKE_SAME_DISPLAY_FAKE,
++    ERR_FAKE_CANT_USE,
++    ERR_FAKE_NOT_SAME_CLASS,
++    ERR_FAKE_BAD_CLASS,
++    ERR_FAKE_BAD_SUBLCASS,
++    ERR_FAKE_BAD_INVENTORYTYPE,
++    ERR_FAKE_OK
++};
++
+ enum PlayerSpellState
+ {
+     PLAYERSPELL_UNCHANGED = 0,
+@@ -976,6 +990,7 @@ class Player : public Unit, public GridObject<Player>
+         Item* GetItemByGuid(uint64 guid) const;
+         Item* GetItemByPos(uint16 pos) const;
+         Item* GetItemByPos(uint8 bag, uint8 slot) const;
++		Bag*  GetBagByPos(uint8 slot) const; //transmogrification
+         Item* GetWeaponForAttack(WeaponAttackType attackType, bool useable = false) const;
+         Item* GetShield(bool useable = false) const;
+         static uint32 GetAttackBySlot(uint8 slot);        // MAX_ATTACK if not weapon slot
+@@ -2106,6 +2121,8 @@ class Player : public Unit, public GridObject<Player>
+         bool HasTitle(uint32 bitIndex);
+         bool HasTitle(CharTitlesEntry const* title) { return HasTitle(title->bit_index); }
+         void SetTitle(CharTitlesEntry const* title, bool lost = false);
++		
++		uint32 SuitableForTransmogrification(Item* oldItem, Item* newItem); //transmogrification
+ 
+     protected:
+ 
+diff --git a/src/game/World.cpp b/src/game/World.cpp
+index b4be73d..31bab94 100644
+--- a/src/game/World.cpp
++++ b/src/game/World.cpp
+@@ -1219,6 +1219,9 @@ void World::SetInitialWorldSettings()
+ 
+     sLog.outString("Loading Item Texts...");
+     objmgr.LoadItemTexts();
++	
++	sLog.outString("Loading Transmogrifications...");           //transmogrification
++    objmgr.LoadTransmogrifications();
+ 
+     sLog.outString("Loading Creature Model Based Info Data...");
+     objmgr.LoadCreatureModelInfo();
+diff --git a/src/scripts/World/npcs_special.cpp b/src/scripts/World/npcs_special.cpp
+index be13e2f..504e195 100644
+--- a/src/scripts/World/npcs_special.cpp
++++ b/src/scripts/World/npcs_special.cpp
+@@ -40,6 +40,8 @@ EndContentData */
+ 
+ #include "ScriptPCH.h"
+ #include "ScriptedEscortAI.h"
++#include "ObjectMgr.h"
++#include "Language.h"
+ 
+ /*######
+ ## npc_lunaclaw_spirit
+@@ -1508,6 +1510,245 @@ bool GossipSelect_npc_spiritofazuregos(Player *player, Creature *creature, uint3
+         return true; 
+ }
+ 
++/*
++1.0.
++Transmogrification 2.4.3. - Gossip Menu
++Original patch by Rochet2. Update by Dirty, thx to lillecarl for GetBagByPos
++
++ScriptName for NPC:
++transmog
++
++TODO:
++Make DB saving even better (Deleting)? What about coding?
++Make local name for items
++Fix the cost formula
++
++Cant transmogrify:
++rediculus _items // Foereaper: would be fun to stab people with a fish
++-- Cant think of any good way to handle this easily
++*/
++
++#define GOLD_COST    0 // 0 for no gold cost
++#include "Item.h"
++
++#if (GOLD_COST)
++#define GOLD_COST_FUNCTION GetFakePrice(oldItem)
++#else
++#define GOLD_COST_FUNCTION 0
++#endif
++
++/*##
++##TRANSMOGRIFICATION
++##*/
++std::string GetItemName(Item* item, WorldSession* session)
++	
++// local name
++{
++        std::string name = item->GetProto()->Name1;
++        int loc_idx = session->GetSessionDbLocaleIndex();
++        if (loc_idx >= 0)
++            if (ItemLocale const* il = objmgr.GetItemLocale(item->GetEntry()))
++            if(il)
++            {
++                if(il->Name.size() > size_t(loc_idx) && !il->Name[loc_idx].empty())
++                    name = il->Name[loc_idx];
++            }
++				
++					
++        return name;
++}
++
++std::map<uint64, std::map<uint32, Item*> > _items; // _items[lowGUID][DISPLAY] = item
++
++const char * GetSlotName(uint8 slot, WorldSession* session)
++{
++    switch(slot)
++    {
++        case EQUIPMENT_SLOT_HEAD      : return session->GetBlizzLikeString(LANG_SLOT_NAME_HEAD);
++        case EQUIPMENT_SLOT_SHOULDERS : return session->GetBlizzLikeString(LANG_SLOT_NAME_SHOULDERS);
++        case EQUIPMENT_SLOT_BODY      : return session->GetBlizzLikeString(LANG_SLOT_NAME_BODY);
++        case EQUIPMENT_SLOT_CHEST     : return session->GetBlizzLikeString(LANG_SLOT_NAME_CHEST);
++        case EQUIPMENT_SLOT_WAIST     : return session->GetBlizzLikeString(LANG_SLOT_NAME_WAIST);
++        case EQUIPMENT_SLOT_LEGS      : return session->GetBlizzLikeString(LANG_SLOT_NAME_LEGS);
++        case EQUIPMENT_SLOT_FEET      : return session->GetBlizzLikeString(LANG_SLOT_NAME_FEET);
++        case EQUIPMENT_SLOT_WRISTS    : return session->GetBlizzLikeString(LANG_SLOT_NAME_WRISTS);
++        case EQUIPMENT_SLOT_HANDS     : return session->GetBlizzLikeString(LANG_SLOT_NAME_HANDS);
++        case EQUIPMENT_SLOT_BACK      : return session->GetBlizzLikeString(LANG_SLOT_NAME_BACK);
++        case EQUIPMENT_SLOT_MAINHAND  : return session->GetBlizzLikeString(LANG_SLOT_NAME_MAINHAND);
++        case EQUIPMENT_SLOT_OFFHAND   : return session->GetBlizzLikeString(LANG_SLOT_NAME_OFFHAND);
++        case EQUIPMENT_SLOT_RANGED    : return session->GetBlizzLikeString(LANG_SLOT_NAME_RANGED);
++        case EQUIPMENT_SLOT_TABARD    : return session->GetBlizzLikeString(LANG_SLOT_NAME_TABARD);
++        default: return NULL;
++    }
++}
++
++bool GossipHello_transmog(Player* player, Creature* creature)
++    {
++        WorldSession* session = player->GetSession();
++        for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_TABARD; slot++) // EQUIPMENT_SLOT_END
++        {
++            if (Item* newItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
++            {
++                if (newItem->HasGoodFakeQuality())
++                {
++                    if (const char* slotName = GetSlotName(slot, session))
++                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, slotName, EQUIPMENT_SLOT_END, slot);
++                }
++            }
++        }
++        player->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, session->GetBlizzLikeString(LANG_OPTION_REMOVE_ALL), EQUIPMENT_SLOT_END+2, 0, session->GetBlizzLikeString(LANG_POPUP_REMOVE_ALL), 0, false);
++        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, session->GetBlizzLikeString(LANG_OPTION_UPDATE_MENU), EQUIPMENT_SLOT_END+1, 0);
++        player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
++        return true;
++    }
++
++bool GossipSelect_transmog(Player* player, Creature* creature, uint32 sender, uint32 uiAction)
++{
++    WorldSession* session = player->GetSession();
++    player->PlayerTalkClass->ClearMenus();
++        switch(sender)
++        {
++        case EQUIPMENT_SLOT_END: // Show items you can use
++        {
++            if (Item* oldItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, uiAction))
++            {
++                uint32 lowGUID = player->GetGUIDLow();
++                _items[lowGUID].clear();
++                uint32 limit = 0;
++                for (uint8 i = INVENTORY_SLOT_ITEM_START; i < INVENTORY_SLOT_ITEM_END; i++)
++                {
++                        if (limit > 30)
++                            break;
++                        if (Item* newItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
++                        {
++                            uint32 display = newItem->GetProto()->DisplayInfoID;
++                            if (player->SuitableForTransmogrification(oldItem, newItem) == ERR_FAKE_OK)
++                            {
++                                if (_items[lowGUID].find(display) == _items[lowGUID].end())
++                                {
++                                    limit++;
++                                    _items[lowGUID][display] = newItem;
++                                    player->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, newItem->GetProto()->Name1, uiAction, display, session->GetBlizzLikeString(LANG_POPUP_TRANSMOGRIFY)+GetItemName(newItem, session), 0, false);
++							   }
++                            }
++                        }
++                    }
++
++                    for (uint8 i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; i++)
++                    {
++                        if (Bag* bag = player->GetBagByPos(i))
++                        {
++                            for (uint32 j = 0; j < bag->GetBagSize(); j++)
++                            {
++                                if (limit > 30)
++                                    break;
++                                if (Item* newItem = player->GetItemByPos(i, j))
++                                {
++                                    uint32 display = newItem->GetProto()->DisplayInfoID;
++                                    if (player->SuitableForTransmogrification(oldItem, newItem) == ERR_FAKE_OK)
++                                    {
++                                        if (_items[lowGUID].find(display) == _items[lowGUID].end())
++                                        {
++                                            limit++;
++                                            _items[lowGUID][display] = newItem;
++                                            player->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, newItem->GetProto()->Name1, uiAction, display, session->GetBlizzLikeString(LANG_POPUP_TRANSMOGRIFY)+GetItemName(newItem, session), GOLD_COST_FUNCTION, false);}
++                                    }
++                                }
++                            }
++                        }
++                    }
++
++                    char popup[250];
++                    snprintf(popup, 250, session->GetBlizzLikeString(LANG_POPUP_REMOVE_ONE), GetSlotName(uiAction, session));
++                    player->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, session->GetBlizzLikeString(LANG_OPTION_REMOVE_ONE), EQUIPMENT_SLOT_END+3, uiAction, popup, 0, false);
++                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, session->GetBlizzLikeString(LANG_OPTION_BACK), EQUIPMENT_SLOT_END+1, 0);
++                    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
++                }
++                else
++                    GossipHello_transmog(player, creature);
++            } break;
++        case EQUIPMENT_SLOT_END+1: // Back
++            {
++                GossipHello_transmog(player, creature);
++            } break;
++        case EQUIPMENT_SLOT_END+2: // Remove Transmogrifications
++            {
++                bool removed = false;
++                for (uint8 Slot = EQUIPMENT_SLOT_START; Slot < EQUIPMENT_SLOT_END; Slot++)
++                {
++                    if (Item* newItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, Slot))
++                    {
++                        if (newItem->DeleteFakeEntry() && !removed)
++                            removed = true;
++                    }
++                }
++                if (removed)
++                {
++                    session->SendAreaTriggerMessage(session->GetBlizzLikeString(LANG_REM_TRANSMOGRIFICATIONS_ITEMS));
++                    player->PlayDirectSound(3337);
++                }
++                else
++                    session->SendNotification(session->GetBlizzLikeString(LANG_ERR_NO_TRANSMOGRIFICATIONS));
++                GossipHello_transmog(player, creature);
++            } break;
++        case EQUIPMENT_SLOT_END+3: // Remove Transmogrification from single item
++            {
++                if (Item* newItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, uiAction))
++                {
++                    if (newItem->DeleteFakeEntry())
++                    {
++                        session->SendAreaTriggerMessage(session->GetBlizzLikeString(LANG_REM_TRANSMOGRIFICATION_ITEM), GetSlotName(uiAction, session));
++                        player->PlayDirectSound(3337);
++                    }
++                    else
++                        session->SendNotification(session->GetBlizzLikeString(LANG_ERR_NO_TRANSMOGRIFICATION), GetSlotName(uiAction, session));
++                }
++                GossipSelect_transmog(player, creature, EQUIPMENT_SLOT_END, uiAction);
++            } break;
++        default: // Transmogrify
++            {
++                uint32 lowGUID = player->GetGUIDLow();
++                if (Item* oldItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, sender))
++                {
++                    if (_items[lowGUID].find(uiAction) != _items[lowGUID].end() && _items[lowGUID][uiAction]->IsInWorld())
++                    {
++                        Item* newItem = _items[lowGUID][uiAction];
++                        if (newItem->GetOwnerGUID() == player->GetGUIDLow() && (newItem->IsInBag() || newItem->GetBagSlot() == INVENTORY_SLOT_BAG_0) && player->SuitableForTransmogrification(oldItem, newItem) == ERR_FAKE_OK)
++                        {
++#if (GOLD_COST)
++                            player->ModifyMoney(-1*GetFakePrice(oldItem)); // take cost
++#endif
++                            oldItem->SetFakeEntry(newItem->GetEntry());
++                            newItem->SetBinding(true);
++                            player->PlayDirectSound(3337);
++                            session->SendAreaTriggerMessage(session->GetBlizzLikeString(LANG_ITEM_TRANSMOGRIFIED), GetSlotName(sender, session));
++                        }
++                        else
++                            session->SendNotification(session->GetBlizzLikeString(LANG_ERR_NO_ITEM_SUITABLE));
++                    }
++                    else
++                        session->SendNotification(session->GetBlizzLikeString(LANG_ERR_NO_ITEM_EXISTS));
++                }
++                else
++                    session->SendNotification(session->GetBlizzLikeString(LANG_ERR_EQUIP_SLOT_EMPTY));
++                _items[lowGUID].clear();
++                GossipSelect_transmog(player, creature, EQUIPMENT_SLOT_END, sender);
++            } break;
++        }
++        return true;
++}  
++
++#if (GOLD_COST)
++    uint32 GetFakePrice(Item* item)
++    {
++        uint32 sellPrice = item->GetProto()->SellPrice;
++        uint32 minPrice = item->GetProto()->RequiredLevel * 1176;
++        if (sellPrice < minPrice)
++            sellPrice = minPrice;
++        return sellPrice;
++    }
++#endif
++
+ void AddSC_npcs_special()
+ {
+     Script *newscript;
+@@ -1598,12 +1839,18 @@ void AddSC_npcs_special()
+     newscript->Name = "mob_mojo";
+     newscript->GetAI = &GetAI_mob_mojo;
+     newscript->RegisterSelf();
+-
++	
+     newscript = new Script; 
+     newscript->Name = "npc_spiritofazuregos"; 
+     newscript->pGossipHello = &GossipHello_npc_spiritofazuregos; 
+     newscript->pGossipSelect = &GossipSelect_npc_spiritofazuregos; 
+     newscript->RegisterSelf();
++	
++    newscript = new Script;
++    newscript->Name = "transmog";
++    newscript->pGossipHello =  &GossipHello_transmog;
++    newscript->pGossipSelect = &GossipSelect_transmog;
++    newscript->RegisterSelf();
+ 
+ }
+ 

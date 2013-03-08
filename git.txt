@@ -5,6 +5,17 @@ git add *
 git commit -m "Core/Chat"
 git push
 
+Merge: mmaps
+git remote add off_repo https://github.com/garyfisher/GaryMoveOut.git
+git fetch off_repo
+git checkout -b off_repo off_repo/mmaps
+git checkout mmaps
+git pull off_repo mmaps
+git push origin mmaps
+//
+git add *
+git commit -m 'Merge remote-tracking branch 'upstream/master''
+git push origin mmaps
 
 Merge: master
 git remote add off_repo https://github.com/garyfisher/GaryMoveOut.git
@@ -14,6 +25,21 @@ git checkout master
 git pull off_repo master
 git push
 
+git remote add gc_repo https://github.com/gc/TrinityCore.git
+git fetch gc_repo
+git checkout -b gc_repo gc_repo/master
+git checkout master
+git pull gc_repo master
+git push
+
+
+Merge: blizzlikecore
+git remote add gary_repo https://github.com/garyfisher/GaryMoveOut_2.4.3.git
+git fetch gary_repo
+git checkout -b gary_repo gary_repo/master
+git checkout master
+git pull gary_repo master
+git push
 Merge: blizzlikecore
 git remote add off_repo https://github.com/blizzlikegroup/blizzlikecore.git
 git fetch off_repo
@@ -77,3 +103,5 @@ git reset --hard HEAD~3 — вернее, три последних коммита. Никто. Никогда.
 git push -f origin
 
 git branch -D имя_ветки
+
+http://wiki.dieg.info/git

@@ -1,3 +1,10 @@
+В Debian:
+
+aptitude install module-assistant xtables-addons-source
+module-assistant prepare
+module-assistant auto-install xtables-addons-source
+depmod -a
+
 sudo nano /etc/network/if-pre-up.d/iptables
 
 Add these lines to it:
@@ -7,7 +14,7 @@ Add these lines to it:
 The file needs to be executable so change the permissions:
 sudo chmod +x /etc/network/if-pre-up.d/iptables 
 
-sudo /sbin/iptables-restore < /home/server/iptables.rules
+sudo /sbin/iptables-restore < /home/server/iptables2.rules
 
 
 netstat -a 10 > C:\netstatlog.txt
@@ -38,3 +45,10 @@ http://wowjp.net/forum/224-140925-1
          # нашей машины вместо сообщения о таймауте будет приходить сообщение
          # Host unreachable
          #$IPTABLES -A icmp_packets -p ICMP -s 0/0 --icmp-type 8 -j REJECT --reject-with icmp-host-unreachable
+
+http://linuxru.org/tips/72
+http://linuxru.org/linux/56
+http://www.xakep.ru/post/53653/?print=true
+http://sys.dmitrow.com/node/35
+
+http://sobrs.ru/index.php/-linux/-firewall-linux/3977.html  автоблокирование

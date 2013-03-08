@@ -1,0 +1,69 @@
+ if (team == winner)
+   {
+    uint32 reward_winner_count = 3,
+    reward_wsg = 20558,
+    reward_ab = 20559,
+    reward_av = 20560,
+    reward_IOQ = 47395,
+    reward_SOTA = 42425,
+    reward_eos = 29024;
+
+ switch(pPlayer->GetZoneId())
+            {
+                case 3277: // Warsong Gulch
+                    pPlayer->AddItem(reward_wsg, reward_winner_count);
+                    break;
+                case 3358: // Arathi Basin
+                   pPlayer->AddItem(reward_ab, reward_winner_count);
+                    break;
+                case 3820: // Eye of the Storm
+                    pPlayer->AddItem(reward_eos, reward_winner_count);
+                    break;
+                case 4710: // IOQ 
+                    pPlayer->AddItem(reward_IOQ, reward_winner_count);
+                    break;
+                case 4384: // reward_SOTA
+                    pPlayer->AddItem(reward_SOTA, reward_winner_count);
+                    break;
+               case 2597: // AV
+                    pPlayer->AddItem(reward_av, reward_winner_count);
+                    break;
+                default:
+                    break;
+            }
+  }
+
+ else                 // Проебавшие
+ {
+  uint32 reward_loser_count = 1,
+    reward_wsg = 20558,
+    reward_ab = 20559,
+    reward_av = 20560,
+    reward_IOQ = 47395,
+    reward_SOTA = 42425,
+    reward_eos = 29024;
+
+  switch(pPlayer->GetZoneId())
+            {
+                case 3277: // Warsong Gulch
+                    pPlayer->AddItem(reward_wsg, reward_loser_count);
+                    break;
+                case 3358: // Arathi Basin
+                   pPlayer->AddItem(reward_ab, reward_loser_count);
+                    break;
+                case 3820: // Eye of the Storm
+                    pPlayer->AddItem(reward_eos, reward_loser_count);
+                    break;
+                case 4710: // IOQ
+                    pPlayer->AddItem(reward_IOQ, reward_loser_count);
+                    break;
+               case 4384: // SOTA
+                    pPlayer->AddItem(reward_SOTA, reward_loser_count);
+                    break;
+               case 2597: // AV
+                    pPlayer->AddItem(reward_av, reward_loser_count);
+                    break;
+                default:
+                    break;
+  }
+ }

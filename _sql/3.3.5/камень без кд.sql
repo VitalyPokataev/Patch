@@ -1,0 +1,1 @@
+UPDATE `item_template` SET `spellcooldown_1` = 0, `spellcategorycooldown_1` = 0 WHERE `entry` IN (6948, 40582);

@@ -1,0 +1,59 @@
+батлграунд.срр
+
+ if (team == winner)
+   {
+uint32 XP = pPlayer->getLevel() * 1200;
+
+ switch(pPlayer->GetZoneId())
+            {
+                case 3277: // Warsong Gulch
+                      pPlayer->GiveXP(XP, NULL);
+                    break;
+                case 3358: // Arathi Basin
+                   pPlayer->GiveXP(XP, NULL);
+                    break;
+                case 3820: // Eye of the Storm
+                    pPlayer->GiveXP(XP, NULL);
+                    break;
+                case 4710: // IOQ 
+                    pPlayer->GiveXP(XP, NULL);
+                    break;
+                 case 4384: // reward_SOTA
+                    pPlayer->GiveXP(XP, NULL);
+                    break;
+                 case 2597: // AV
+                   pPlayer->GiveXP(XP, NULL);
+                   break;
+                default:
+                    break;
+            }
+  }
+
+ else                 // Проебавшие
+ {
+uint32 XP = pPlayer->getLevel() * 1200/3;
+
+  switch(pPlayer->GetZoneId())
+            {
+                case 3277: // Warsong Gulch
+                   pPlayer->GiveXP(XP, NULL);
+                    break;
+                case 3358: // Arathi Basin
+                   pPlayer->GiveXP(XP, NULL);
+                    break;
+                case 3820: // Eye of the Storm
+                   pPlayer->GiveXP(XP, NULL);
+                    break;
+                case 4710: // IOQ
+                   pPlayer->GiveXP(XP, NULL);
+                    break;
+                case 4384: // SOTA
+                   pPlayer->GiveXP(XP, NULL);
+                    break;
+                case 2597: // AV
+                   pPlayer->GiveXP(XP, NULL);
+                   break;
+                default:
+                    break;
+  }
+ }

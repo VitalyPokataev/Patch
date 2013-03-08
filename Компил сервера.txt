@@ -13,7 +13,7 @@ tar xvzf ACE-6.0.3.tar.gz && cd ACE_wrappers && mkdir build && cd build && ../co
 sudo make install -j 15
 
 wget http://download.dre.vanderbilt.edu/previous_versions/ACE-6.0.0.tar.gz
-tar xvzf ACE-6.0.0.tar.gz && cd ACE_wrappers && mkdir build && cd build && ../configure --prefix=/home/server/.sys_new/ --disable-ssl
+tar xvzf ACE-6.0.0.tar.gz && cd ACE_wrappers && mkdir build && cd build && ../configure --prefix=/home/server/.sys/ --disable-ssl
 sudo make install -j 15
 
 1. Качаем и разархивируем: 
@@ -48,7 +48,7 @@ sudo dpkg -i libssl-dev_1.0.1c-4_amd64.deb
 
 
 wget http://www.openssl.org/source/openssl-1.0.1c.tar.gz 
-tar -xvzf openssl-1.0.1c.tar.gz && cd openssl-1.0.1c && ./config --prefix=/home/server/.sys_new shared 
+tar -xvzf openssl-1.0.1c.tar.gz && cd openssl-1.0.1c && ./config --prefix=/home/server/.sys shared 
 sudo make install -j 15
 
 wget http://www.openssl.org/source/openssl-fips-1.2.4.tar.gz
@@ -68,13 +68,13 @@ mkdir build && cd build
 
 Стандартный вид конфигурации: 
 cmake ../ -DCMAKE_C_FLAGS="-O3 -pipe" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DDO_RA=1 -DLARGE_CELL=1 -DPREFIX=/home/server/reliase/335 
-
+-DCMAKE_BUILD_TYPE=Debug
+-DWITH_COREDEBUG=1
  Конфигурация для процессоров Athlon 64, линукс 64.  -DCONF_DIR=/home/server/wow/sh -DUSE_SFMT=0 
 
 cmake ../ -DPREFIX=/home/server/reliase/arcanum -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DDO_DEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=k8-m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/server/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/server/.sys/include/ -DSSLLIB=/home/server/.sys/lib/libssl.so
 
-cmake ../ -DPREFIX=/home/server/reliase/fun -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DWITH_COREDEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=k8-m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/server/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/server/.sys/include/ -DOPENSSL_LIBRARIES=/home/server/.sys/lib/libssl.so  -DOPENSSL_INCLUDE_DIR=/home/server/.sys/include/
-cmake ../ -DPREFIX=/home/server/reliase/x25 -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DWITH_COREDEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=k8-m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/server/.sys_new/lib/libACE.so -DACE_INCLUDE_DIR=/home/server/.sys_new/include/ -DOPENSSL_LIBRARIES=/home/server/.sys_new/lib/libssl.so  -DOPENSSL_INCLUDE_DIR=/home/server/.sys_new/include/
+mkdir build && cd build && cmake ../ -DPREFIX=/home/server/reliase/mmaps -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DWITH_COREDEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=k8-m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/server/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/server/.sys/include/ -DOPENSSL_LIBRARIES=/home/server/.sys/lib/libssl.so  -DOPENSSL_INCLUDE_DIR=/home/server/.sys/include/
 
 cmake ../ -DPREFIX=/home/server/reliase/243 -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DDO_DEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=k8-m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/server/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/server/.sys/include/ -DSSLLIB=/home/server/.sys/lib/libssl.so
 cmake ../ -DPREFIX=/home/server/reliase/335 -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DDO_DEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=k8-m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/server/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/server/.sys/include/ -DSSLLIB=/home/server/.sys/lib/libssl.so
@@ -87,7 +87,8 @@ cmake ../ -DPREFIX=/home/trinity/release -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS
 cmake ../ -DPREFIX=/home/trinity/release -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DDO_DEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=nocona-m32 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=32 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/trinity/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/trinity/.sys/include/ -DSSLLIB=/home/trinity/.sys/lib/libssl.so
 
  Конфигурация для онлайна ~1000, оптимизация под процессоры семейства Intel Quad/Core 2 duo и 64 битную систему: 
-cmake ../ -DPREFIX=/home/trinity/release -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DDO_DEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=prescott -m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/trinity/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/trinity/.sys/include/ -DSSLLIB=/home/trinity/.sys/lib/libssl.so
+cmake ../ -DPREFIX=/home/Battle/core -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DDO_DEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=prescott -m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/trinity/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/trinity/.sys/include/ -DSSLLIB=/home/trinity/.sys/lib/libssl.so
+cmake ../ -DPREFIX=/home/Battle/core -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DDO_DEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=prescott -m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}"
 
  Конфигурация для онлайна ~1000, оптимизация под процессоры семейства Intel Xeon и 64 битную систему: 
 cmake ../ -DPREFIX=/home/trinity/release -DCMAKE_C_FLAGS="-O3" -DCMAKE_CXX_FLAGS="-O3" -DDO_DEBUG=0 -DDO_SCRIPTS=true -DCMAKE_DFD_SETSIZE=4096 -DLARGE_CELL=0 -DSHORT_SLEEP=1 -DCMAKE_C_FLAGS="-march=nocona-m64 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -pipe -pipe -msse3 -fomit-frame-pointer -ffast-math -fno-strength-reduce -fno-strict-aliasing -frename-registers" -DCMAKE_CXX_FLAGS="${CMAKE_C_FLAGS}" -DACE_LIBRARY=/home/trinity/.sys/lib/libACE.so -DACE_INCLUDE_DIR=/home/trinity/.sys/include/ -DSSLLIB=/home/trinity/.sys/lib/libssl.so

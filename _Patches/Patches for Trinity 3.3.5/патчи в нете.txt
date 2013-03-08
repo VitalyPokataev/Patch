@@ -1,0 +1,43 @@
+транмогрификация
+https://gist.github.com/2873435  
+https://bitbucket.org/Neket007/jetcore/changeset/b6d4261117b8#chg-sql/updates/JetCore/characters/2012_06_06_00_transmogrify.sql
+http://www.trinity-core.ru/threads/%D0%A2%D1%80%D0%B0%D0%BD%D1%81%D0%BC%D0%BE%D0%B3%D1%80%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D1%8F-3-3-5.7180/
+ 
+Vip accounts
+https://bitbucket.org/Neket007/jetcore/changeset/4e7dc9328d8f#chg-src/server/worldserver/worldserver.conf.dist  
+
+Арены Даларана и Арены Доблести c динамическим ЛОСом.
+https://bitbucket.org/Neket007/jetcore/changeset/b72213d1b124#chg-sql/updates/JetCore/world/2012_06_16_00_arena.sql  
+
+arena-spectator
+http://pastebin.com/apLfcheu
+http://www.trinity-core.ru/threads/arena-spectator.7175/
+https://github.com/walkline/Voodoo/commit/b86040a5b96460748af8c3949ffd1ad18a9a6bc2   
+https://bitbucket.org/Neket007/jetcore/changeset/d3ec5f0b1e04#chg-sql/updates/JetCore/world/2012_06_06_00_arena_spectator.sql  
+
+Всепожирающая чюма!
+http://www.trinity-core.ru/threads/fix-%D0%92%D1%81%D0%B5%D0%BF%D0%BE%D0%B6%D0%B8%D1%80%D0%B0%D1%8E%D1%89%D0%B0%D1%8F-%D1%87%D1%83%D0%BC%D0%B0.2698/  
+
+Мод на чат!
+https://bitbucket.org/Neket007/jetcore/changeset/28208192c30ad52bcd95148da805071a6c5432f5#chg-sql/updates/JetCore/world/2012_06_09_01_trinity_string.sql
+
+
+https://github.com/Neket007/Jet-Core/commit/1980853f708e2ad386d0fa57e77bd3ea8932f95d
+
+дабл кил ультра кил))
+http://www.trinity-core.ru/threads/mod-ut-adwards-%D0%BE%D0%BF%D0%BE%D0%B2%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D1%8F-%D0%B2-%D1%81%D1%82%D0%B8%D0%BB%D0%B5-unreal-tournament.7513/#post-44889
+
+
+-- поиск спутников везде
+https://github.com/SignFinder/FaceCore/commit/6971f950468c492bf7150423c8ac159b75a395f8
+
+-всё по фану
+https://github.com/Darkelmo/LivingLegend/commits/master
+
+https://github.com/aedansilver/TrinityCore/commit/2c0f3555574fb5efa9f393521d7408de4efa1ebf
+-- нип для руководства новых игроков
+
+
+http://paste2.org/p/2848295
+-- RBAC: Create default players group for account if no group for account
+    is present.

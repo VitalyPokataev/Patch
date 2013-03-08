@@ -2,9 +2,22 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.0.13'
  IDENTIFIED BY '25826' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
-GRANT ALL PRIVILEGES ON b_characters.* TO 'anton'@'%'
- IDENTIFIED BY 'dvarf1884' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON characters_bc.* TO 'rootbc'@'%'
+ IDENTIFIED BY 'bc25826' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
+
+GRANT ALL PRIVILEGES ON world.* TO 'siteadminvitasic'@'%'
+ IDENTIFIED BY 'tgby5hnu9jmi8kwsxe47dcrfv' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+UPDATE mysql.user SET Password=PASSWORD('kvjtjvKrtkvkzak') WHERE User = 'auth' AND host = '%';
+
+GRANT ALL PRIVILEGES ON auth.* TO 'auth'@'%'
+ IDENTIFIED BY 'wow25826freedom' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+
+
 
 Заливаем базы легко!!
 // Все делается через консоль, экономит время в разы!
@@ -40,3 +53,42 @@ source /home/server/wow/lk/c/sql/characters.sql
 
 SELECT * FROM `creature` WHERE `id`=23709;
 
+
+
+Подключение к mysql
+mysql -uusername -ppassword -hlocalhost
+Здесь сокращения:
+-h host
+-u user
+-p password
+Пробел после них отсутствует.
+
+Посмотреть имеющиеся базы данных
+mysql> show databases;
+
+Создать базу данных с именем new_db
+mysql> create database new_db default character set utf8;
+
+Переключение между базами (выбор конкретной базы)
+mysql> use new_db;
+
+Посмотреть имеющиеся таблицы в базе данных
+mysql> show tables;
+
+Посмотреть структуру таблицы zipcodes
+mysql> describe zipcodes;
+
+Удалить базу new_db
+mysql> drop database new_db;
+
+Заливаем дамп базы данных из old_db.sql в базу my_db
+mysql -hlocalhost -uusername -ppassword my_db < old_db.sql
+
+mysql -uroot -pgamesv world2 < YTDB_0.14.6_R630_TC_R117015_TDBAI_335_RuDB_R56.sql.sql
+
+
+MYSQL -UUSERNAME -PPASSWORD -HHOST DB_NAME < FILE_NAME.SQL – залить бд;
+mysqldump -uroot -p25826 world > /data/dump/world.sql;
+mysqldump -uroot -p25826 characters > /data/dump/characters.sql; 
+
+http://wowjp.net/forum/120-237727-1
