@@ -56,14 +56,14 @@ index 935fc46..9de7bf9 100644
 @@ -34,3 +34,10 @@ INSERT INTO `creature_template` (`entry`, `modelid1`, `name`, `subname`, `IconNa
  DELETE FROM `locales_creature` WHERE `entry` = 190000;
  INSERT INTO `locales_creature` (`entry`, `name_loc8`, `subname_loc8`) VALUES
- (190000, 'Íàáëşäàòåëè Àğåíû', 'Èñïîëüçóéòå Àääîí!');
+ (190000, 'ĞĞ°Ğ±Ğ»ÑĞ´Ğ°Ñ‚ĞµĞ»Ğ¸ ĞÑ€ĞµĞ½Ñ‹', 'Ğ˜ÑĞ¿Ğ¾Ğ»ÑŒĞ·ÑƒĞ¹Ñ‚Ğµ ĞĞ´Ğ´Ğ¾Ğ½!');
 +
 +-- Vip Commands
 +DELETE FROM `trinity_string` WHERE `entry` IN (11007,11008,11009,11010,11011,11012);
 +INSERT INTO `trinity_string`(`entry`,`content_default`, `content_loc8`) VALUES 
-+(11009, 'You can\`t do this at the moment.', 'Âû íå ìîæåòå ñäåëàòü ıòî ñåé÷àñ.'),
-+(11007,'You are not VIP.', 'Âû íå âëàäååòå ïğàâàìè VIP àêêàóíòà.'),
-+(11008,'You are not VIP.', 'Âàì íåäîñòóïíà ıòà VIP êîìàíäà.');
++(11009, 'You can\`t do this at the moment.', 'Ğ’Ñ‹ Ğ½Ğµ Ğ¼Ğ¾Ğ¶ĞµÑ‚Ğµ ÑĞ´ĞµĞ»Ğ°Ñ‚ÑŒ ÑÑ‚Ğ¾ ÑĞµĞ¹Ñ‡Ğ°Ñ.'),
++(11007,'You are not VIP.', 'Ğ’Ñ‹ Ğ½Ğµ Ğ²Ğ»Ğ°Ğ´ĞµĞµÑ‚Ğµ Ğ¿Ñ€Ğ°Ğ²Ğ°Ğ¼Ğ¸ VIP Ğ°ĞºĞºĞ°ÑƒĞ½Ñ‚Ğ°.'),
++(11008,'You are not VIP.', 'Ğ’Ğ°Ğ¼ Ğ½ĞµĞ´Ğ¾ÑÑ‚ÑƒĞ¿Ğ½Ğ° ÑÑ‚Ğ° VIP ĞºĞ¾Ğ¼Ğ°Ğ½Ğ´Ğ°.');
 diff --git a/src/server/authserver/Server/AuthSocket.cpp b/src/server/authserver/Server/AuthSocket.cpp
 index fc4d4df..89dcaa9 100755
 --- a/src/server/authserver/Server/AuthSocket.cpp
@@ -570,7 +570,7 @@ index 0000000..ec5e5dd
 +        plr->SetTaxiCheater(true);
 +        handler->PSendSysMessage(LANG_YOU_GIVE_TAXIS, handler->GetNameLink(plr).c_str());
 +        if (handler->needReportToTarget(plr))
-+            ChatHandler(plr).PSendSysMessage(LANG_YOURS_TAXIS_ADDED, handler->GetNameLink().c_str());
++            ChatHandler(plr->GetSession()).PSendSysMessage(LANG_YOURS_TAXIS_ADDED, handler->GetNameLink().c_str());
 +            
 +		return true;
 +    }
