@@ -56,7 +56,7 @@ diff -r 3d55d9aa1fa9 -r 0dadcdc551ce src/server/scripts/Custom/CMakeLists.txt
 diff -r 3d55d9aa1fa9 -r 0dadcdc551ce src/server/scripts/Custom/gm_login.cpp
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
 +++ b/src/server/scripts/Custom/gm_login.cpp	Sun Aug 19 12:39:03 2012 +0300
-@@ -0,0 +1,37 @@
+@@ -0,0 +1,38 @@
 +#include "ScriptPCH.h"
 +#include "Config.h"
 +
@@ -78,11 +78,12 @@ diff -r 3d55d9aa1fa9 -r 0dadcdc551ce src/server/scripts/Custom/gm_login.cpp
 +				std::string uptime = secsToTimeString(sWorld->GetUptime());
 +
 +				handler.PSendSysMessage("|cffff0000=================================|r");
-+				handler.PSendSysMessage("|cff00ff00РџСЂРёРІРµС‚,|r %s", gmname.c_str());
-+				handler.PSendSysMessage("|cff00ff00РўРІРѕР№ СѓСЂРѕРІРµРЅСЊ СѓС‡РµС‚РЅРѕР№ Р·Р°РїРёСЃРё:|r %u", gmlvl);
-+				handler.PSendSysMessage("|cff00ff00РЎРµР№С‡Р°СЃ|r %u |cff00ff00РёРіСЂРѕРєРѕРІ РѕРЅР»Р°Р№РЅ|r", playeronline);
-+				handler.PSendSysMessage("|cff00ff00Р’СЂРµРјСЏ СЂР°Р±РѕС‚С‹ СЃРµСЂРІРµСЂР°:|r %s", uptime.c_str());
-+				handler.PSendSysMessage("|cff00ff00РЈРґР°С‡Рё Рё РїСЂРёСЏС‚РЅРѕР№ РёРіСЂС‹|r");
++				handler.PSendSysMessage("|cff00ff00Привет,|r %s", gmname.c_str());
++				handler.PSendSysMessage("|cff00ff00Твой уровень учетной записи:|r %u", gmlvl);
++				handler.PSendSysMessage("|cff00ff00Сейчас|r %u |cff00ff00игроков онлайн|r", playeronline);
++                              handler.PSendSysMessage("|cff00ff00Открытые тикеты:|r %u", tickets);
++				handler.PSendSysMessage("|cff00ff00Время работы сервера:|r %s", uptime.c_str());
++				handler.PSendSysMessage("|cff00ff00Удачи и приятной игры|r");
 +				handler.PSendSysMessage("|cffff0000=================================|r");
 +				return;
 +			}

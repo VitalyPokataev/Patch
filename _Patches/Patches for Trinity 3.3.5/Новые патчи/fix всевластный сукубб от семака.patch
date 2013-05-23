@@ -1,0 +1,66 @@
+From 30bb9557783d7605c019f1c7bfd08c318069090a Mon Sep 3 12:43:16 2012
+From: cemak
+Date: Tue, 4 Sep 2012 21:02:10 +0400
+Subject: [PATCH 1/3] = фикс спелла Всевластный суккуб.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+9c97fec40c663fa63bd004d9012d3bcde7cd7afe
+ src/server/game/Entities/Unit/Unit.cpp |    5 +++--
+ src/server/game/Spells/SpellInfo.cpp   |    8 +++++++-
+ src/server/game/Spells/SpellMgr.cpp    |    5 +++++
+ 3 files changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/src/server/game/Entities/Unit/Unit.cpp b/src/server/game/Entities/Unit/Unit.cpp
+index 5118b58..ec1eab0 100755
+--- a/src/server/game/Entities/Unit/Unit.cpp
++++ b/src/server/game/Entities/Unit/Unit.cpp
+@@ -13241,8 +13241,9 @@ void Unit::ModSpellCastTime(SpellInfo const* spellProto, int32 & castTime, Spell
+     if (!spellProto || castTime < 0)
+         return;
+     // called from caster
+-    if (Player* modOwner = GetSpellModOwner())
+-        modOwner->ApplySpellMod(spellProto->Id, SPELLMOD_CASTING_TIME, castTime, spell);
++   if (!spellProto->IsChanneled())
++       if (Player* modOwner = GetSpellModOwner())
++           modOwner->ApplySpellMod(spellProto->Id, SPELLMOD_CASTING_TIME, castTime, spell);
+ 
+     if (!(spellProto->Attributes & (SPELL_ATTR0_ABILITY|SPELL_ATTR0_TRADESPELL)) && ((GetTypeId() == TYPEID_PLAYER && spellProto->SpellFamilyName) || GetTypeId() == TYPEID_UNIT))
+         castTime = int32(float(castTime) * GetFloatValue(UNIT_MOD_CAST_SPEED));
+diff --git a/src/server/game/Spells/SpellInfo.cpp b/src/server/game/Spells/SpellInfo.cpp
+index 7b3f9a1..ab06000 100644
+--- a/src/server/game/Spells/SpellInfo.cpp
++++ b/src/server/game/Spells/SpellInfo.cpp
+@@ -1964,9 +1964,15 @@ uint32 SpellInfo::CalcCastTime(Unit* caster, Spell* spell) const
+         return 0;
+ 
+     int32 castTime = CastTimeEntry->CastTime;
+-
++    
++  if (spell)
+     if (caster)
++    {
+         caster->ModSpellCastTime(this, castTime, spell);
++        if (IsChanneled())
++           if (Player* modOwner = caster->GetSpellModOwner())
++               modOwner->ApplySpellMod(Id, SPELLMOD_CASTING_TIME, castTime, spell);
++    }
+ 
+     if (Attributes & SPELL_ATTR0_REQ_AMMO && (!IsAutoRepeatRangedSpell()))
+         castTime += 500;
+diff --git a/src/server/game/Spells/SpellMgr.cpp b/src/server/game/Spells/SpellMgr.cpp
+index e17e71f..239e293 100755
+--- a/src/server/game/Spells/SpellMgr.cpp
++++ b/src/server/game/Spells/SpellMgr.cpp
+@@ -3115,6 +3115,11 @@ void SpellMgr::LoadDbcDataCorrections()
+                 spellInfo->MaxAffectedTargets = 1;
+                 spellInfo->EffectTriggerSpell[0] = 33760;
+                 break;
++            case 18754:     // Improved Succubus
++            case 18755:
++            case 18756:
++                spellInfo->EffectImplicitTargetA[0] = TARGET_UNIT_CASTER;
++                break;
+             case 17941: // Shadow Trance
+             case 22008: // Netherwind Focus
+             case 31834: // Light's Grace
