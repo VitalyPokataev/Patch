@@ -1,4 +1,4 @@
-From e722a50c6de3c4bd3c0663630e56af18ad82eb70 Mon Sep 17 00:00:00 2001
+п»їFrom e722a50c6de3c4bd3c0663630e56af18ad82eb70 Mon Sep 17 00:00:00 2001
 From: Neket007 <neket007wow@gmail.com>
 Date: Sun, 23 Sep 2012 21:59:49 +1000
 Subject: [PATCH] =?UTF-8?q?=D0=94=D0=BE=D0=BF=D0=BE=D0=BB=D0=BD=D0=B8=D1=82=D0?=
@@ -56,14 +56,14 @@ index 935fc46..9de7bf9 100644
 @@ -34,3 +34,10 @@ INSERT INTO `creature_template` (`entry`, `modelid1`, `name`, `subname`, `IconNa
  DELETE FROM `locales_creature` WHERE `entry` = 190000;
  INSERT INTO `locales_creature` (`entry`, `name_loc8`, `subname_loc8`) VALUES
- (190000, 'Наблюдатели Арены', 'Используйте Аддон!');
+ (190000, 'РќР°Р±Р»СЋРґР°С‚РµР»Рё РђСЂРµРЅС‹', 'РСЃРїРѕР»СЊР·СѓР№С‚Рµ РђРґРґРѕРЅ!');
 +
 +-- Vip Commands
 +DELETE FROM `trinity_string` WHERE `entry` IN (11007,11008,11009,11010,11011,11012);
 +INSERT INTO `trinity_string`(`entry`,`content_default`, `content_loc8`) VALUES 
-+(11009, 'You can\`t do this at the moment.', 'Вы не можете сделать это сейчас.'),
-+(11007,'You are not VIP.', 'Вы не владеете правами VIP аккаунта.'),
-+(11008,'You are not VIP.', 'Вам недоступна эта VIP команда.');
++(11009, 'You can\`t do this at the moment.', 'Р’С‹ РЅРµ РјРѕР¶РµС‚Рµ СЃРґРµР»Р°С‚СЊ СЌС‚Рѕ СЃРµР№С‡Р°СЃ.'),
++(11007,'You are not VIP.', 'Р’С‹ РЅРµ РІР»Р°РґРµРµС‚Рµ РїСЂР°РІР°РјРё VIP Р°РєРєР°СѓРЅС‚Р°.'),
++(11008,'You are not VIP.', 'Р’Р°Рј РЅРµРґРѕСЃС‚СѓРїРЅР° СЌС‚Р° VIP РєРѕРјР°РЅРґР°.');
 diff --git a/src/server/authserver/Server/AuthSocket.cpp b/src/server/authserver/Server/AuthSocket.cpp
 index fc4d4df..89dcaa9 100755
 --- a/src/server/authserver/Server/AuthSocket.cpp
