@@ -570,7 +570,7 @@ index 0000000..ec5e5dd
 +        plr->SetTaxiCheater(true);
 +        handler->PSendSysMessage(LANG_YOU_GIVE_TAXIS, handler->GetNameLink(plr).c_str());
 +        if (handler->needReportToTarget(plr))
-+            ChatHandler(plr).PSendSysMessage(LANG_YOURS_TAXIS_ADDED, handler->GetNameLink().c_str());
++            ChatHandler(plr->GetSession()).PSendSysMessage(LANG_YOURS_TAXIS_ADDED, handler->GetNameLink().c_str());
 +            
 +		return true;
 +    }
