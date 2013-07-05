@@ -1,3 +1,7 @@
+Rochet2
+https://docs.google.com/folder/d/0Bx5knS2IsjatTlVtWHRwbUN3VlE/edit
+
+
 транмогрификация
 https://gist.github.com/2873435  
 https://bitbucket.org/Neket007/jetcore/changeset/b6d4261117b8#chg-sql/updates/JetCore/characters/2012_06_06_00_transmogrify.sql

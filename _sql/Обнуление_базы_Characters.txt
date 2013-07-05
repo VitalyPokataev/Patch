@@ -1,0 +1,75 @@
+TRINCATE account_instance_times;
+TRINCATE arena_logs;
+TRINCATE arena_team;
+TRINCATE arena_team_member;
+TRINCATE armory_character_stats;
+TRINCATE armory_game_chart;
+
+UPDATE `characters` 
+SET `level` = '1' 
+AND `money` = '1000000' 
+AND `arenaPoints` = '0' 
+AND `totalHonorPoints` = '0' 
+AND `todayHonorPoints` = '0' 
+AND `yesterdayHonorPoints` = '0' 
+AND `totalKills` = '0' 
+AND `todayKills` = '0' 
+AND `yesterdayKills` = '0' 
+WHERE `online` = '0';
+
+TRINCATE character_achievement;
+TRINCATE character_achievement_progress;
+
+UPDATE `character_arena_stats` 
+SET `matchMakerRating` = '1400';
+
+TRINCATE character_aura;
+TRINCATE character_battleground_data;
+TRINCATE character_feed_log;  --?
+TRINCATE character_inventory;
+TRINCATE character_pet;
+TRINCATE character_pet_declinedname;
+TRINCATE character_queststatus;
+TRINCATE character_queststatus_daily;
+TRINCATE character_queststatus_monthly;
+TRINCATE character_queststatus_rewarded;
+TRINCATE character_queststatus_seasonal;
+TRINCATE character_queststatus_weekly;
+TRINCATE character_reputation;  --                 &&&&&&&&&&&&&&&&&&
+TRINCATE character_skills;
+TRINCATE character_social;
+
+DELETE FROM `character_spell` WHERE (`guid`!=0 AND `spell`!=63645 AND `spell`!=63644);
+/*
+-- 63645 ----- первый набор талантов
+-- 63644 ----- второй набор талантов
+-- DELETE FROM `character_spell` WHERE (`guid`=30575);
+-- INSERT INTO `character_spell` (`guid`, `spell`, `active`, `disabled`) VALUES
+-- ((SELECT `guid` FROM `character`), XXXXX, 1, 0)
+*/
+
+TRINCATE character_spell_cooldown;
+TRINCATE character_talent;
+
+TRINCATE custom_transmogrification;
+
+TRINCATE corpse;
+TRINCATE gm_tickets;
+TRINCATE group_instance;
+TRINCATE group_member;
+TRINCATE groups;
+-- TRINCATE guild;
+-- TRINCATE guild_bank_eventlog;
+TRINCATE guild_bank_item;
+-- TRINCATE guild_eventlog;
+TRINCATE instance;
+TRINCATE instance_reset;
+TRINCATE mail;
+TRINCATE mail_external;
+TRINCATE mail_items;
+TRINCATE pet_aura;
+TRINCATE pet_spell;
+TRINCATE pet_spell_cooldown;
+TRINCATE petition;
+TRINCATE petition_sign;
+TRINCATE players_reports_status;
