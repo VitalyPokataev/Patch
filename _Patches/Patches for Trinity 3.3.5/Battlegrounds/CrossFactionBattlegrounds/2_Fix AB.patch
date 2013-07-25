@@ -1,0 +1,20 @@
+From 5873d551dc9d8219bdfa34e227a3d7db54d1878c Mon Sep 17 00:00:00 2001
+From: Carl Hjerpe <lillecarl@gmail.com>
+Date: Mon, 22 Jul 2013 21:38:42 +0200
+Subject: [PATCH] Fix AB flags Thanks @Raydor closes #4
+
+---
+ sql/custom/ABFix.sql | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 sql/custom/ABFix.sql
+
+diff --git a/sql/custom/ABFix.sql b/sql/custom/ABFix.sql
+new file mode 100644
+index 0000000..c1857d9
+--- /dev/null
++++ b/sql/custom/ABFix.sql
+@@ -0,0 +1,2 @@
++UPDATE `gameobject_template` SET `faction`=83 WHERE `entry` IN (180058,180059);
++UPDATE `gameobject_template` SET `faction`=84 WHERE `entry` IN (180060,180061);
+-- 
+1.8.1.6

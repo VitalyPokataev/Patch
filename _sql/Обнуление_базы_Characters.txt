@@ -1,9 +1,9 @@
-TRINCATE account_instance_times;
-TRINCATE arena_logs;
-TRINCATE arena_team;
-TRINCATE arena_team_member;
-TRINCATE armory_character_stats;
-TRINCATE armory_game_chart;
+TRUNCATE account_instance_times;
+TRUNCATE arena_logs;
+TRUNCATE arena_team;
+TRUNCATE arena_team_member;
+TRUNCATE armory_character_stats;
+TRUNCATE armory_game_chart;
 
 UPDATE `characters` 
 SET `level` = '1' 
@@ -17,27 +17,31 @@ AND `todayKills` = '0'
 AND `yesterdayKills` = '0' 
 WHERE `online` = '0';
 
-TRINCATE character_achievement;
-TRINCATE character_achievement_progress;
+UPDATE `characters` 
+SET `level` = '55'
+WHERE `class` = '6'; -- dk
+
+TRUNCATE character_achievement;
+TRUNCATE character_achievement_progress;
 
 UPDATE `character_arena_stats` 
 SET `matchMakerRating` = '1400';
 
-TRINCATE character_aura;
-TRINCATE character_battleground_data;
-TRINCATE character_feed_log;  --?
-TRINCATE character_inventory;
-TRINCATE character_pet;
-TRINCATE character_pet_declinedname;
-TRINCATE character_queststatus;
-TRINCATE character_queststatus_daily;
-TRINCATE character_queststatus_monthly;
-TRINCATE character_queststatus_rewarded;
-TRINCATE character_queststatus_seasonal;
-TRINCATE character_queststatus_weekly;
-TRINCATE character_reputation;  --                 &&&&&&&&&&&&&&&&&&
-TRINCATE character_skills;
-TRINCATE character_social;
+TRUNCATE character_aura;
+TRUNCATE character_battleground_data;
+TRUNCATE character_feed_log;  --?
+TRUNCATE character_inventory;
+TRUNCATE character_pet;
+TRUNCATE character_pet_declinedname;
+TRUNCATE character_queststatus;
+TRUNCATE character_queststatus_daily;
+TRUNCATE character_queststatus_monthly;
+TRUNCATE character_queststatus_rewarded;
+TRUNCATE character_queststatus_seasonal;
+TRUNCATE character_queststatus_weekly;
+TRUNCATE character_reputation;
+TRUNCATE character_skills;
+TRUNCATE character_social;
 
 DELETE FROM `character_spell` WHERE (`guid`!=0 AND `spell`!=63645 AND `spell`!=63644);
 /*
@@ -48,28 +52,497 @@ DELETE FROM `character_spell` WHERE (`guid`!=0 AND `spell`!=63645 AND `spell`!=6
 -- ((SELECT `guid` FROM `character`), XXXXX, 1, 0)
 */
 
-TRINCATE character_spell_cooldown;
-TRINCATE character_talent;
+TRUNCATE character_spell_cooldown;
+TRUNCATE character_talent;
 
-TRINCATE custom_transmogrification;
+TRUNCATE custom_transmogrification;
 
-TRINCATE corpse;
-TRINCATE gm_tickets;
-TRINCATE group_instance;
-TRINCATE group_member;
-TRINCATE groups;
--- TRINCATE guild;
--- TRINCATE guild_bank_eventlog;
-TRINCATE guild_bank_item;
--- TRINCATE guild_eventlog;
-TRINCATE instance;
-TRINCATE instance_reset;
-TRINCATE mail;
-TRINCATE mail_external;
-TRINCATE mail_items;
-TRINCATE pet_aura;
-TRINCATE pet_spell;
-TRINCATE pet_spell_cooldown;
-TRINCATE petition;
-TRINCATE petition_sign;
-TRINCATE players_reports_status;
+TRUNCATE corpse;
+TRUNCATE gm_tickets;
+TRUNCATE group_instance;
+TRUNCATE group_member;
+TRUNCATE groups;
+-- TRUNCATE guild;
+-- TRUNCATE guild_bank_eventlog;
+TRUNCATE guild_bank_item;
+-- TRUNCATE guild_eventlog;
+TRUNCATE instance;
+TRUNCATE instance_reset;
+TRUNCATE mail;
+TRUNCATE mail_external;
+TRUNCATE mail_items;
+TRUNCATE pet_aura;
+TRUNCATE pet_spell;
+TRUNCATE pet_spell_cooldown;
+TRUNCATE petition;
+TRUNCATE petition_sign;
+TRUNCATE players_reports_status;
+
+
+/*  Старт в старт локах  */
+
+UPDATE `characters` 
+SET `position_x` = '-8949.95' 
+AND `position_y` = '-132.493' 
+AND `position_z` = '83.5312' 
+AND `map` = '0' 
+AND `orientation` = '0' 
+WHERE `race` = '1' AND `class` = '1';
+UPDATE `characters` 
+SET `position_x` = '-8949.95' 
+AND `position_y` = '-132.493' 
+AND `position_z` = '83.5312' 
+AND `map` = '0' 
+AND `orientation` = '0' 
+WHERE `race` = '1' AND `class` = '2';
+UPDATE `characters` 
+SET `position_x` = '-8949.95' 
+AND `position_y` = '-132.493' 
+AND `position_z` = '83.5312' 
+AND `map` = '0' 
+AND `orientation` = '0' 
+WHERE `race` = '1' AND `class` = '3';
+UPDATE `characters` 
+SET `position_x` = '-8949.95' 
+AND `position_y` = '-132.493' 
+AND `position_z` = '83.5312' 
+AND `map` = '0' 
+AND `orientation` = '0' 
+WHERE `race` = '1' AND `class` = '4';
+UPDATE `characters` 
+SET `position_x` = '-8949.95' 
+AND `position_y` = '-132.493' 
+AND `position_z` = '83.5312' 
+AND `map` = '0' 
+AND `orientation` = '0' 
+WHERE `race` = '1' AND `class` = '5';
+UPDATE `characters` 
+SET `position_x` = '-8949.95' 
+AND `position_y` = '-132.493' 
+AND `position_z` = '83.5312' 
+AND `map` = '0' 
+AND `orientation` = '0' 
+WHERE `race` = '1' AND `class` = '6';
+UPDATE `characters` 
+SET `position_x` = '-8949.95' 
+AND `position_y` = '-132.493' 
+AND `position_z` = '83.5312' 
+AND `map` = '0' 
+AND `orientation` = '0' 
+WHERE `race` = '1' AND `class` = '7';
+UPDATE `characters` 
+SET `position_x` = '-8949.95' 
+AND `position_y` = '-132.493' 
+AND `position_z` = '83.5312' 
+AND `map` = '0' 
+AND `orientation` = '0' 
+WHERE `race` = '1' AND `class` = '8';
+UPDATE `characters` 
+SET `position_x` = '-8949.95' 
+AND `position_y` = '-132.493' 
+AND `position_z` = '83.5312' 
+AND `map` = '0' 
+AND `orientation` = '0' 
+WHERE `race` = '1' AND `class` = '9';
+
+UPDATE `characters` 
+SET `position_x` = '-618.518' 
+AND `position_y` = '-4251.67' 
+AND `position_z` = '38.718' 
+AND `map` = '1' 
+AND `orientation` = '0' 
+WHERE `race` = '2' AND `class` = '1';
+UPDATE `characters` 
+SET `position_x` = '-618.518' 
+AND `position_y` = '-4251.67' 
+AND `position_z` = '38.718' 
+AND `map` = '1' 
+AND `orientation` = '0' 
+WHERE `race` = '2' AND `class` = '3';
+UPDATE `characters` 
+SET `position_x` = '-618.518' 
+AND `position_y` = '-4251.67' 
+AND `position_z` = '38.718' 
+AND `map` = '1' 
+AND `orientation` = '0' 
+WHERE `race` = '2' AND `class` = '4';
+UPDATE `characters` 
+SET `position_x` = '-618.518' 
+AND `position_y` = '-4251.67' 
+AND `position_z` = '38.718' 
+AND `map` = '1' 
+AND `orientation` = '0' 
+WHERE `race` = '2' AND `class` = '7';
+UPDATE `characters` 
+SET `position_x` = '-618.518' 
+AND `position_y` = '-4251.67' 
+AND `position_z` = '38.718' 
+AND `map` = '1' 
+AND `orientation` = '0' 
+WHERE `race` = '2' AND `class` = '9';
+
+UPDATE `characters` 
+SET `position_x` = '-6240.32' 
+AND `position_y` = '331.033' 
+AND `position_z` = '382.758' 
+AND `map` = '1' 
+AND `orientation` = '6.17716' 
+WHERE `race` = '3' AND `class` = '1';
+UPDATE `characters` 
+SET `position_x` = '-6240.32' 
+AND `position_y` = '331.033' 
+AND `position_z` = '382.758' 
+AND `map` = '1' 
+AND `orientation` = '6.17716' 
+WHERE `race` = '3' AND `class` = '2';
+UPDATE `characters` 
+SET `position_x` = '-6240.32' 
+AND `position_y` = '331.033' 
+AND `position_z` = '382.758' 
+AND `map` = '1' 
+AND `orientation` = '6.17716' 
+WHERE `race` = '3' AND `class` = '3';
+UPDATE `characters` 
+SET `position_x` = '-6240.32' 
+AND `position_y` = '331.033' 
+AND `position_z` = '382.758' 
+AND `map` = '1' 
+AND `orientation` = '6.17716' 
+WHERE `race` = '3' AND `class` = '4';
+UPDATE `characters` 
+SET `position_x` = '-6240.32' 
+AND `position_y` = '331.033' 
+AND `position_z` = '382.758' 
+AND `map` = '1' 
+AND `orientation` = '6.17716' 
+WHERE `race` = '3' AND `class` = '5';
+
+UPDATE `characters` 
+SET `position_x` = '10311.3' 
+AND `position_y` = '832.463' 
+AND `position_z` = '1326.41' 
+AND `map` = '1' 
+AND `orientation` = '5.69632' 
+WHERE `race` = '4' AND `class` = '1';
+UPDATE `characters` 
+SET `position_x` = '10311.3' 
+AND `position_y` = '832.463' 
+AND `position_z` = '1326.41' 
+AND `map` = '1' 
+AND `orientation` = '5.69632' 
+WHERE `race` = '4' AND `class` = '3';
+UPDATE `characters` 
+SET `position_x` = '10311.3' 
+AND `position_y` = '832.463' 
+AND `position_z` = '1326.41' 
+AND `map` = '1' 
+AND `orientation` = '5.69632' 
+WHERE `race` = '4' AND `class` = '4';
+UPDATE `characters` 
+SET `position_x` = '10311.3' 
+AND `position_y` = '832.463' 
+AND `position_z` = '1326.41' 
+AND `map` = '1' 
+AND `orientation` = '5.69632' 
+WHERE `race` = '4' AND `class` = '5';
+UPDATE `characters` 
+SET `position_x` = '10311.3' 
+AND `position_y` = '832.463' 
+AND `position_z` = '1326.41' 
+AND `map` = '1' 
+AND `orientation` = '5.69632' 
+WHERE `race` = '4' AND `class` = '11';
+
+UPDATE `characters` 
+SET `position_x` = '1676.71' 
+AND `position_y` = '1678.31' 
+AND `position_z` = '121.67' 
+AND `map` = '0' 
+AND `orientation` = '2.70526' 
+WHERE `race` = '5' AND `class` = '1';
+UPDATE `characters` 
+SET `position_x` = '1676.71' 
+AND `position_y` = '1678.31' 
+AND `position_z` = '121.67' 
+AND `map` = '0' 
+AND `orientation` = '2.70526' 
+WHERE `race` = '5' AND `class` = '4';
+UPDATE `characters` 
+SET `position_x` = '1676.71' 
+AND `position_y` = '1678.31' 
+AND `position_z` = '121.67' 
+AND `map` = '0' 
+AND `orientation` = '2.70526' 
+WHERE `race` = '5' AND `class` = '5';
+UPDATE `characters` 
+SET `position_x` = '1676.71' 
+AND `position_y` = '1678.31' 
+AND `position_z` = '121.67' 
+AND `map` = '0' 
+AND `orientation` = '2.70526' 
+WHERE `race` = '5' AND `class` = '8';
+UPDATE `characters` 
+SET `position_x` = '1676.71' 
+AND `position_y` = '1678.31' 
+AND `position_z` = '121.67' 
+AND `map` = '0' 
+AND `orientation` = '2.70526' 
+WHERE `race` = '5' AND `class` = '9';
+
+UPDATE `characters` 
+SET `position_x` = '-2917.58' 
+AND `position_y` = '-257.98' 
+AND `position_z` = '52.9968' 
+AND `map` = '1' 
+AND `orientation` = '0' 
+WHERE `race` = '6' AND `class` = '1';
+UPDATE `characters` 
+SET `position_x` = '-2917.58' 
+AND `position_y` = '-257.98' 
+AND `position_z` = '52.9968' 
+AND `map` = '1' 
+AND `orientation` = '0' 
+WHERE `race` = '6' AND `class` = '3';
+UPDATE `characters` 
+SET `position_x` = '-2917.58' 
+AND `position_y` = '-257.98' 
+AND `position_z` = '52.9968' 
+AND `map` = '1' 
+AND `orientation` = '0' 
+WHERE `race` = '6' AND `class` = '7';
+UPDATE `characters` 
+SET `position_x` = '-2917.58' 
+AND `position_y` = '-257.98' 
+AND `position_z` = '52.9968' 
+AND `map` = '1' 
+AND `orientation` = '0' 
+WHERE `race` = '6' AND `class` = '11';
+
+UPDATE `characters` 
+SET `position_x` = '-6240.32' 
+AND `position_y` = '331.033' 
+AND `position_z` = '382.758' 
+AND `map` = '0' 
+AND `orientation` = '0' 
+WHERE `race` = '7' AND `class` = '1';
+UPDATE `characters` 
+SET `position_x` = '-6240.32' 
+AND `position_y` = '331' 
+AND `position_z` = '383' 
+AND `map` = '0' 
+AND `orientation` = '0' 
+WHERE `race` = '7' AND `class` = '9';
+UPDATE `characters` 
+SET `position_x` = '-6240.32' 
+AND `position_y` = '331' 
+AND `position_z` = '383' 
+AND `map` = '0' 
+AND `orientation` = '0' 
+WHERE `race` = '7' AND `class` = '8';
+UPDATE `characters` 
+SET `position_x` = '-6240.32' 
+AND `position_y` = '331' 
+AND `position_z` = '383' 
+AND `map` = '0' 
+AND `orientation` = '0' 
+WHERE `race` = '7' AND `class` = '4';
+
+UPDATE `characters` 
+SET `position_x` = '-618.518' 
+AND `position_y` = '-4251.67' 
+AND `position_z` = '38.718' 
+AND `map` = '1' 
+AND `orientation` = '0' 
+WHERE `race` = '8' AND `class` = '1';
+UPDATE `characters` 
+SET `position_x` = '-618.518' 
+AND `position_y` = '-4251.67' 
+AND `position_z` = '38.718' 
+AND `map` = '1' 
+AND `orientation` = '0' 
+WHERE `race` = '8' AND `class` = '3';
+UPDATE `characters` 
+SET `position_x` = '-618.518' 
+AND `position_y` = '-4251.67' 
+AND `position_z` = '38.718' 
+AND `map` = '1' 
+AND `orientation` = '0' 
+WHERE `race` = '8' AND `class` = '4';
+UPDATE `characters` 
+SET `position_x` = '-618.518' 
+AND `position_y` = '-4251.67' 
+AND `position_z` = '38.718' 
+AND `map` = '1' 
+AND `orientation` = '0' 
+WHERE `race` = '8' AND `class` = '5';
+UPDATE `characters` 
+SET `position_x` = '-618.518' 
+AND `position_y` = '-4251.67' 
+AND `position_z` = '38.718' 
+AND `map` = '1' 
+AND `orientation` = '0' 
+WHERE `race` = '8' AND `class` = '7';
+UPDATE `characters` 
+SET `position_x` = '-618.518' 
+AND `position_y` = '-4251.67' 
+AND `position_z` = '38.718' 
+AND `map` = '1' 
+AND `orientation` = '0' 
+WHERE `race` = '8' AND `class` = '8';
+
+UPDATE `characters` 
+SET `position_x` = '10349.6' 
+AND `position_y` = '-6357.29' 
+AND `position_z` = '33.4026' 
+AND `map` = '530' 
+AND `orientation` = '5.31605' 
+WHERE `race` = '10' AND `class` = '2';
+UPDATE `characters` 
+SET `position_x` = '10349.6' 
+AND `position_y` = '-6357.29' 
+AND `position_z` = '33.4026' 
+AND `map` = '530' 
+AND `orientation` = '5.31605' 
+WHERE `race` = '10' AND `class` = '3';
+UPDATE `characters` 
+SET `position_x` = '10349.6' 
+AND `position_y` = '-6357.29' 
+AND `position_z` = '33.4026' 
+AND `map` = '530' 
+AND `orientation` = '5.31605' 
+WHERE `race` = '10' AND `class` = '4';
+UPDATE `characters` 
+SET `position_x` = '10349.6' 
+AND `position_y` = '-6357.29' 
+AND `position_z` = '33.4026' 
+AND `map` = '530' 
+AND `orientation` = '5.31605' 
+WHERE `race` = '10' AND `class` = '5';
+UPDATE `characters` 
+SET `position_x` = '10349.6' 
+AND `position_y` = '-6357.29' 
+AND `position_z` = '33.4026' 
+AND `map` = '530' 
+AND `orientation` = '5.31605' 
+WHERE `race` = '10' AND `class` = '8';
+UPDATE `characters` 
+SET `position_x` = '10349.6' 
+AND `position_y` = '-6357.29' 
+AND `position_z` = '33.4026' 
+AND `map` = '530' 
+AND `orientation` = '5.31605' 
+WHERE `race` = '10' AND `class` = '9';
+
+UPDATE `characters` 
+SET `position_x` = '-3961.64' 
+AND `position_y` = '-13931.2' 
+AND `position_z` = '100.615' 
+AND `map` = '530' 
+AND `orientation` = '2.08364' 
+WHERE `race` = '11' AND `class` = '1';
+UPDATE `characters` 
+SET `position_x` = '-3961.64' 
+AND `position_y` = '-13931.2' 
+AND `position_z` = '100.615' 
+AND `map` = '530' 
+AND `orientation` = '2.08364' 
+WHERE `race` = '11' AND `class` = '2';
+UPDATE `characters` 
+SET `position_x` = '-3961.64' 
+AND `position_y` = '-13931.2' 
+AND `position_z` = '100.615' 
+AND `map` = '530' 
+AND `orientation` = '2.08364' 
+WHERE `race` = '11' AND `class` = '3';
+UPDATE `characters` 
+SET `position_x` = '-3961.64' 
+AND `position_y` = '-13931.2' 
+AND `position_z` = '100.615' 
+AND `map` = '530' 
+AND `orientation` = '2.08364' 
+WHERE `race` = '11' AND `class` = '5';
+UPDATE `characters` 
+SET `position_x` = '-3961.64' 
+AND `position_y` = '-13931.2' 
+AND `position_z` = '100.615' 
+AND `map` = '530' 
+AND `orientation` = '2.08364' 
+WHERE `race` = '11' AND `class` = '7';
+UPDATE `characters` 
+SET `position_x` = '-3961.64' 
+AND `position_y` = '-13931.2' 
+AND `position_z` = '100.615' 
+AND `map` = '530' 
+AND `orientation` = '2.08364' 
+WHERE `race` = '11' AND `class` = '8';
+
+UPDATE `characters` 
+SET `position_x` = '2355.84' 
+AND `position_y` = '-5664.77' 
+AND `position_z` = '426.028' 
+AND `map` = '609' 
+AND `orientation` = '3.65997' 
+WHERE `race` = '1' AND `class` = '6';
+UPDATE `characters` 
+SET `position_x` = '2358.44' 
+AND `position_y` = '-5666.9' 
+AND `position_z` = '426.023' 
+AND `map` = '609' 
+AND `orientation` = '3.65997' 
+WHERE `race` = '2' AND `class` = '6';
+UPDATE `characters` 
+SET `position_x` = '2358.44' 
+AND `position_y` = '-5666.9' 
+AND `position_z` = '426.023' 
+AND `map` = '609' 
+AND `orientation` = '3.65997' 
+WHERE `race` = '3' AND `class` = '6';
+UPDATE `characters` 
+SET `position_x` = '2356.21' 
+AND `position_y` = '-5662.21' 
+AND `position_z` = '426.026' 
+AND `map` = '609' 
+AND `orientation` = '3.65997' 
+WHERE `race` = '4' AND `class` = '6';
+UPDATE `characters` 
+SET `position_x` = '2356.21' 
+AND `position_y` = '-5662.21' 
+AND `position_z` = '426.026' 
+AND `map` = '609' 
+AND `orientation` = '3.65997' 
+WHERE `race` = '5' AND `class` = '6';
+UPDATE `characters` 
+SET `position_x` = '2358.17' 
+AND `position_y` = '-5663.21' 
+AND `position_z` = '426.027' 
+AND `map` = '609' 
+AND `orientation` = '3.65997' 
+WHERE `race` = '6' AND `class` = '6';
+UPDATE `characters` 
+SET `position_x` = '2355.05' 
+AND `position_y` = '-5661.7' 
+AND `position_z` = '426.026' 
+AND `map` = '609' 
+AND `orientation` = '3.65997' 
+WHERE `race` = '7' AND `class` = '6';
+UPDATE `characters` 
+SET `position_x` = '2355.05' 
+AND `position_y` = '-5661.7' 
+AND `position_z` = '426.026' 
+AND `map` = '609' 
+AND `orientation` = '3.65997' 
+WHERE `race` = '8' AND `class` = '6';
+UPDATE `characters` 
+SET `position_x` = '2355.84' 
+AND `position_y` = '-5664.77' 
+AND `position_z` = '426.028' 
+AND `map` = '609' 
+AND `orientation` = '3.65997' 
+WHERE `race` = '10' AND `class` = '6';
+UPDATE `characters` 
+SET `position_x` = '2358.17' 
+AND `position_y` = '-5663.21' 
+AND `position_z` = '426.027' 
+AND `map` = '609' 
+AND `orientation` = '3.65997' 
+WHERE `race` = '11' AND `class` = '6';

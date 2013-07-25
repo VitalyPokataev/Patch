@@ -1,0 +1,29 @@
+From 1f5f2473f44b7b9ec14b2e73c5c26cef27b1fbce Mon Sep 17 00:00:00 2001
+From: Carl Hjerpe <lillecarl@gmail.com>
+Date: Mon, 22 Jul 2013 22:10:46 +0200
+Subject: [PATCH] Cannot confirm if #3 was valid, but with these changes & my
+ testing (alt f4 wow and relogin) it worked as intended.
+
+Maybe i'm like blizzard GM's? http://www.wowwiki.com/Working_as_intended
+
+Closes #3
+---
+ src/server/game/Handlers/CharacterHandler.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/server/game/Handlers/CharacterHandler.cpp b/src/server/game/Handlers/CharacterHandler.cpp
+index f65be0d..d07acbd 100644
+--- a/src/server/game/Handlers/CharacterHandler.cpp
++++ b/src/server/game/Handlers/CharacterHandler.cpp
+@@ -1022,7 +1022,8 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
+     sScriptMgr->OnPlayerLogin(pCurrChar);
+     delete holder;
+ 
+-    pCurrChar->FitPlayerInTeam(pCurrChar->GetBattleground() && !pCurrChar->GetBattleground()->isArena() ? true : false);
++    if (pCurrChar->GetTeam() != pCurrChar->GetOTeam())
++        pCurrChar->FitPlayerInTeam(pCurrChar->GetBattleground() && !pCurrChar->GetBattleground()->isArena() ? true : false, pCurrChar->GetBattleground());
+ }
+ 
+ void WorldSession::HandleSetFactionAtWar(WorldPacket& recvData)
+-- 
+1.8.1.6
