@@ -1,0 +1,178 @@
+###################################################################################################            
+# Antikiller System 
+#            
+#     Antikiller.System.Enbled 
+#     Система Antikiller 
+#     Default:  true  - Enable 
+#               false - Disable 
+# 
+
+Antikiller.System.Enbled = true 
+
+#     Antikiller.System.Level 
+#     На сколько лвл'ов киллер должен быть выше, что бы система работала 
+#     Default:  5 
+#                    
+
+Antikiller.System.Level = 5 
+
+#     Antikiller.System.Aura 
+#     ID ауры, которая вешается на киллера 
+#     Default:  15007 
+#                 
+
+Antikiller.System.Aura = 15007 
+
+#            
+###################################################################################################
+
+
+diff -r b1dd4984a709 -r 3d55d9aa1fa9 src/server/game/Miscellaneous/Language.h
+--- a/src/server/game/Miscellaneous/Language.h  Thu Jul 05 11:43:26 2012 +0300
++++ b/src/server/game/Miscellaneous/Language.h  Fri Aug 17 17:00:39 2012 +0300
+@@ -1098,6 +1098,8 @@
+        LANG_VIP_ARENA_ERROR                = 11010,
+        LANG_VIP_INCORRECT_VALUE            = 11011,
+        LANG_VIP_FROST_ERROR                = 11012,
++      
++       LANG_ANTIKILLER_SYSTEM              = 11013,
+ 
+     // NOT RESERVED IDS                   12000-1999999999
+     // `db_script_string` table index     2000000000-2000009999 (MIN_DB_SCRIPT_STRING_ID-MAX_DB_SCRIPT_STRING_ID)
+diff -r b1dd4984a709 -r 3d55d9aa1fa9 src/server/game/Scripting/ScriptLoader.cpp
+--- a/src/server/game/Scripting/ScriptLoader.cpp        Thu Jul 05 11:43:26 2012 +0300
++++ b/src/server/game/Scripting/ScriptLoader.cpp        Fri Aug 17 17:00:39 2012 +0300
+@@ -1251,6 +1251,7 @@
+ 
+   void AddSC_arena_spectator_script();
+   void AddSC_transmogrify_script();
++  void AddSC_antikiller_system();
+ 
+ #endif
+ 
+@@ -1261,6 +1262,7 @@
+       
+        AddSC_transmogrify_script();
+        AddSC_arena_spectator_script();
++       AddSC_antikiller_system();
+ 
+ #endif
+ }
+diff -r b1dd4984a709 -r 3d55d9aa1fa9 src/server/game/World/World.cpp
+--- a/src/server/game/World/World.cpp   Thu Jul 05 11:43:26 2012 +0300
++++ b/src/server/game/World/World.cpp   Fri Aug 17 17:00:39 2012 +0300
+@@ -1224,6 +1224,11 @@
+     m_int_configs[CONFIG_DB_PING_INTERVAL] = ConfigMgr::GetIntDefault("MaxPingTime", 30);
+        m_int_configs[CONFIG_DUEL_RESET_COOLDOWN] = ConfigMgr::GetIntDefault("DuelResetCooldown", 1);
+       
++       //Antikiller System
++       m_bool_configs[CONFIG_ANTIKILLER_ENABLED] = ConfigMgr::GetBoolDefault("Antikiller.System.Enbled", true);
++       m_int_configs[CONFIG_ANTIKILLER_LEVEL] = ConfigMgr::GetIntDefault("Antikiller.System.Level", 5);
++       m_int_configs[CONFIG_ANTIKILLER_AURA] = ConfigMgr::GetIntDefault("Antikiller.System.Aura", 15007);     
++      
+     // damage checker  
+     m_int_configs[CONFIG_DAMAGE_CHECKER_MAX_DAMAGE] = ConfigMgr::GetIntDefault("DamageChecker.MaxDamage", 50000);  
+     m_int_configs[CONFIG_DAMAGE_CHECKER_IMMUNE_MIN_GM_LEVEL] = ConfigMgr::GetIntDefault("DamageChecker.ImmuneMinGMLevel", 1);  
+diff -r b1dd4984a709 -r 3d55d9aa1fa9 src/server/game/World/World.h
+--- a/src/server/game/World/World.h     Thu Jul 05 11:43:26 2012 +0300
++++ b/src/server/game/World/World.h     Fri Aug 17 17:00:39 2012 +0300
+@@ -177,7 +177,8 @@
+        CONFIG_VIP_HOME_COMMAND,
+        CONFIG_VIP_CAPITAL_COMMAND,
+        CONFIG_VIP_EXCHANGE_ARENA_COMMAND,
+-       CONFIG_VIP_EXCHANGE_FROST_COMMAND,     
++       CONFIG_VIP_EXCHANGE_FROST_COMMAND,
++    CONFIG_ANTIKILLER_ENABLED,
+     BOOL_CONFIG_VALUE_COUNT
+ };
+ 
+@@ -355,6 +356,8 @@
+     CONFIG_DAMAGE_CHECKER_BAN_VALUE,
+     CONFIG_DUEL_RESET_COOLDOWN,       
+        CONFIG_BALANCE_MINIMUM,
++       CONFIG_ANTIKILLER_LEVEL,
++       CONFIG_ANTIKILLER_AURA,
+     INT_CONFIG_VALUE_COUNT
+ };
+ 
+diff -r b1dd4984a709 -r 3d55d9aa1fa9 src/server/scripts/Custom/CMakeLists.txt
+--- a/src/server/scripts/Custom/CMakeLists.txt  Thu Jul 05 11:43:26 2012 +0300
++++ b/src/server/scripts/Custom/CMakeLists.txt  Fri Aug 17 17:00:39 2012 +0300
+@@ -12,6 +12,7 @@
+   ${scripts_STAT_SRCS}
+   Custom/npc_transmogrify.cpp
+   Custom/arena_spectator.cpp
++  Custom/antikiller_system.cpp
+ )
+ 
+ message("  -> Prepared: Custom")
+diff -r b1dd4984a709 -r 3d55d9aa1fa9 src/server/scripts/Custom/antikiller_system.cpp
+--- /dev/null   Thu Jan 01 00:00:00 1970 +0000
++++ b/src/server/scripts/Custom/antikiller_system.cpp   Fri Aug 17 17:00:39 2012 +0300
+@@ -0,0 +1,29 @@
++#include "ScriptPCH.h"
++
++class antikiller_system : public PlayerScript
++{
++public:
++       antikiller_system() : PlayerScript("antikiller_system") { }
++
++       void OnPVPKill(Player* killer, Player* killed)
++       {
++               std::string NameKiller = killer->GetName();
++               std::string NameKilled = killed->GetName();
++
++               if (sWorld->getBoolConfig(CONFIG_ANTIKILLER_ENABLED))
++               {
++                       if (killer->getLevel() - sWorld->getIntConfig(CONFIG_ANTIKILLER_LEVEL) > killed->getLevel())
++                       {
++                               sWorld->SendWorldText(LANG_ANTIKILLER_SYSTEM, NameKilled.c_str(), NameKiller.c_str());
++                               killer->AddAura(sWorld->getIntConfig(CONFIG_ANTIKILLER_AURA), killer);
++                               killed->ResurrectPlayer(100, false);
++                               killer->Kill(killer);
++                       }
++               }
++       }
++};
++
++void AddSC_antikiller_system()
++{
++       new antikiller_system();
++}
+\ No newline at end of file
+
+**********************************************************************************************************************************************************************
+
+// new
+
+#include "ScriptPCH.h"
+ 
+class antikiller_system : public PlayerScript
+{
+public:
+        antikiller_system() : PlayerScript("antikiller_system") { }
+       
+        void OnPVPKill(Player* killer, Player* killed)
+        {
+                if(killer->InBattleground() || killed->InBattleground())
+                        return;
+ 
+                if (sWorld->getBoolConfig(CONFIG_ANTIKILLER_ENABLED))
+                {
+                        if (killer->getLevel() - sWorld->getIntConfig(CONFIG_ANTIKILLER_LEVEL) > killed->getLevel())
+                        {
+                                char msg[250];
+                                snprintf(msg, 250, "|cffff0000[Antikiller System]:|r Player '%s' killed player '%s'", "|cffff0000[Antikiller System]:|r Игрок '%s' убил игрока '%s'", killer->GetName(), killed->GetName());
+                                sWorld->SendServerMessage(SERVER_MSG_STRING, msg);
+                                killer->AddAura(sWorld->getIntConfig(CONFIG_ANTIKILLER_AURA), killer);
+                                killed->ResurrectPlayer(100, false);
+                                killer->Kill(killer);
+                        }
+                }
+        }
+};
+ 
+void AddSC_antikiller_system()
+{
+        new antikiller_system();
+}

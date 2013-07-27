@@ -1,0 +1,96 @@
+diff --git a/src/server/game/Battlegrounds/Battleground.cpp b/src/server/game/Battlegrounds/Battleground.cpp 
+--- a/src/server/game/Battlegrounds/Battleground.cpp 
++++ b/src/server/game/Battlegrounds/Battleground.cpp 
+@@ -871,6 +871,8 @@ 
+player->ModifyArenaPoints(winner_arena); 
+if (!player->GetRandomWinner()) 
+player->SetRandomWinner(true); 
++ if (sWorld->getBoolConfig(CONFIG_RANDOM_BG_ITEM_REW)) 
++ player->AddItem(sWorld->getIntConfig(CONFIG_RANDOM_BG_ITEM_ID),sWorld->getIntConfig(CONFIG_RANDOM_BG_WIN_COUNT)); 
+} 
+
+player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_WIN_BG, 1); 
+@@ -878,4 +880,5 @@ 
+else 
+{ 
+if (IsRandom() || BattlegroundMgr::IsBGWeekend(GetTypeID())) 
++ { 
+UpdatePlayerScore(player, SCORE_BONUS_HONOR, GetBonusHonorFromKill(loser_kills)); 
+@@ -881,4 +884,7 @@ 
+UpdatePlayerScore(player, SCORE_BONUS_HONOR, GetBonusHonorFromKill(loser_kills)); 
++ if (sWorld->getBoolConfig(CONFIG_RANDOM_BG_ITEM_REW)) 
++ player->AddItem(sWorld->getIntConfig(CONFIG_RANDOM_BG_ITEM_ID),sWorld->getIntConfig(CONFIG_RANDOM_BG_LOS_COUNT)); 
++ } 
+} 
+
+diff --git a/src/server/game/World/World.cpp b/src/server/game/World/World.cpp 
+--- a/src/server/game/World/World.cpp 
++++ b/src/server/game/World/World.cpp 
+@@ -1212,6 +1212,11 @@ 
+m_int_configs[CONFIG_CONFIG_OUTDOORPVP_WINTERGRASP_ANTIFARM_ATK] = ConfigMgr::GetBoolDefault("OutdoorPvP.Wintergrasp.Antifarm.Atk", 5); 
+m_int_configs[CONFIG_CONFIG_OUTDOORPVP_WINTERGRASP_ANTIFARM_DEF] = ConfigMgr::GetBoolDefault("OutdoorPvP.Wintergrasp.Antifarm.Def", 5); 
+
++ m_bool_configs[CONFIG_RANDOM_BG_ITEM_REW] = ConfigMgr::GetBoolDefault("RandomBG.CustomItem.Enable", false); 
++ m_int_configs[CONFIG_RANDOM_BG_ITEM_ID] = ConfigMgr::GetBoolDefault("RandomBG.CustomItem.ID", 49426); 
++ m_int_configs[CONFIG_RANDOM_BG_WIN_COUNT] = ConfigMgr::GetBoolDefault("RandomBG.CustomItem.WinCount", 3); 
++ m_int_configs[CONFIG_RANDOM_BG_LOS_COUNT] = ConfigMgr::GetBoolDefault("RandomBG.CustomItem.LosCount", 1); 
++ m_bool_configs[CONFIG_ANTICHEAT_ENABLE] = ConfigMgr::GetBoolDefault("Anticheat.Enable", true); 
+m_int_configs[CONFIG_ANTICHEAT_REPORTS_INGAME_NOTIFICATION] = ConfigMgr::GetBoolDefault("Anticheat.ReportsForIngameWarnings", 70); 
+
+diff --git a/src/server/game/World/World.h b/src/server/game/World/World.h 
+--- a/src/server/game/World/World.h 
++++ b/src/server/game/World/World.h 
+@@ -166,6 +166,7 @@ 
+CONFIG_DUEL_RESET_COOLDOWN_MAX_ENERGY_ON_START, 
+CONFIG_ENABLE_MMAPS, 
+CONFIG_WINTERGRASP_ENABLE, 
++ CONFIG_RANDOM_BG_ITEM_REW, 
+BOOL_CONFIG_VALUE_COUNT 
+}; 
+
+@@ -340,6 +341,9 @@ 
+CONFIG_WINTERGRASP_PLR_MIN, 
+CONFIG_WINTERGRASP_PLR_MIN_LVL, 
+CONFIG_WINTERGRASP_BATTLETIME, 
++ CONFIG_RANDOM_BG_ITEM_ID, 
++ CONFIG_RANDOM_BG_WIN_COUNT, 
++ CONFIG_RANDOM_BG_LOS_COUNT, 
+CONFIG_WINTERGRASP_NOBATTLETIME, 
+INT_CONFIG_VALUE_COUNT 
+}; 
+
+diff --git a/src/server/worldserver/worldserver.conf.dist b/src/server/worldserver/worldserver.conf.dist 
+--- a/src/server/worldserver/worldserver.conf.dist 
++++ b/src/server/worldserver/worldserver.conf.dist 
+@@ -2854,4 +2854,29 @@ 
+OutdoorPvP.Wintergrasp.CustomHonorIntactBuilding = 1500 
+OutdoorPvP.Wintergrasp.Antifarm.Enable = 1 
+OutdoorPvP.Wintergrasp.Antifarm.Atk = 1 
+-OutdoorPvP.Wintergrasp.Antifarm.Def = 1 
+\ No newline at end of file 
++OutdoorPvP.Wintergrasp.Antifarm.Def = 1 
++ 
++########################################################## 
++# 
++# RandomBG.CustomItem.Enable 
++# Enable or disable random bg custom items 
++# (Default: 0) 
++# 
++# RandomBG.CustomItem.ID 
++# Custom item ID 
++# (Default: 49426) 
++# 
++# RandomBG.CustomItem.WinCount 
++# Count items winner 
++# (Default: 3) 
++# 
++# RandomBG.CustomItem.LosCount 
++# Count items loser 
++# (Default: 1) 
++# 
++########################################################## 
++ 
++RandomBG.CustomItem.Enable = 1 
++RandomBG.CustomItem.ID = 49426 
++RandomBG.CustomItem.WinCount = 3 
++RandomBG.CustomItem.LosCount = 1
