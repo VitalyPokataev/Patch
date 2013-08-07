@@ -1,0 +1,23 @@
+From cd653d551731062d2b7d4a357e0b0faeca4b364d Mon Sep 17 00:00:00 2001
+From: Carl Hjerpe <lillecarl@gmail.com>
+Date: Thu, 1 Aug 2013 16:32:10 +0200
+Subject: [PATCH] Missing packet sending +1
+
+---
+ src/server/game/Cfbg/Cfbg.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/server/game/Cfbg/Cfbg.cpp b/src/server/game/Cfbg/Cfbg.cpp
+index 63715e9..26f0d9a 100644
+--- a/src/server/game/Cfbg/Cfbg.cpp
++++ b/src/server/game/Cfbg/Cfbg.cpp
+@@ -42,6 +42,7 @@ bool Player::SendRealNameQuery()
+     data << uint8(getGender());
+     data << uint8(getClass());
+     data << uint8(0);                                   // is not declined
++    GetSession()->SendPacket(&data);
+ 
+     return true;
+ }
+-- 
+1.8.1.6

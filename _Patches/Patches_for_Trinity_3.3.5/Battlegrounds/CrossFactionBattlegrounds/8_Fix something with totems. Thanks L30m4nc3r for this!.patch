@@ -1,0 +1,37 @@
+From 46b3b82a8fcf5d411cf1581faf3c33ced0df98c9 Mon Sep 17 00:00:00 2001
+From: Carl Hjerpe <lillecarl@gmail.com>
+Date: Thu, 1 Aug 2013 16:39:05 +0200
+Subject: [PATCH] Fix something with totems. Thanks L30m4nc3r for this!
+
+---
+ src/server/game/Entities/Unit/Unit.cpp | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/src/server/game/Entities/Unit/Unit.cpp b/src/server/game/Entities/Unit/Unit.cpp
+index a7f3b55..5db5187 100644
+--- a/src/server/game/Entities/Unit/Unit.cpp
++++ b/src/server/game/Entities/Unit/Unit.cpp
+@@ -16696,6 +16696,21 @@ uint32 Unit::GetModelForTotem(PlayerTotemType totemType)
+             }
+             break;
+         }
++        default: // One standard for other races.
++        {        // THANKS L30m4nc3r for this
++            switch (totemType)
++            {
++                case SUMMON_TYPE_TOTEM_FIRE:    // fire
++                    return 4589;
++                case SUMMON_TYPE_TOTEM_EARTH:   // earth
++                    return 4588;
++                case SUMMON_TYPE_TOTEM_WATER:   // water
++                    return 4587;
++                case SUMMON_TYPE_TOTEM_AIR:     // air
++                    return 4590;
++            }
++            break;
++        }
+     }
+     return 0;
+ }
+-- 
+1.8.1.6

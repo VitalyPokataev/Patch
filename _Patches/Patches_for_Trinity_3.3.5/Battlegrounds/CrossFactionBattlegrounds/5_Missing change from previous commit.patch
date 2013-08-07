@@ -1,0 +1,23 @@
+From 293538604916645de32f16bb153b2a6dfa49ab01 Mon Sep 17 00:00:00 2001
+From: Carl Hjerpe <lillecarl@gmail.com>
+Date: Mon, 22 Jul 2013 23:23:34 +0200
+Subject: [PATCH] Missing change from previous commit
+
+---
+ src/server/game/Entities/Player/Player.cpp | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/server/game/Entities/Player/Player.cpp b/src/server/game/Entities/Player/Player.cpp
+index 666f002..a07c9ad 100644
+--- a/src/server/game/Entities/Player/Player.cpp
++++ b/src/server/game/Entities/Player/Player.cpp
+@@ -17015,7 +17015,6 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
+     SetORace();
+     m_team = TeamForRace(getORace());
+     SetFakeRaceAndMorph(); // m_team must be set before this can be used.
+-    SetFakeMorph();
+     setFactionForRace(getORace());
+ 
+     SetUInt32Value(UNIT_FIELD_LEVEL, fields[6].GetUInt8());
+-- 
+1.8.1.6

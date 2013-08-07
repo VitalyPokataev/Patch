@@ -60,19 +60,11 @@ void OnPVPKill(Player *pKiller, Player *pVictim)
         }
                 
       if(KillingStreak[kGUID].LastGUIDKill == vGUID)
-
-
-
-
-
-
       {
           KillingStreak[kGUID].KillCount++;
           KillingStreak[vGUID].KillCount = 1;
           pKiller->AddItem(ItemReward, 1);
           if(LooseTokenOnPvPDeath == true)
-
-
               pVictim->DestroyItemCount(ItemReward, AmountOfItemsYouWantTheVictimToLoose, true, false);
       }
 
@@ -88,7 +80,6 @@ void OnPVPKill(Player *pKiller, Player *pVictim)
       }
 
       if(OnlyInBattlegrounds)
-
       {
           if(!pKiller->GetMap()->IsBattleground())
               return;
