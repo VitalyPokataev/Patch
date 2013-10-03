@@ -1,0 +1,2 @@
+UPDATE `account` SET `expansion`='3' WHERE (`expansion`='1') OR (`expansion`='2');                             
+ALTER TABLE `account` CHANGE `expansion` `expansion` tinyint(3) unsigned NOT NULL default '3';

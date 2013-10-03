@@ -1929,6 +1929,7 @@ REPLACE INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_ent
 DELETE FROM `npc_trainer` WHERE (`entry`=40079);
 INSERT INTO `npc_trainer` (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) VALUES 
 (40079, 53431, 61000, 0, 0, 61),  -- гравирование
+(40079, 50977, 61000, 0, 0, 61), -- врата смерти
 (40079, 53428, 61000, 0, 0, 61),
 (40079, 3714, 61000, 0, 0, 61),
 (40079, 42650, 360000, 0, 0, 80),
